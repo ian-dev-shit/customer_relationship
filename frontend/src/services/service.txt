@@ -1,0 +1,1 @@
+bridge para mag fetch ng URL api sa backend
