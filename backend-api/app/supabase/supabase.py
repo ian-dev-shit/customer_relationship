@@ -3,10 +3,13 @@
 
 from supabase import create_client, Client
 from app.config.config import settings
-import redis
+from upstash_redis import Redis
 
 # Gawa ng single connection instance kay supabase
 supabase: Client = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
 
 # Connection sa redis
-redis_client = redis.Redis.from_url(settings.REDIS_URL, decode_responses=True)
+redis_client = Redis(
+    url=settings.UPSTASH_REDIS_REST_URL, 
+    token=settings.UPSTASH_REDIS_REST_TOKEN
+)

@@ -8,7 +8,8 @@ class Settings(BaseSettings):
     SUPABASE_URL: str
     SUPABASE_KEY: str
     SUPABASE_JWT_SECRET: str
-    REDIS_URL: str
+    UPSTASH_REDIS_REST_URL: str
+    UPSTASH_REDIS_REST_TOKEN: str
     RESEND_API_KEY: str
 
     #Automatic na babasahin ang .env file sa root folder

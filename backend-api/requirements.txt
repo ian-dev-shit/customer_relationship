@@ -11,7 +11,7 @@ deprecation==2.1.0
 dnspython==2.8.0
 ecdsa==0.19.2
 email-validator==2.3.0
-fastapi==0.139.0
+fastapi==0.139.2
 h11==0.16.0
 h2==4.3.0
 hpack==4.2.0
@@ -55,6 +55,7 @@ supabase-auth==2.31.0
 supabase-functions==2.31.0
 typing-inspection==0.4.2
 typing_extensions==4.16.0
+upstash-redis==1.7.0
 urllib3==2.7.0
 uvicorn==0.51.0
 watchfiles==1.2.0

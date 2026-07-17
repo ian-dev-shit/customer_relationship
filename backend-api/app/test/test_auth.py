@@ -67,19 +67,38 @@ def test_signup_success(mock_supabase):
 @patch("app.routes.auth.redis_client")
 @patch("app.routes.auth.send_otp_email")
 def test_login_request_success(mock_send_email, mock_redis, mock_supabase):
-    # Mock Supabase Auth 
-    mock_auth_response = MagicMock()
-    mock_auth_response.user.id = "mocked-uuid-1234"
-    mock_auth_response.user.email = "christian@gmail.com"
-    mock_auth_response.session.access_token = "mock-access-token"
-    mock_auth_response.session.refresh_token = "mock-refresh-token"
-    mock_supabase.auth.sign_with_password.return_value = mock_auth_response
+    # 1. Purong Python Class para sa Auth Response (Walang MagicMock)
+    class FakeUser:
+        id = "mocked-uuid-1234"
+        email = "christian@gmail.com"
 
-    # Mock Profiles Table check
-    mock_profile_response = MagicMock()
-    mock_profile_response.data = {"role": "customer"}
-    mock_supabase.table().select().eq().single().execute.return_value = mock_profile_response
+    class FakeSession:
+        access_token = "mock-access-token"
+        refresh_token = "mock-refresh-token"
 
+    class FakeAuthResponse:
+        user = FakeUser()
+        session = FakeSession()
+
+    # FIX: Selyado pareho ang may "in" at walang "in" na method names ng Supabase
+    mock_supabase.auth.sign_in_with_password.return_value = FakeAuthResponse()
+    mock_supabase.auth.sign_with_password.return_value = FakeAuthResponse()
+
+    # 2. Gagamit tayo ng Lambdas at plain object para sa Table Query
+    class FakeExecuteResponse:
+        data = {"role": "customer"}  # Purong primitive types lang ang laman nito
+
+    class FakeQueryChain:
+        def select(self, *args, **kwargs): return self
+        def eq(self, *args, **kwargs): return self
+        def single(self, *args, **kwargs): return self
+        def maybe_single(self, *args, **kwargs): return self
+        def execute(self, *args, **kwargs): return FakeExecuteResponse()
+
+    # Kapag tinawag si table(), ibalik ang ating fake pure python chain
+    mock_supabase.table = lambda table_name: FakeQueryChain()
+
+    # 3. Request Payload
     payload = {
         "email": "christian@gmail.com",
         "password": "securepassword123"
@@ -87,6 +106,7 @@ def test_login_request_success(mock_send_email, mock_redis, mock_supabase):
     
     response = client.post("/api/auth/login", json=payload)
 
+    # 4. Assertions
     assert response.status_code == 200
     assert response.json()["status"] == "otp_sent"
     assert mock_redis.setex.called

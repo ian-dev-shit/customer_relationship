@@ -46,7 +46,7 @@ def signup(user_data: UserRegister):
 def login(user_data: UserLogin):
     try:
         #Login ang user gamit ang email at password
-        auth_response = supabase.auth.sign_with_password({
+        auth_response = supabase.auth.sign_in_with_password({
             "email": user_data.email,
             "password": user_data.password
         })
@@ -54,10 +54,13 @@ def login(user_data: UserLogin):
         user_id = auth_response.user.id
 
         # Kunin ang role ng user sa profile table
-        profile_response = supabase.table("profiles").select("role").eq("id", user_id).single().execute()
+        profile_response = supabase.table("profiles").select("role").eq("id", user_id).maybe_single().execute()
 
-        # Fallback sa 'customer if walang profile na mahanap
-        user_role = profile_response.data.get("role") if profile_response.data else "customer"
+        # Ligtas na pagkuha ng role
+        if profile_response and hasattr(profile_response, 'data') and profile_response.data:
+            user_role = profile_response.data.get("role", "customer")
+        else:
+            user_role = "customer"
 
         otp_code = f"{random.randint(100000, 999999)}"
 
@@ -84,7 +87,8 @@ def login(user_data: UserLogin):
         return {"status":"otp_sent", "message": "OTP has been sent to your registered channel.", "email": user_data.email}
 
     
-    except Exception:
+    except Exception as e:
+        print(f"Login error detail: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Wrong email or password"
@@ -94,9 +98,9 @@ def login(user_data: UserLogin):
 # Verification OTP
 @auth_router.post("/login-verify", response_model=TokenResponse)
 def login_verify(email: str, otp_code: str):
-    redis_key =f"pre_auth:{email}"
+    redis_key = f"pre_auth:{email}"
 
-    # 1.  Kunin ang pansamantalang session sa redis
+    # 1. Kunin ang pansamantalang session sa redis
     cached_data = redis_client.get(redis_key)
 
     if not cached_data:
@@ -105,19 +109,24 @@ def login_verify(email: str, otp_code: str):
             detail="Expired na o walang nahanap na OTP request para sa email na ito."
         )
     
-    session_data = json.loads(cached_data)
+
+    if isinstance(cached_data, str):
+        session_data = json.loads(cached_data)
+    else:
+        session_data = cached_data
+    # ---------------------------
 
     # 2. I-verify kung tugma ang OTP na in-input ng user
-    if session_data["otp"] != otp_code:
+    if str(session_data.get("otp")) != str(otp_code):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Wrong OTP code"
         )
     
-    # 3. Kung tama ang OTp burahin na ito sa redis
+    # 3. Kung tama ang OTP, burahin na ito sa redis
     redis_client.delete(redis_key)
 
-    # 4. Ibalik sa original na supabase token sa PHP frontend
+    # 4. Ibalik sa supabase token sa PHP frontend
     return {
         "access_token": session_data["access_token"],
         "refresh_token": session_data["refresh_token"],

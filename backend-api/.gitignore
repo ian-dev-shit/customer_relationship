@@ -9,3 +9,6 @@ myvenv/
 **/__pycache__/
 *.py[cod]
 *$py.class
+
+# Seed
+app/seed.py
