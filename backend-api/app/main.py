@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.routes.auth import auth_router
 
 # 1. I-initialize ang FastAPI app
 app = FastAPI(
@@ -16,6 +17,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Dito natin lalagay mga routes
+app.include_router(auth_router)
 
 # 3. Simple Root Route (Ito ang babasahin ng test file natin para pumasa ang CI)
 @app.get("/")

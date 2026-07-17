@@ -46,7 +46,10 @@ jobs:
       env:
         SUPABASE_URL: "https://dummy-url.supabase.co"
         SUPABASE_KEY: "dummy-key"
+        SUPABASE_JWT_SECRET: "dummy-jwt-secret"
+        REDIS_URL: "redis://localhost:6379/0"
+        RESEND_API_KEY: "re_dummy_api_key"
         APP_ENV: "testing" 
       run: |
-        # Ituturo natin ang PYTHONPATH sa loob ng app folder at patatakbuhin ang pytest doon
-        PYTHONPATH=app pytest app/test
+        # Ituro ang PYTHONPATH sa root ng backend project (.)
+        PYTHONPATH=. pytest app/test -v
