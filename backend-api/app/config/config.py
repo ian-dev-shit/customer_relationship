@@ -10,7 +10,8 @@ class Settings(BaseSettings):
     SUPABASE_JWT_SECRET: str
     UPSTASH_REDIS_REST_URL: str
     UPSTASH_REDIS_REST_TOKEN: str
-    RESEND_API_KEY: str
+    SMTP_SENDER: str
+    SMTP_PASSWORD: str
 
     #Automatic na babasahin ang .env file sa root folder
     model_config = SettingsConfigDict(

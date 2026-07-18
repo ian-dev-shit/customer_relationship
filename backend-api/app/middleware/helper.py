@@ -1,37 +1,74 @@
 
 # OTP helper
-
-import resend
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from app.config.config import settings
 
-# Resend api Setup
-resend.api_key = settings.RESEND_API_KEY
-
 def send_otp_email(to_email: str, otp_code: str):
-    try:
 
-        html_content = f"""
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
-            <h2 style="color: #333; text-align: center;">Your One-Time Password (OTP)</h2>
-            <p>Hello,</p>
-            <p>You requested a One-Time Password (OTP) to log in to your account. This code is valid for <strong>5 minutes</strong>.</p>
-            <div style="text-align: center; margin: 30px 0;">
-                <span style="font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #4F46E5; background-color: #F3F4F6; padding: 10px 20px; border-radius: 5px;">{otp_code}</span>
+    sender_email = settings.SMTP_SENDER
+    sender_password = settings.SMTP_PASSWORD
+
+    # 1. set up ang email Header
+
+    msg = MIMEMultipart()
+    msg['From'] = f"Rising Red Dragon <{sender_email}>"
+    msg['To'] = to_email
+    msg['Subject'] = f"{otp_code} is your Rising Red Dragon Verification Code"
+
+    # HTML Body clean look 
+    html_content = f"""
+    <html>
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #ffffff; color: #333333; padding: 40px 20px; margin: 0;">
+            <div style="max-width: 560px; margin: 0 auto; background: #ffffff; padding: 40px; border-radius: 8px; border: 1px solid #e1e1e1; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                
+                <!-- Title / Header -->
+                <h2 style="font-size: 22px; font-weight: 600; color: #111111; text-align: center; margin-bottom: 30px; margin-top: 0;">
+                    Your One-Time Password (OTP)
+                </h2>
+                
+                <!-- Body Text -->
+                <p style="font-size: 14px; line-height: 1.6; color: #444444; margin-bottom: 10px;">
+                    Hello,
+                </p>
+                <p style="font-size: 14px; line-height: 1.6; color: #444444; margin-top: 0; margin-bottom: 30px;">
+                    You requested a One-Time Password (OTP) to log in to your account. This code is valid for <strong style="color: #ff3838;">5 minutes</strong>.
+                </p>
+                
+                <!-- OTP Box -->
+                <div style="text-align: center; margin: 35px 0;">
+                    <span style="font-size: 32px; font-weight: bold; letter-spacing: 4px; color: #ff3838; background-color: #fff5f5; padding: 12px 35px; border-radius: 4px; border: 1px dashed #ffb8b8; display: inline-block;">
+                        {otp_code}
+                    </span>
+                </div>
+                
+                <!-- Notice Text -->
+                <p style="font-size: 13px; line-height: 1.5; color: #666666; margin-top: 30px; margin-bottom: 30px;">
+                    If you did not request this code, please ignore this email or contact support if you have concerns.
+                </p>
+                
+                <!-- Footer Divider -->
+                <hr style="border: 0; border-top: 1px solid #eeeeee; margin-bottom: 20px;">
+                
+                <!-- Footer Text -->
+                <p style="font-size: 11px; color: #888888; text-align: center; margin: 0; letter-spacing: 0.5px;">
+                    Rising Red Dragon System • Secure Auth Service
+                </p>
             </div>
-            <p>If you did not request this code, please ignore this email or contact support if you have concerns.</p>
-            <hr style="border: 0; border-top: 1px solid #e0e0e0;" />
-            <p style="font-size: 12px; color: #777; text-align: center;">Customer Relationship Management System &bull; Secure Auth Service</p>
-        </div>
-        """
+        </body>
+    </html>
+    """
 
-        response = resend.Emails.send({
-            "from": "Acme <onboarding@resend.dev>",
-            "to": to_email,
-            "subject": f"{otp_code} is your Login Verification Code",
-            "html": html_content
-        })
+    msg.attach(MIMEText(html_content, 'html', 'utf-8'))
 
-        return response
+    try:
+        # connect sa SMTP server ng google PORT 465
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+            server.login(sender_email, sender_password)
+            server.sendmail(sender_email, to_email, msg.as_string())
+
+        return True
     except Exception as e:
-        print(f"Failed to send email: {str(e)}")
-        return None
+        print(f"SMTP Email Error: {str(e)}")
+        return False

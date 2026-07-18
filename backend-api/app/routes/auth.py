@@ -38,7 +38,7 @@ def signup(user_data: UserRegister):
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            details=f"Registration failed: {str(e)}"
+            detail=f"Registration failed: {str(e)}"
         )
     
 # 2. Login endpoint

@@ -67,7 +67,7 @@ def test_signup_success(mock_supabase):
 @patch("app.routes.auth.redis_client")
 @patch("app.routes.auth.send_otp_email")
 def test_login_request_success(mock_send_email, mock_redis, mock_supabase):
-    # 1. Purong Python Class para sa Auth Response (Walang MagicMock)
+    # 1. Purong Python Class para sa Auth Response
     class FakeUser:
         id = "mocked-uuid-1234"
         email = "christian@gmail.com"
@@ -80,7 +80,6 @@ def test_login_request_success(mock_send_email, mock_redis, mock_supabase):
         user = FakeUser()
         session = FakeSession()
 
-    # FIX: Selyado pareho ang may "in" at walang "in" na method names ng Supabase
     mock_supabase.auth.sign_in_with_password.return_value = FakeAuthResponse()
     mock_supabase.auth.sign_with_password.return_value = FakeAuthResponse()
 
