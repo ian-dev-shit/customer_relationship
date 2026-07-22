@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter, HTTPException, status
 from app.schemas.auth import UserLogin, UserRegister, TokenResponse, LoginResponse
-from app.supabase.supabase import supabase, redis_client
+from app.supabase_config.supabase import supabase, redis_client
 import random
 import json
 from app.middleware.helper import send_otp_email
@@ -45,55 +45,65 @@ def signup(user_data: UserRegister):
 @auth_router.post("/login", response_model=LoginResponse)
 def login(user_data: UserLogin):
     try:
-        #Login ang user gamit ang email at password
+        # 1. Login ang user gamit ang email at password
         auth_response = supabase.auth.sign_in_with_password({
             "email": user_data.email,
             "password": user_data.password
         })
 
         user_id = auth_response.user.id
+        access_token = auth_response.session.access_token
 
-        # Kunin ang role ng user sa profile table
-        profile_response = supabase.table("profiles").select("role").eq("id", user_id).maybe_single().execute()
+        # 2. OPTION A: Gamitin ang Service Role Client (pinakaligtas sa backend)
+        # O kaya OPTION B: Ipasa ang Access Token sa headers para sa RLS Check
+        profile_response = (
+            supabase.table("profiles")
+            .select("role")
+            .eq("id", user_id)
+            .execute()
+        )
 
-        # Ligtas na pagkuha ng role
-        if profile_response and hasattr(profile_response, 'data') and profile_response.data:
-            user_role = profile_response.data.get("role", "customer")
+        # 3. Kuhanin ang role mula sa response
+        user_role = "customer" # Default fallback
+        
+        if profile_response.data and len(profile_response.data) > 0:
+            user_role = profile_response.data[0].get("role", "customer")
+            print(f"DEBUG: Found profile role -> {user_role}")
         else:
-            user_role = "customer"
+            print(f"DEBUG: No profile found for user_id -> {user_id}. Using fallback 'customer'.")
 
         otp_code = f"{random.randint(100000, 999999)}"
 
         temp_session = {
             "otp": otp_code,
-            "access_token": auth_response.session.access_token,
+            "access_token": access_token,
             "refresh_token": auth_response.session.refresh_token,
             "user_id": user_id,
             "email": auth_response.user.email,
             "role": user_role
         }
 
-        # Ipasok sa redis na 5 minutes limmit ang code
-        redis_key =f"pre_auth:{user_data.email}"
+        # 4. Ipasok sa redis na 5 minutes limit ang code
+        redis_key = f"pre_auth:{user_data.email}"
         redis_client.setex(redis_key, 300, json.dumps(temp_session))
 
-        # Sending to email
+        # 5. Sending to email
         send_otp_email(user_data.email, otp_code)
 
-        # For checking lang
         print(f"Email Sent to {user_data.email} with OTP: {otp_code}")
 
-        # Soon sa totong email na send ang code
-        return {"status":"otp_sent", "message": "OTP has been sent to your registered channel.", "email": user_data.email}
+        return {
+            "status": "otp_sent", 
+            "message": "OTP has been sent to your registered channel.", 
+            "email": user_data.email
+        }
 
-    
     except Exception as e:
         print(f"Login error detail: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Wrong email or password"
         )
-    
 
 # Verification OTP
 @auth_router.post("/login-verify", response_model=TokenResponse)

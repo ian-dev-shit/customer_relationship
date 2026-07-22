@@ -17,11 +17,18 @@ def send_otp_email(to_email: str, otp_code: str):
     msg['To'] = to_email
     msg['Subject'] = f"{otp_code} is your Rising Red Dragon Verification Code"
 
+    logo_url = "https://ueexljyfzygzhgjluqhm.supabase.co/storage/v1/object/public/assets/logoW-1.png"
+
     # HTML Body clean look 
     html_content = f"""
     <html>
         <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #ffffff; color: #333333; padding: 40px 20px; margin: 0;">
             <div style="max-width: 560px; margin: 0 auto; background: #ffffff; padding: 40px; border-radius: 8px; border: 1px solid #e1e1e1; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+
+            <!--  LOGO HERE -->
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <img src="{logo_url}" alt="Dragon" style="max-width: 120px; height: auto; display: block; margin: 0 auto;" />
+                </div
                 
                 <!-- Title / Header -->
                 <h2 style="font-size: 22px; font-weight: 600; color: #111111; text-align: center; margin-bottom: 30px; margin-top: 0;">

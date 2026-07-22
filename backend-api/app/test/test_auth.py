@@ -58,7 +58,6 @@ def test_signup_success(mock_supabase):
     assert response.json()["message"] == "Registration successful!"
     assert response.json()["user_id"] == "mocked-uuid-1234"
 
-
 # ==========================================
 # 3. TEST: REQUEST OTP / LOGIN (WITH MOCKING)
 # ==========================================
@@ -81,11 +80,10 @@ def test_login_request_success(mock_send_email, mock_redis, mock_supabase):
         session = FakeSession()
 
     mock_supabase.auth.sign_in_with_password.return_value = FakeAuthResponse()
-    mock_supabase.auth.sign_with_password.return_value = FakeAuthResponse()
 
-    # 2. Gagamit tayo ng Lambdas at plain object para sa Table Query
+    # 2. Fake Execute Response (Naka-List structure para ligtas sa data[0] access)
     class FakeExecuteResponse:
-        data = {"role": "customer"}  # Purong primitive types lang ang laman nito
+        data = [{"role": "staff_sla"}]
 
     class FakeQueryChain:
         def select(self, *args, **kwargs): return self
@@ -94,8 +92,8 @@ def test_login_request_success(mock_send_email, mock_redis, mock_supabase):
         def maybe_single(self, *args, **kwargs): return self
         def execute(self, *args, **kwargs): return FakeExecuteResponse()
 
-    # Kapag tinawag si table(), ibalik ang ating fake pure python chain
-    mock_supabase.table = lambda table_name: FakeQueryChain()
+    # I-bind ang query chain sa mock table
+    mock_supabase.table.return_value = FakeQueryChain()
 
     # 3. Request Payload
     payload = {
@@ -110,8 +108,6 @@ def test_login_request_success(mock_send_email, mock_redis, mock_supabase):
     assert response.json()["status"] == "otp_sent"
     assert mock_redis.setex.called
     assert mock_send_email.called
-
-
 # ==========================================
 # 4. TEST: VERIFY OTP (WITH MOCKING)
 # ==========================================
