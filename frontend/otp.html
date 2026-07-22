@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OTP Verification · Rising Red Dragon</title>
+
+  <!-- ===== HEADER SECTION ===== -->
+  <!-- This block can be moved to a separate header include file -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- ===== END HEADER SECTION ===== -->
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .glass-panel {
+      background: rgba(30, 41, 59, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .fade-in {
+      animation: fadeIn 0.4s ease-out both;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .mesh-bg {
+      background-color: #0b1120;
+      background-image: radial-gradient(at 0% 0%, hsla(217, 91%, 30%, 1) 0, transparent 50%),
+                        radial-gradient(at 100% 0%, hsla(199, 85%, 24%, 1) 0, transparent 50%),
+                        radial-gradient(at 100% 100%, hsla(222, 70%, 20%, 1) 0, transparent 50%),
+                        radial-gradient(at 0% 100%, hsla(190, 80%, 20%, 1) 0, transparent 50%);
+    }
+
+    .otp-input {
+      width: 3.5rem;
+      height: 4rem;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 600;
+      border-radius: 0.75rem;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+    .otp-input:focus {
+      border-color: #0ea5e9;
+      box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.2);
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .otp-input.filled {
+      border-color: rgba(14, 165, 233, 0.5);
+      background: rgba(14, 165, 233, 0.1);
+    }
+    .otp-input::-webkit-outer-spin-button,
+    .otp-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      appearance: none;
+      margin: 0;
+    }
+    .otp-input[type="number"] {
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+  </style>
+</head>
+
+<body class="bg-slate-950 text-slate-100 antialiased">
+
+  <div class="min-h-screen mesh-bg relative overflow-hidden">
+
+    <!-- Decorative grid -->
+    <div class="absolute inset-0 opacity-20 pointer-events-none"
+         style="background-image:
+           linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+           linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+           background-size: 40px 40px;">
+    </div>
+
+    <div class="grid lg:grid-cols-12 min-h-screen relative z-10">
+
+      <!-- LEFT COLUMN – Branding -->
+      <div class="lg:col-span-7 flex flex-col justify-center px-8 py-12 lg:px-16 xl:px-24">
+
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-300 text-xs font-semibold tracking-wide uppercase mb-6 w-fit fade-in" style="animation-delay:.1s">
+          <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
+          Enterprise Logistics OS
+        </div>
+
+        <h1 class="text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight text-white leading-[1.1] mb-6 fade-in" style="animation-delay:.2s">
+          Verify Your <br />
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-cyan-300">Identity</span>
+        </h1>
+
+        <p class="text-lg text-slate-300 max-w-xl mb-10 leading-relaxed fade-in" style="animation-delay:.3s">
+          We’ve sent a 6-digit code to your registered email address. Enter it below to continue.
+        </p>
+
+        <div class="grid sm:grid-cols-3 gap-6 mb-12 fade-in" style="animation-delay:.4s">
+          <div class="glass-panel rounded-xl p-5">
+            <div class="text-2xl font-bold text-white mb-1">📧</div>
+            <div class="text-sm text-slate-400">Code sent to your email</div>
+          </div>
+          <div class="glass-panel rounded-xl p-5">
+            <div class="text-2xl font-bold text-white mb-1">⏱️</div>
+            <div class="text-sm text-slate-400">Expires in 2 minutes</div>
+          </div>
+          <div class="glass-panel rounded-xl p-5">
+            <div class="text-2xl font-bold text-white mb-1">🔐</div>
+            <div class="text-sm text-slate-400">Secure verification</div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-6 text-sm text-slate-400 fade-in" style="animation-delay:.5s">
+          <span class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.746 3.746 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"/></svg>
+            Protected by AES-256
+          </span>
+          <span class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.746 3.746 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"/></svg>
+            Secure channel
+          </span>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN – OTP Form -->
+      <div class="lg:col-span-5 flex items-center justify-center p-6 lg:p-12 bg-slate-900/50 backdrop-blur-sm border-l border-white/5">
+
+        <div class="w-full max-w-md fade-in" style="animation-delay:.3s">
+
+          <div class="bg-slate-900/80 border border-slate-700 rounded-2xl shadow-2xl p-8">
+
+            <div class="flex items-center gap-3 mb-2">
+              <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-sky-500 to-cyan-600 flex items-center justify-center shadow-lg">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-19.5-3h19.5m-19.5-3h19.5m-19.5-3h19.5M4.5 3h15a2.25 2.25 0 012.25 2.25v.75a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25v-.75A2.25 2.25 0 014.5 3z"/></svg>
+              </div>
+              <div>
+                <h2 class="text-xl font-bold text-white tracking-tight">CargoNet</h2>
+                <p class="text-xs text-slate-400">Secure Verification</p>
+              </div>
+            </div>
+
+            <div class="border-t border-slate-700/50 my-6"></div>
+
+            <form id="otpForm" class="space-y-5" onsubmit="handleOTP(event)">
+
+              <div>
+                <label class="block text-sm font-medium text-slate-300 mb-3 text-center">
+                  Enter 6‑Digit Code
+                </label>
+
+                <div class="flex justify-center gap-3" id="otpContainer">
+                  <input type="number" max="9" min="0" class="otp-input" id="otp1" maxlength="1" required autofocus />
+                  <input type="number" max="9" min="0" class="otp-input" id="otp2" maxlength="1" required />
+                  <input type="number" max="9" min="0" class="otp-input" id="otp3" maxlength="1" required />
+                  <input type="number" max="9" min="0" class="otp-input" id="otp4" maxlength="1" required />
+                  <input type="number" max="9" min="0" class="otp-input" id="otp5" maxlength="1" required />
+                  <input type="number" max="9" min="0" class="otp-input" id="otp6" maxlength="1" required />
+                </div>
+                <input type="hidden" name="otp" id="otpHidden" value="" />
+              </div>
+
+              <div class="flex items-center justify-between text-xs">
+                <div class="text-slate-400">
+                  Code expires in <span id="timer" class="text-sky-400 font-semibold">02:00</span>
+                </div>
+                <button type="button" id="resendBtn" onclick="resendOTP()"
+                        class="text-sky-400 hover:text-sky-300 font-medium transition disabled:opacity-50 disabled:cursor-not-allowed">
+                  Resend Code
+                </button>
+              </div>
+
+              <button type="submit"
+                      class="w-full py-2.5 rounded-lg bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-400 hover:to-cyan-400 text-white font-semibold shadow-lg shadow-sky-500/20 transition active:scale-[0.98]">
+                Verify & Continue
+              </button>
+            </form>
+
+            <!-- Back to Login – now points to login.html -->
+            <div class="mt-6 pt-6 border-t border-white/5 text-center">
+              <a href="login.html" class="text-xs text-slate-400 hover:text-slate-300 transition">
+                ← Back to Login
+              </a>
+            </div>
+
+            <div class="mt-3 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 flex gap-3 items-start">
+              <svg class="w-5 h-5 text-amber-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.949 3.374h14.71c1.73 0 2.813-1.874 1.949-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+              <p class="text-xs text-amber-200/80 leading-relaxed">
+                If you didn’t receive the code, check your spam folder or request a new one.
+              </p>
+            </div>
+
+          </div>
+
+          <p class="text-center text-xs text-slate-500 mt-6">© 2026 CargoNet Systems. Global Logistics Solutions.</p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FOOTER SECTION ===== -->
+  <!-- This block can be moved to a separate footer include file -->
+  <script>
+    // --- OTP Input Logic ---
+    const otpInputs = document.querySelectorAll('.otp-input');
+    const otpHidden = document.getElementById('otpHidden');
+
+    function updateHiddenOTP() {
+      let otp = '';
+      otpInputs.forEach(input => { otp += input.value || ''; });
+      otpHidden.value = otp;
+    }
+
+    otpInputs.forEach((input, index) => {
+      input.addEventListener('input', function(e) {
+        const val = this.value;
+        if (val.length > 1) { this.value = val.slice(0, 1); }
+        if (this.value) { this.classList.add('filled'); } else { this.classList.remove('filled'); }
+
+        if (this.value && index < otpInputs.length - 1) {
+          otpInputs[index + 1].focus();
+        }
+        updateHiddenOTP();
+
+        const allFilled = Array.from(otpInputs).every(inp => inp.value !== '');
+        if (allFilled) {
+          setTimeout(() => document.getElementById('otpForm').submit(), 300);
+        }
+      });
+
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace' && !this.value && index > 0) {
+          otpInputs[index - 1].focus();
+          otpInputs[index - 1].value = '';
+          otpInputs[index - 1].classList.remove('filled');
+          updateHiddenOTP();
+        }
+      });
+
+      input.addEventListener('paste', function(e) {
+        e.preventDefault();
+        const pasted = (e.clipboardData || window.clipboardData).getData('text');
+        const digits = pasted.replace(/\D/g, '').slice(0, 6);
+        digits.split('').forEach((d, i) => {
+          if (i < otpInputs.length) {
+            otpInputs[i].value = d;
+            if (d) { otpInputs[i].classList.add('filled'); }
+          }
+        });
+        const nextIndex = Math.min(digits.length, otpInputs.length - 1);
+        if (nextIndex < otpInputs.length - 1) {
+          otpInputs[nextIndex + 1].focus();
+        } else {
+          otpInputs[otpInputs.length - 1].focus();
+        }
+        updateHiddenOTP();
+      });
+    });
+
+    // --- Timer (2 minutes) ---
+    let timeLeft = 120;
+    const timerEl = document.getElementById('timer');
+    const resendBtn = document.getElementById('resendBtn');
+
+    function updateTimerDisplay() {
+      const mins = Math.floor(timeLeft / 60);
+      const secs = timeLeft % 60;
+      timerEl.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    // Store interval globally so resend can clear it
+    window.otpTimer = setInterval(() => {
+      timeLeft--;
+      updateTimerDisplay();
+      if (timeLeft <= 0) {
+        clearInterval(window.otpTimer);
+        timerEl.textContent = 'Expired';
+        resendBtn.disabled = false;
+        resendBtn.classList.remove('opacity-50');
+      }
+    }, 1000);
+
+    // Initial state
+    resendBtn.disabled = true;
+    updateTimerDisplay();
+
+    // --- Resend OTP (demo) ---
+    function resendOTP() {
+      if (resendBtn.disabled) return;
+      resendBtn.disabled = true;
+      resendBtn.textContent = 'Sending...';
+
+      setTimeout(() => {
+        // Reset timer
+        timeLeft = 120;
+        updateTimerDisplay();
+        resendBtn.textContent = 'Resend Code';
+        resendBtn.disabled = true;
+
+        // Clear old interval and start fresh
+        if (window.otpTimer) clearInterval(window.otpTimer);
+        window.otpTimer = setInterval(() => {
+          timeLeft--;
+          updateTimerDisplay();
+          if (timeLeft <= 0) {
+            clearInterval(window.otpTimer);
+            timerEl.textContent = 'Expired';
+            resendBtn.disabled = false;
+            resendBtn.classList.remove('opacity-50');
+          }
+        }, 1000);
+
+        alert('A new OTP has been sent to your email.');
+      }, 1000);
+    }
+
+    // --- Form Submit Handler (demo) ---
+    function handleOTP(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      const orig = btn.innerText;
+      btn.innerText = 'Verifying...';
+      btn.disabled = true;
+
+      setTimeout(() => {
+        alert('OTP Verified! (Demo) — Redirecting to dashboard...');
+        btn.innerText = orig;
+        btn.disabled = false;
+        // In a real app: window.location.href = 'dashboard.html';
+      }, 800);
+    }
+  </script>
+  <!-- ===== END FOOTER SECTION ===== -->
+
+</body>
+</html>
