@@ -170,7 +170,7 @@
 
               <div class="flex items-center justify-between text-xs">
                 <div class="text-slate-400">
-                  Code expires in <span id="timer" class="text-sky-400 font-semibold">02:00</span>
+                  Code expires in <span id="timer" class="text-sky-400 font-semibold">05:00</span>
                 </div>
                 <button type="button" id="resendBtn" onclick="resendOTP()"
                         class="text-sky-400 hover:text-sky-300 font-medium transition disabled:opacity-50 disabled:cursor-not-allowed">
@@ -266,8 +266,8 @@
       });
     });
 
-    // --- Timer (2 minutes) ---
-    let timeLeft = 120;
+    // --- Timer (5 minutes) ---
+    let timeLeft = 300;
     const timerEl = document.getElementById('timer');
     const resendBtn = document.getElementById('resendBtn');
 
@@ -335,7 +335,7 @@
         alert('OTP Verified! (Demo) — Redirecting to dashboard...');
         btn.innerText = orig;
         btn.disabled = false;
-        // In a real app: window.location.href = 'dashboard.html';
+        window.location.href = 'customer-dashboard.html';
       }, 800);
     }
   </script>
