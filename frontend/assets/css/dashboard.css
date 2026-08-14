@@ -1,0 +1,73 @@
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f4f5f9;
+  color: #1e293b;
+}
+
+/* White Card Style (Papalit sa dark glass-panel) */
+.dashboard-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+}
+
+/* Status Badges - Soft Pastels base sa Prototype */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.status-in-transit {
+  background-color: #e0edff;
+  color: #2563eb;
+}
+
+.status-customs {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.status-delivered {
+  background-color: #d1fae5;
+  color: #059669;
+}
+
+.status-delayed {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+/* SLA Health Progress Bars */
+.progress-bar-bg {
+  background-color: #f1f5f9;
+  border-radius: 9999px;
+  height: 0.5rem;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.4s ease;
+}
+
+/* Animations & Scrollbar */
+.fade-in {
+  animation: fadeIn 0.4s ease-out both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }

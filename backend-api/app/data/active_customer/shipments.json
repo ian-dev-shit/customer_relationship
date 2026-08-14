@@ -1,0 +1,46 @@
+[
+    {
+        "shipment_id": "shp_001",
+        "customer_id": "cust_101",
+        "waybill_no": "SF-WB-208841",
+        "cargo_type": "40ft Container - Reefer",
+        "origin": "Port of Shanghai",
+        "destination": "Port of Manila",
+        "status": "In Transit",
+        "eta": "2026-07-29T14:00:00Z",
+        "created_at": "2026-07-20T08:30:00Z"
+    },
+    {
+        "shipment_id": "shp_002",
+        "customer_id": "cust_101",
+        "waybill_no": "SF-WB-208835",
+        "cargo_type": "20ft Container - Dry Van",
+        "origin": "Port of Singapore",
+        "destination": "Port of Batangas",
+        "status": "Customs",
+        "eta": "2026-07-30T09:00:00Z",
+        "created_at": "2026-07-21T10:15:00Z"
+    },
+    {
+    "shipment_id": "shp_003",
+    "customer_id": "cust_101",
+    "waybill_no": "SF-WB-200790",
+    "cargo_type": "LCL - Palletized",
+    "origin": "Port of Busan",
+    "destination": "Port of Manila",
+    "status": "Delivered",
+    "eta": "2026-07-25T11:20:00Z",
+    "created_at": "2026-07-15T06:00:00Z"
+  },
+  {
+    "shipment_id": "shp_004",
+    "customer_id": "cust_101",
+    "waybill_no": "SF-WB-200712",
+    "cargo_type": "40ft Container - Dry Van",
+    "origin": "Port of Shenzhen",
+    "destination": "Port of Subic",
+    "status": "Delayed",
+    "eta": "2026-07-27T18:00:00Z",
+    "created_at": "2026-07-18T12:45:00Z"
+  }
+]

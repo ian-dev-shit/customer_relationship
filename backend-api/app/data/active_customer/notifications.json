@@ -1,0 +1,22 @@
+[
+  {
+    "notification_id": "notif_001",
+    "customer_id": "cust_101",
+    "type": "Shipment Update",
+    "message": "Shipment SF-WB-200712 has been marked as Delayed due to port congestion.",
+    "related_entity": "shipment",
+    "entity_id": "shp_004",
+    "is_read": false,
+    "created_at": "2026-07-26T10:15:00Z"
+  },
+  {
+    "notification_id": "notif_002",
+    "customer_id": "cust_101",
+    "type": "Document Uploaded",
+    "message": "Proof of Delivery is now available for SF-WB-200790.",
+    "related_entity": "document",
+    "entity_id": "doc_003",
+    "is_read": true,
+    "created_at": "2026-07-25T12:05:00Z"
+  }
+]

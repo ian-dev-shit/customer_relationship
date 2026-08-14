@@ -36,7 +36,6 @@ class RoleChecker:
 
     def __call__(self, current_user = Depends(get_current_user)):
         try:
-            # Gamitin ang maybe_single() para iwas crash kapag walang nahanap
             profile = (
                 supabase.table('profiles')
                 .select('role')

@@ -54,8 +54,6 @@ def login(user_data: UserLogin):
         user_id = auth_response.user.id
         access_token = auth_response.session.access_token
 
-        # 2. OPTION A: Gamitin ang Service Role Client (pinakaligtas sa backend)
-        # O kaya OPTION B: Ipasa ang Access Token sa headers para sa RLS Check
         profile_response = (
             supabase.table("profiles")
             .select("role")
@@ -106,7 +104,7 @@ def login(user_data: UserLogin):
         )
 
 # Verification OTP
-@auth_router.post("/login-verify", response_model=TokenResponse)
+@auth_router.post("/verify-otp", response_model=TokenResponse)
 def login_verify(email: str, otp_code: str):
     redis_key = f"pre_auth:{email}"
 

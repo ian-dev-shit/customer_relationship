@@ -1,0 +1,26 @@
+{
+  "customer_id": "cust_101",
+  "overall_compliance_pct": 94,
+  "metrics": [
+    {
+      "category": "On-time Pickup",
+      "target_pct": 95,
+      "actual_pct": 97
+    },
+    {
+      "category": "Transit Time",
+      "target_pct": 90,
+      "actual_pct": 92
+    },
+    {
+      "category": "Customs Clearance",
+      "target_pct": 85,
+      "actual_pct": 78
+    },
+    {
+      "category": "Damage-free Delivery",
+      "target_pct": 98,
+      "actual_pct": 99
+    }
+  ]
+}

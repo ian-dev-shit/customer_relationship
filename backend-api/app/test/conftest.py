@@ -9,3 +9,5 @@ def pytest_configure(config):
     os.environ.setdefault("UPSTASH_REDIS_REST_TOKEN", "mock-redis-token")
     os.environ.setdefault("SMTP_SENDER", "test@example.com")
     os.environ.setdefault("SMTP_PASSWORD", "mock-smtp-password")
+    os.environ["SUPABASE_URL_2"] = "https://mock-supabase-url-2.supabase.co"
+    os.environ["SUPABASE_KEY_2"] = "mock-key-2"

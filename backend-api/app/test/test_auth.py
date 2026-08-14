@@ -126,7 +126,7 @@ def test_login_verify_success(mock_redis):
     mock_redis.get.return_value = json.dumps(cached_session)
     mock_redis.return_value = json.dumps(cached_session)
 
-    response = client.post("/api/auth/login-verify", params={"email": "christian@gmail.com", "otp_code": "123456"})
+    response = client.post("/api/auth/verify-otp", params={"email": "christian@gmail.com", "otp_code": "123456"})
     assert response.status_code == 200
     data = response.json()
     assert data["access_token"] == "valid-jwt-token"
@@ -147,6 +147,6 @@ def test_login_verify_wrong_otp(mock_redis):
     mock_redis.get.return_value = json.dumps(cached_session)
     mock_redis.return_value = json.dumps(cached_session)
 
-    response = client.post("/api/auth/login-verify", params={"email": "christian@gmail.com", "otp_code": "999999"})
+    response = client.post("/api/auth/verify-otp", params={"email": "christian@gmail.com", "otp_code": "999999"})
     assert response.status_code == 400
     assert response.json()["detail"] == "Wrong OTP code"

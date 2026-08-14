@@ -1,7 +1,6 @@
 import smtplib
 from email.mime.text import MIMEText
 
-# I-hardcode muna natin DITO LANG sa test file para masiguradong tama ang code
 sender = "ianmasong7@gmail.com" 
 password = "ujbflvgqhdyohuvq" 
 

@@ -1,0 +1,10 @@
+{
+  "customer_id": "cust_101",
+  "account_id": "acc_5501",
+  "company_name": "Corn Hub, Inc.",
+  "contact_name": "Jasper Sison",
+  "contact_email": "jasperSison@gmail.com",
+  "contact_phone": "+63 917 123 4567",
+  "billing_address": "Building 4, Metro Industrial Park, Pasig City, Philippines",
+  "created_at": "2025-11-10T08:00:00Z"
+}

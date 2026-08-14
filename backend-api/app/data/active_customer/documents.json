@@ -1,0 +1,29 @@
+[
+  {
+    "document_id": "doc_001",
+    "shipment_id": "shp_001",
+    "customer_id": "cust_101",
+    "title": "Bill of Lading - WB-208841",
+    "doc_type": "PDF",
+    "file_url": "https://storage.swiftfreight.com/docs/bol-208841.pdf",
+    "uploaded_at": "2026-07-20T09:00:00Z"
+  },
+  {
+    "document_id": "doc_002",
+    "shipment_id": "shp_002",
+    "customer_id": "cust_101",
+    "title": "Customs Declaration - WB-208835",
+    "doc_type": "PDF",
+    "file_url": "https://storage.swiftfreight.com/docs/cd-208835.pdf",
+    "uploaded_at": "2026-07-21T11:30:00Z"
+  },
+  {
+    "document_id": "doc_003",
+    "shipment_id": "shp_003",
+    "customer_id": "cust_101",
+    "title": "Proof of Delivery - WB-200790",
+    "doc_type": "PDF",
+    "file_url": "https://storage.swiftfreight.com/docs/pod-200790.pdf",
+    "uploaded_at": "2026-07-25T12:00:00Z"
+  }
+]

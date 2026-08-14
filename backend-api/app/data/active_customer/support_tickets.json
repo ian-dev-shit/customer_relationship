@@ -1,0 +1,22 @@
+[
+  {
+    "ticket_id": "tkt_001",
+    "customer_id": "cust_101",
+    "shipment_id": "shp_004",
+    "subject": "Delay Inquiry for SF-WB-200712",
+    "category": "Shipment Tracking",
+    "status": "Open",
+    "priority": "High",
+    "created_at": "2026-07-26T14:20:00Z"
+  },
+  {
+    "ticket_id": "tkt_002",
+    "customer_id": "cust_101",
+    "shipment_id": "shp_002",
+    "subject": "Customs Documentation Request",
+    "category": "Billing & Docs",
+    "status": "In Progress",
+    "priority": "Medium",
+    "created_at": "2026-07-22T09:10:00Z"
+  }
+]

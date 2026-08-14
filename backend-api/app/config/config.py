@@ -13,6 +13,10 @@ class Settings(BaseSettings):
     SMTP_SENDER: str
     SMTP_PASSWORD: str
 
+    # SECOND ACC
+    SUPABASE_URL_2: str
+    SUPABASE_KEY_2: str
+
     #Automatic na babasahin ang .env file sa root folder
     model_config = SettingsConfigDict(
         env_file=".env", 

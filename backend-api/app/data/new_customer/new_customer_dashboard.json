@@ -1,0 +1,27 @@
+{
+  "customer_id": "cust_202",
+  "company_name": "New Logistics Partner Corp.",
+  "status": "Newly Onboarded",
+  "metrics": {
+    "active_shipments": 0,
+    "in_transit": 0,
+    "delayed": 0,
+    "delivered_30d": 0
+  },
+  "initial_documents": [
+    {
+      "doc_id": "doc_new_01",
+      "title": "Signed_SLA_Contract.pdf",
+      "doc_type": "PDF",
+      "uploaded_by": "Sales Admin",
+      "created_at": "2026-08-07T10:00:00Z"
+    },
+    {
+      "doc_id": "doc_new_02",
+      "title": "Approved_Quotation_RateCard.pdf",
+      "doc_type": "PDF",
+      "uploaded_by": "Sales Admin",
+      "created_at": "2026-08-07T10:05:00Z"
+    }
+  ]
+}
