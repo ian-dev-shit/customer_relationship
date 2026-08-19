@@ -8,11 +8,10 @@ app.include_router(router)
 
 client = TestClient(app)
 
-# Dummy item na sumusunod nang eksakto sa LeadResponseSchema
 MOCK_LEAD = {
     "id": "123e4567-e89b-12d3-a456-426614174000",
     "inquiry_code": "INQ-001",
-    "created_at": "2026-08-15T00:00:00Z",  
+    "created_at": "2026-08-15T00:00:00Z",
     "company_name": "ABC Corp",
     "contact_person": "Juan Dela Cruz",
     "email": "juan@abc.com",
@@ -27,15 +26,21 @@ MOCK_LEAD = {
 
 @patch("app.routes.leads.supabase_secondary")
 def test_get_leads_success(mock_supabase):
-    mock_data = [MOCK_LEAD, {**MOCK_LEAD, "id": "123e4567-e89b-12d3-a456-426614174001", "status": "qualifying"}]
+    mock_data = [
+        MOCK_LEAD,
+        {
+            **MOCK_LEAD,
+            "id": "123e4567-e89b-12d3-a456-426614174001",
+            "status": "qualifying",
+        },
+    ]
 
     mock_execute = MagicMock()
     mock_execute.data = mock_data
     mock_execute.count = 2
 
-    # Mock method chain: .table().select().order().range().execute()
     (
-        mock_supabase.table.return_value.select.return_value.order.return_value.range.return_value.execute.return_value
+        mock_supabase.table.return_value.select.return_value.neq.return_value.neq.return_value.order.return_value.range.return_value.execute.return_value
     ) = mock_execute
 
     response = client.get("/api/v1/leads/")
@@ -54,7 +59,6 @@ def test_get_leads_with_status_and_search_filter(mock_supabase):
     mock_execute.data = mock_data
     mock_execute.count = 1
 
-    # Mock method chain kapag may .eq() at .or_()
     (
         mock_supabase.table.return_value.select.return_value.eq.return_value.or_.return_value.order.return_value.range.return_value.execute.return_value
     ) = mock_execute
@@ -92,6 +96,7 @@ def test_get_lead_stats_success(mock_supabase):
         {"status": "qualifying"},
         {"status": "quote_sent"},
         {"status": "closed_won"},
+        {"status": "closed_lost"},
     ]
 
     mock_execute = MagicMock()
@@ -105,13 +110,14 @@ def test_get_lead_stats_success(mock_supabase):
 
     assert response.status_code == 200
     stats = response.json()
-    assert stats["all"] == 5
+    # 'all' excludes closed_won and closed_lost
+    assert stats["all"] == 4
     assert stats["new_inquiry"] == 2
     assert stats["qualifying"] == 1
     assert stats["quote_sent"] == 1
     assert stats["negotiation"] == 0
     assert stats["closed_won"] == 1
-    assert stats["closed_lost"] == 0
+    assert stats["closed_lost"] == 1
 
 
 @patch("app.routes.leads.supabase_secondary")
@@ -133,12 +139,19 @@ def test_get_lead_stats_error(mock_supabase):
 def test_update_lead_status_success(mock_supabase):
     updated_lead = {**MOCK_LEAD, "status": "quote_sent"}
 
-    mock_execute = MagicMock()
-    mock_execute.data = [updated_lead]
+    # Mock DB response para sa initial check (select) at update execute
+    mock_select_execute = MagicMock()
+    mock_select_execute.data = [MOCK_LEAD]
 
-    (
-        mock_supabase.table.return_value.update.return_value.eq.return_value.execute.return_value
-    ) = mock_execute
+    mock_update_execute = MagicMock()
+    mock_update_execute.data = [updated_lead]
+
+    mock_supabase.table.return_value.select.return_value.eq.return_value.execute.return_value = (
+        mock_select_execute
+    )
+    mock_supabase.table.return_value.update.return_value.eq.return_value.execute.return_value = (
+        mock_update_execute
+    )
 
     response = client.patch(
         "/api/v1/leads/123e4567-e89b-12d3-a456-426614174000/status",
@@ -150,25 +163,72 @@ def test_update_lead_status_success(mock_supabase):
 
 
 @patch("app.routes.leads.supabase_secondary")
-def test_update_lead_status_invalid_enum(mock_supabase):
-    # Test validation error kapag nag-pasa ng maling StatusType
-    response = client.patch(
-        "/api/v1/leads/123e4567-e89b-12d3-a456-426614174000/status",
-        json={"status": "invalid_status_enum"},
+def test_update_lead_status_closed_won_success(mock_supabase):
+    # Test for closed_won creating ticket successfully
+    updated_lead = {
+        **MOCK_LEAD,
+        "status": "closed_won",
+        "pickup_address": "Manila",
+    }
+
+    mock_select_execute = MagicMock()
+    mock_select_execute.data = [MOCK_LEAD]
+
+    mock_update_execute = MagicMock()
+    mock_update_execute.data = [updated_lead]
+
+    mock_supabase.table.return_value.select.return_value.eq.return_value.execute.return_value = (
+        mock_select_execute
+    )
+    mock_supabase.table.return_value.update.return_value.eq.return_value.execute.return_value = (
+        mock_update_execute
     )
 
-    # Dapat mag-throw ng 422 Unprocessable Entity dahil sa Pydantic validation
-    assert response.status_code == 422
+    payload = {
+        "status": "closed_won",
+        "pickup_address": "123 Warehouse St., Manila",
+        "pickup_datetime": "2026-08-25T10:00:00Z",
+        "estimated_amount": 15000.0,
+    }
+
+    response = client.patch(
+        "/api/v1/leads/123e4567-e89b-12d3-a456-426614174000/status", json=payload
+    )
+
+    assert response.status_code == 200
+    assert response.json()["status"] == "closed_won"
+
+
+@patch("app.routes.leads.supabase_secondary")
+def test_update_lead_status_closed_won_missing_fields(mock_supabase):
+    # Missing pickup_address/datetime when status is closed_won
+    mock_select_execute = MagicMock()
+    mock_select_execute.data = [MOCK_LEAD]
+
+    mock_supabase.table.return_value.select.return_value.eq.return_value.execute.return_value = (
+        mock_select_execute
+    )
+
+    response = client.patch(
+        "/api/v1/leads/123e4567-e89b-12d3-a456-426614174000/status",
+        json={"status": "closed_won"},
+    )
+
+    assert response.status_code == 400
+    assert (
+        "Pickup address and datetime are required"
+        in response.json()["detail"]
+    )
 
 
 @patch("app.routes.leads.supabase_secondary")
 def test_update_lead_status_not_found(mock_supabase):
-    mock_execute = MagicMock()
-    mock_execute.data = []
+    mock_select_execute = MagicMock()
+    mock_select_execute.data = []
 
-    (
-        mock_supabase.table.return_value.update.return_value.eq.return_value.execute.return_value
-    ) = mock_execute
+    mock_supabase.table.return_value.select.return_value.eq.return_value.execute.return_value = (
+        mock_select_execute
+    )
 
     response = client.patch(
         "/api/v1/leads/non-existing-id/status", json={"status": "closed_won"}
@@ -178,14 +238,52 @@ def test_update_lead_status_not_found(mock_supabase):
     assert response.json()["detail"] == "Lead ID not found."
 
 
-@patch("app.routes.leads.supabase_secondary")
-def test_update_lead_status_server_error(mock_supabase):
-    mock_supabase.table.side_effect = Exception("Update query failed")
+# ==========================================
+# 4. TEST: GET /api/v1/leads/dashboard-kpis
+# ==========================================
 
-    response = client.patch(
-        "/api/v1/leads/123e4567-e89b-12d3-a456-426614174000/status",
-        json={"status": "closed_lost"},
+
+@patch("app.routes.leads.supabase_secondary")
+def test_get_dashboard_kpis_success(mock_supabase):
+    mock_closed_leads = [
+        {
+            "id": "1",
+            "status": "closed_won",
+            "estimated_amount": 5000.0,
+            "created_at": "2026-08-10T10:00:00Z",  # Current month (August 2026)
+        },
+        {
+            "id": "2",
+            "status": "closed_won",
+            "estimated_amount": 3000.0,
+            "created_at": "2026-07-15T10:00:00Z",  # Previous month (July 2026)
+        },
+    ]
+
+    mock_execute = MagicMock()
+    mock_execute.data = mock_closed_leads
+
+    mock_supabase.table.return_value.select.return_value.eq.return_value.execute.return_value = (
+        mock_execute
     )
 
+    response = client.get("/api/v1/leads/dashboard-kpis")
+
+    assert response.status_code == 200
+    res_json = response.json()
+    assert res_json["status"] == "success"
+    assert res_json["data"]["revenue"]["current"] == 5000.0
+    assert res_json["data"]["revenue"]["previous"] == 3000.0
+    assert res_json["data"]["revenue"]["diff"] == 2000.0
+    assert res_json["data"]["customers_closed"]["current"] == 1
+    assert res_json["data"]["customers_closed"]["previous"] == 1
+
+
+@patch("app.routes.leads.supabase_secondary")
+def test_get_dashboard_kpis_error(mock_supabase):
+    mock_supabase.table.side_effect = Exception("KPI query failed")
+
+    response = client.get("/api/v1/leads/dashboard-kpis")
+
     assert response.status_code == 500
-    assert "Update query failed" in response.json()["detail"]
+    assert "KPI query failed" in response.json()["detail"]

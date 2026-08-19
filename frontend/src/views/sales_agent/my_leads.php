@@ -73,19 +73,7 @@ function getLeadStatusBadge($status) {
 
     <!-- SEARCH & ACTION BUTTONS -->
     <div class="flex items-center gap-3">
-      <form method="GET" action="" class="relative">
-        <input type="hidden" name="status" value="<?= htmlspecialchars($current_status) ?>">
-        <input 
-          type="text" 
-          name="search" 
-          placeholder="Search company or contact..." 
-          value="<?= htmlspecialchars($search_query) ?>"
-          class="w-64 pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 shadow-sm"
-        >
-        <svg class="w-4 h-4 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-        </svg>
-      </form>
+      <?php include 'components/search.php'; ?>
 
       <button class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-sm font-medium transition shadow-sm">
         + New Quote
@@ -139,6 +127,7 @@ function getLeadStatusBadge($status) {
             <th class="py-3 px-4">Inquiry Code</th>
             <th class="py-3 px-4">Company & Contact</th>
             <th class="py-3 px-4">Service Type</th>
+            <th class="py-3 px-4">Estimated Price</th>
             <th class="py-3 px-4">Status</th>
             <th class="py-3 px-4">Date Submitted</th>
             <th class="py-3 px-4 text-center">Actions</th>
@@ -180,10 +169,15 @@ function getLeadStatusBadge($status) {
                   <?php endif; ?>
                 </td>
 
+                <!--  ESTIMATED PRICE DISPLAY -->
+                <td class="py-4 px-4 font-bold text-slate-800">
+                  ₱<?= number_format((float)($lead['estimated_amount'] ?? 0), 2) ?>
+                </td>
+
                 <!-- 4. STATUS -->
-                <td class="py-4 px-4">
-                  <span class="px-2.5 py-1 rounded-full text-xs font-semibold border <?= getLeadStatusBadge($lead['status'] ?? 'new_inquiry') ?>">
-                    <?= htmlspecialchars(str_replace('_', ' ', strtoupper($lead['status'] ?? 'new_inquiry'))) ?>
+                <td class="py-4 px-4 align-middle">
+                  <span class="inline-flex items-center justify-center px-3 py-1 rounded-full text-[11px] font-bold border tracking-wide whitespace-nowrap leading-none <?= getLeadStatusBadge($lead['status'] ?? 'new_inquiry') ?>">
+                    <?= htmlspecialchars(str_replace('_', ' ', strtoupper($lead['status'] ?? 'NEW INQUIRY'))) ?>
                   </span>
                 </td>
 
@@ -204,11 +198,11 @@ function getLeadStatusBadge($status) {
                     </button>
 
                     <!-- DIRECT CONTACT ACTION -->
-                    <a 
-                      href="mailto:<?= htmlspecialchars($lead['email'] ?? '') ?>" 
+                    <button 
+                      onclick="openContactModal('<?= htmlspecialchars(addslashes($lead['company_name'] ?? 'N/A')) ?>', '<?= htmlspecialchars(addslashes($lead['contact_person'] ?? '')) ?>', '<?= htmlspecialchars($lead['email'] ?? '') ?>', '<?= htmlspecialchars($lead['phone_number'] ?? '') ?>')" 
                       class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-xs transition border border-slate-200 flex items-center gap-1">
                       ✉️ Contact
-                    </a>
+                    </button>
 
                   </div>
                 </td>
@@ -241,7 +235,7 @@ function getLeadStatusBadge($status) {
 
 <!-- VIEW INQUIRY DETAILS MODAL -->
 <div id="viewModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-  <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 relative">
+  <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 relative max-h-[90vh] overflow-y-auto">
     
     <button onclick="closeViewModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
       ✕
@@ -261,29 +255,78 @@ function getLeadStatusBadge($status) {
     </div>
 
     <!-- UPDATE STATUS FORM -->
-    <form id="statusUpdateForm" onsubmit="handleStatusUpdate(event)" class="space-y-3">
+    <form id="statusUpdateForm" onsubmit="handleStatusUpdate(event)" class="space-y-4">
       <input type="hidden" id="modalLeadId" value="">
-      <label class="block text-xs font-semibold text-slate-700">Update Lead Status:</label>
-      <div class="flex gap-2">
-        <select id="modalStatusSelect" class="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-purple-500">
-          <option value="new_inquiry">NEW INQUIRY</option>
-          <option value="qualifying">QUALIFYING</option>
-          <option value="quote_sent">QUOTE SENT</option>
-          <option value="negotiation">NEGOTIATION</option>
-          <option value="closed_won">CLOSED WON</option>
-          <option value="closed_lost">CLOSED LOST</option>
-        </select>
-        <button type="submit" class="px-4 py-2 bg-purple-600 text-white font-semibold rounded-xl text-xs hover:bg-purple-700 transition">
-          Save Status
-        </button>
+      
+      <!-- TOP ROW: Status and Price -->
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Update Status:</label>
+          <select id="modalStatusSelect" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-purple-500">
+            <option value="new_inquiry">NEW INQUIRY</option>
+            <option value="qualifying">QUALIFYING</option>
+            <option value="quote_sent">QUOTE SENT</option>
+            <option value="negotiation">NEGOTIATION</option>
+            <option value="closed_won">CLOSED WON</option>
+            <option value="closed_lost">CLOSED LOST</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Agreed Price / Quote (₱):</label>
+          <input 
+            type="number" 
+            step="0.01" 
+            id="modalPriceInput" 
+            placeholder="0.00" 
+            class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-purple-500 font-bold text-slate-800"
+          >
+        </div>
       </div>
+
+      <!-- DYNAMIC PICKUP FIELDS SECTION  -->
+      <div id="pickupFieldsSection" class="hidden space-y-3 pt-3 border-t border-slate-200">
+        <div class="text-xs font-bold text-slate-700 flex items-center gap-1">
+           Pickup Details <span class="text-rose-500">*</span>
+        </div>
+        
+        <div>
+          <label class="block text-xs text-slate-500 mb-1">Full Pickup Address</label>
+          <textarea 
+            id="modalPickupAddress"
+            name="pickup_address" 
+            rows="2" 
+            placeholder="Enter complete street address, landmark, floor/unit..."
+            class="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+          ></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs text-slate-500 mb-1">Pickup Date & Time</label>
+          <input 
+            type="datetime-local" 
+            id="modalPickupDateTime" 
+            name="pickup_datetime"
+            class="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+          />
+        </div>
+      </div>
+
+      <!-- SUBMIT BUTTON -->
+      <button type="submit" class="w-full py-2.5 bg-purple-600 text-white font-semibold rounded-xl text-xs hover:bg-purple-700 transition shadow-md shadow-purple-200">
+        Save Status
+      </button>
     </form>
 
   </div>
 </div>
 
-<!-- JAVASCRIPT FOR MODAL & FASTAPI PATCH STATUS -->
+<?php include_once 'components/contact_modal.php'; ?>
+
+<!-- JAVASCRIPT FOR MODAL -->
 <script src="../../../assets/js/myleads.js"></script>
+
+<?php include_once 'components/alert.php'; ?>
 
 <!-- FOOTER INCLUDE -->
 <?php include_once '../../includes/footer.php'; ?>

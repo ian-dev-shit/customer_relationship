@@ -8,6 +8,17 @@ require_once '../../helpers/api_helper.php';
 $stats_res  = make_api_request('/api/v1/leads/stats', 'GET');
 $stats_data = $stats_res['data'] ?? [];
 
+// 2. Fetch Dashboard KPIs (Revenue & Customers Closed month vs last month)
+$kpi_res     = make_api_request('/api/v1/leads/dashboard-kpis', 'GET');
+
+// INAYOS DITO: Kinuha ang inner 'data' object mula sa FastAPI Response {"status":"success", "data":{...}}
+$kpi_data    = $kpi_res['data']['data'] ?? $kpi_res['data'] ?? [];
+
+$revenue_current   = (float)($kpi_data['revenue']['current'] ?? 0);
+$revenue_diff      = (float)($kpi_data['revenue']['diff'] ?? 0);
+$customers_current = (int)($kpi_data['customers_closed']['current'] ?? 0);
+$customers_diff    = (int)($kpi_data['customers_closed']['diff'] ?? 0);
+
 // Extract Live Counts
 $total_leads = (int)($stats_data['all'] ?? 0);
 $new_inquiry = (int)($stats_data['new_inquiry'] ?? 0);
@@ -26,7 +37,7 @@ $pipeline  = [
     'won_mtd'     => ['count' => $closed_won,  'percentage' => min(100, round(($closed_won / $max_count) * 100))],
 ];
 
-// 2. Fetch Pending Leads para sa Escalation Queue Widget 
+// 3. Fetch Pending Leads para sa Escalation Queue Widget 
 $recent_leads_res = make_api_request('/api/v1/leads/?status=new_inquiry&limit=5', 'GET');
 $escalations      = $recent_leads_res['data']['data'] ?? [];
 

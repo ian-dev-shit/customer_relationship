@@ -14,6 +14,16 @@ StatusType = Literal[
 
 class StatusUpdateSchema(BaseModel):
     status: StatusType
+    estimated_amount: Optional[float] = None
+
+    # Dagdag: Pick-up deatials
+    pickup_address: Optional[str] = None
+    pickup_datetime: Optional[datetime] = None
+
+    # Dagdag: Sales agent info
+    agent_id: Optional[str] = None
+    agent_name: Optional[str] = None
+    agent_email: Optional[str] = None
 
 class LeadResponseSchema(BaseModel):
     id: str
@@ -33,10 +43,14 @@ class LeadResponseSchema(BaseModel):
     initial_inquiry_text: Optional[str] = None
     
     status: Optional[str] = "new_inquiry"
+    estimated_amount: Optional[float] = None
     
     assigned_agent_id: Optional[str] = None
     assigned_agent_name: Optional[str] = None
     assigned_agent_email: Optional[str] = None
+
+    pickup_address: Optional[str] = None
+    pickup_datetime: Optional[datetime] = None
 
     class Config:
         from_attributes = True
