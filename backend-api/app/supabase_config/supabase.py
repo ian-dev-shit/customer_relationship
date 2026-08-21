@@ -7,7 +7,7 @@ from upstash_redis import Redis
 
 # Gawa ng single connection instance kay supabase
 supabase: Client = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
-supabase_secondary: Client = create_client(settings.SUPABASE_URL_2, settings.SUPABASE_KEY_2)
+supabase_secondary: Client = create_client(settings.SUPABASE_URL_2, settings.SUPABASE_SERVICE_KEY_2)
 
 # Connection sa redis
 redis_client = Redis(

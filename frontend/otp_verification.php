@@ -54,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     'x-user-id: ' . $userId
                 ];
 
-                // BAGUHIN DITO: Palitan ng `false` ang 4th parameter ($is_form_data)
+                
                 $profile_res = make_api_request('/api/v1/portal/profile', 'GET', null, false, $headers);
 
                 if ($profile_res['status_code'] == 200 && !empty($profile_res['data'])) {

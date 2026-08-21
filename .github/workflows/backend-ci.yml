@@ -47,7 +47,7 @@ jobs:
         SUPABASE_URL: "https://dummy-url.supabase.co"
         SUPABASE_KEY: "dummy-key"
         SUPABASE_URL_2: "https://dummy-url-2.supabase.co"
-        SUPABASE_KEY_2: "dummy-key-2"
+        SUPABASE_SERVICE_KEY_2: "dummy-key-2"
         SUPABASE_JWT_SECRET: "dummy-jwt-secret"
         SMTP_SENDER: "test@gmail.com"
         SMTP_PASSWORD: "testpassword"

@@ -11,7 +11,7 @@ $stats_data = $stats_res['data'] ?? [];
 // 2. Fetch Dashboard KPIs (Revenue & Customers Closed month vs last month)
 $kpi_res     = make_api_request('/api/v1/leads/dashboard-kpis', 'GET');
 
-// INAYOS DITO: Kinuha ang inner 'data' object mula sa FastAPI Response {"status":"success", "data":{...}}
+// INAYOS DITO: Kinuha ang inner 'data' object mula sa FastAPI Response 
 $kpi_data    = $kpi_res['data']['data'] ?? $kpi_res['data'] ?? [];
 
 $revenue_current   = (float)($kpi_data['revenue']['current'] ?? 0);

@@ -25,8 +25,9 @@ class SidebarService
         $userRole  = $this->session['role'] ?? 'sales_agent';
         $agentId   = $this->session['agent_id'] ?? 'SA-014';
 
-        $apiStats   = $this->fetchApiStats();
-        $navigation = $this->buildNavigation($userRole, $apiStats['leads'], $apiStats['alerts']);
+        // Ipasa ang $userRole para tama ang API na tatawagin
+        $apiStats   = $this->fetchApiStats($userRole);
+        $navigation = $this->buildNavigation($userRole, $apiStats);
 
         return [
             'userRole'    => $userRole,
@@ -42,20 +43,29 @@ class SidebarService
     /**
      * Private Method: Pag-fetch ng Data sa API
      */
-    private function fetchApiStats(): array
+    private function fetchApiStats(string $role): array
     {
         $leads = 0;
         $alerts = 0;
+        $tickets = 0;
 
         if (function_exists('make_api_request')) {
-            $response = make_api_request('/api/v1/leads/stats', 'GET');
-            $data = $response['data'] ?? [];
-            
-            $leads  = (int)($data['all'] ?? 0);
-            $alerts = (int)($data['new_inquiry'] ?? 0);
+            if ($role === 'admin') {
+                // Fetch Close-Won Tickets na 'for account' pa lang mula sa FastAPI
+                $ticketRes = make_api_request('/api/v1/admin/close-won-tickets', 'GET');
+                $ticketsData = $ticketRes['data'] ?? [];
+                $tickets = count($ticketsData);
+            } else {
+                // Fetch Sales Agent Stats
+                $response = make_api_request('/api/v1/leads/stats', 'GET');
+                $data = $response['data'] ?? [];
+                
+                $leads  = (int)($data['all'] ?? 0);
+                $alerts = (int)($data['new_inquiry'] ?? 0);
+            }
         }
 
-        return ['leads' => $leads, 'alerts' => $alerts];
+        return ['leads' => $leads, 'alerts' => $alerts, 'tickets' => $tickets];
     }
 
     /**
@@ -95,8 +105,34 @@ class SidebarService
     /**
      * Private Method: Pagbuo ng Navigation batay sa Role
      */
-    private function buildNavigation(string $role, int $leads, int $alerts): array
+    private function buildNavigation(string $role, array $stats): array
     {
+        $leads   = $stats['leads'] ?? 0;
+        $alerts  = $stats['alerts'] ?? 0;
+        $tickets = $stats['tickets'] ?? 0;
+
+        if ($role === 'admin'){
+            return [
+                'portalLabel' => 'ADMIN PORTAL',
+                'sections' => [
+                    'OVERVIEW' => [
+                        'dashboard' => ['label' => 'Control Center', 'icon' => 'fa-chart-pie', 'url' => 'dashboard.php'],
+                    ],
+                    'MANAGEMENT' => [
+                        'tickets' => [
+                            'label' => 'Account Tickets', 
+                            'icon' => 'fa-ticket-simple', 
+                            'url' => 'tickets.php',
+                            'badge' => (string)$tickets, // Dynamic count mula sa API
+                            'badgeColor' => $tickets > 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-800 text-slate-500'
+                        ],
+                        'customers' => ['label' => 'Customer Accounts', 'icon' => 'fa-address-book', 'url' => 'customers.php'], 
+                    ],
+                ]
+            ];
+        }
+
+
         if ($role === 'sales_agent') {
             return [
                 'portalLabel' => 'SALES AGENT PORTAL',

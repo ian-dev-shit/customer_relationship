@@ -62,52 +62,130 @@ def test_signup_success(mock_supabase):
 # 3. TEST: REQUEST OTP / LOGIN (WITH MOCKING)
 # ==========================================
 
+
+class FakeUser:
+    id = "mocked-uuid-1234"
+    email = "christian@gmail.com"
+
+
+class FakeSession:
+    access_token = "mock-access-token"
+    refresh_token = "mock-refresh-token"
+
+
+class FakeAuthResponse:
+    user = FakeUser()
+    session = FakeSession()
+
+
+class FakeExecuteResponse:
+    data = [{"role": "sales"}]
+
+
+class FakeQueryChain:
+
+    def select(self, *args, **kwargs):
+        return self
+
+    def eq(self, *args, **kwargs):
+        return self
+
+    def execute(self, *args, **kwargs):
+        return FakeExecuteResponse()
+
+
+# 3a. Primary Auth Login Success (Admin / Sales)
+@patch("app.routes.auth.supabase_secondary")
 @patch("app.routes.auth.supabase")
 @patch("app.routes.auth.redis_client")
 @patch("app.routes.auth.send_otp_email")
-def test_login_request_success(mock_send_email, mock_redis, mock_supabase):
-    # 1. Purong Python Class para sa Auth Response
-    class FakeUser:
-        id = "mocked-uuid-1234"
-        email = "christian@gmail.com"
+def test_login_primary_success(
+    mock_send_email, mock_redis, mock_supabase_primary, mock_supabase_secondary
+):
+    # Primary Auth succeeds
+    mock_supabase_primary.auth.sign_in_with_password.return_value = (
+        FakeAuthResponse()
+    )
+    mock_supabase_primary.table.return_value = FakeQueryChain()
 
-    class FakeSession:
-        access_token = "mock-access-token"
-        refresh_token = "mock-refresh-token"
-
-    class FakeAuthResponse:
-        user = FakeUser()
-        session = FakeSession()
-
-    mock_supabase.auth.sign_in_with_password.return_value = FakeAuthResponse()
-
-    # 2. Fake Execute Response (Naka-List structure para ligtas sa data[0] access)
-    class FakeExecuteResponse:
-        data = [{"role": "staff_sla"}]
-
-    class FakeQueryChain:
-        def select(self, *args, **kwargs): return self
-        def eq(self, *args, **kwargs): return self
-        def single(self, *args, **kwargs): return self
-        def maybe_single(self, *args, **kwargs): return self
-        def execute(self, *args, **kwargs): return FakeExecuteResponse()
-
-    # I-bind ang query chain sa mock table
-    mock_supabase.table.return_value = FakeQueryChain()
-
-    # 3. Request Payload
     payload = {
         "email": "christian@gmail.com",
-        "password": "securepassword123"
+        "password": "securepassword123",
     }
-    
+
     response = client.post("/api/auth/login", json=payload)
 
-    # 4. Assertions
     assert response.status_code == 200
     assert response.json()["status"] == "otp_sent"
     assert mock_redis.setex.called
     assert mock_send_email.called
+
+
+# 3b. Secondary Auth Fallback Success (Customer Portal)
+@patch("app.routes.auth.supabase_secondary")
+@patch("app.routes.auth.supabase")
+@patch("app.routes.auth.redis_client")
+@patch("app.routes.auth.send_otp_email")
+def test_login_secondary_fallback_success(
+    mock_send_email, mock_redis, mock_supabase_primary, mock_supabase_secondary
+):
+    # Primary Auth fails, causing fallback to Secondary
+    mock_supabase_primary.auth.sign_in_with_password.side_effect = Exception(
+        "Invalid primary credentials"
+    )
+
+    class CustomerExecuteResponse:
+        data = [{"role": "customer"}]
+
+    class CustomerQueryChain:
+
+        def select(self, *args, **kwargs):
+            return self
+
+        def eq(self, *args, **kwargs):
+            return self
+
+        def execute(self, *args, **kwargs):
+            return CustomerExecuteResponse()
+
+    mock_supabase_secondary.auth.sign_in_with_password.return_value = (
+        FakeAuthResponse()
+    )
+    mock_supabase_secondary.table.return_value = CustomerQueryChain()
+
+    payload = {
+        "email": "customer@gmail.com",
+        "password": "securepassword123",
+    }
+
+    response = client.post("/api/auth/login", json=payload)
+
+    assert response.status_code == 200
+    assert response.json()["status"] == "otp_sent"
+    assert mock_redis.setex.called
+    assert mock_send_email.called
+
+
+# 3c. Both Auth Fail (Unauthorized 401)
+@patch("app.routes.auth.supabase_secondary")
+@patch("app.routes.auth.supabase")
+def test_login_both_auth_failed(mock_supabase_primary, mock_supabase_secondary):
+    mock_supabase_primary.auth.sign_in_with_password.side_effect = Exception(
+        "Primary Auth failed"
+    )
+    mock_supabase_secondary.auth.sign_in_with_password.side_effect = Exception(
+        "Secondary Auth failed"
+    )
+
+    payload = {
+        "email": "wrong@gmail.com",
+        "password": "wrongpassword",
+    }
+
+    response = client.post("/api/auth/login", json=payload)
+
+    assert response.status_code == 401
+    assert response.json()["detail"] == "Invalid email or password"
 # ==========================================
 # 4. TEST: VERIFY OTP (WITH MOCKING)
 # ==========================================

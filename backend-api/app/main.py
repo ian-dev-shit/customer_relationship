@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.routes.auth import auth_router
 from app.routes.portal import router as portal_router
 from app.routes.leads import router as leads_router
+from app.routes.admin import router as admin_router
 
 # 1. I-initialize ang FastAPI app
 app = FastAPI(
@@ -24,6 +25,7 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(portal_router)
 app.include_router(leads_router)
+app.include_router(admin_router)
 
 # 3. Simple Root Route (Ito ang babasahin ng test file natin para pumasa ang CI)
 @app.get("/")

@@ -4,7 +4,6 @@ from fastapi.testclient import TestClient
 
 from app.routes.portal import router
 
-# Gumawa ng temporary FastAPI app para sa testing ng router
 app = FastAPI()
 app.include_router(router)
 
@@ -13,7 +12,6 @@ client = TestClient(app)
 
 # --- 1. TEST: Missing/Empty Header (400 Bad Request) ---
 def test_get_profile_missing_header():
-    # Nag-call nang walang 'x-user-id' header
     response = client.get("/api/v1/portal/profile")
 
     assert response.status_code == 400
@@ -21,7 +19,6 @@ def test_get_profile_missing_header():
 
 
 def test_get_profile_empty_header():
-    # Nag-call na spaces lang ang laman ng header
     response = client.get(
         "/api/v1/portal/profile", headers={"x-user-id": "   "}
     )
@@ -30,10 +27,10 @@ def test_get_profile_empty_header():
     assert response.json()["detail"] == "Header 'x-user-id' is missing or empty."
 
 
-# --- 2. TEST: Profile Found (200 OK) ---
-@patch("app.routes.portal.supabase")  
-def test_get_profile_success(mock_supabase):
-    # Mocking sa response data ng Supabase
+# --- 2. TEST: Profile Found in Secondary DB (Customer - Priority 1) ---
+@patch("app.routes.portal.supabase")
+@patch("app.routes.portal.supabase_secondary")
+def test_get_profile_secondary_success(mock_supabase_sec, mock_supabase_pri):
     mock_data = [
         {
             "id": "user-123",
@@ -43,14 +40,12 @@ def test_get_profile_success(mock_supabase):
         }
     ]
 
-    # I-chain ang mock methods para mag-match sa supabase.table().select().eq().execute()
     mock_execute = MagicMock()
     mock_execute.data = mock_data
-    mock_supabase.table.return_value.select.return_value.eq.return_value.execute.return_value = (
+    mock_supabase_sec.table.return_value.select.return_value.eq.return_value.execute.return_value = (
         mock_execute
     )
 
-    # Call endpoint
     response = client.get(
         "/api/v1/portal/profile", headers={"x-user-id": "user-123"}
     )
@@ -59,16 +54,60 @@ def test_get_profile_success(mock_supabase):
     data = response.json()
     assert data["id"] == "user-123"
     assert data["full_name"] == "Juan Delacruz"
+    mock_supabase_sec.table.assert_called_once_with("users")
 
 
-# --- 3. TEST: Profile Not Found (404 Not Found) ---
+# --- 3. TEST: Profile Fallback to Primary DB (Admin/Sales - Priority 2) ---
 @patch("app.routes.portal.supabase")
-def test_get_profile_not_found(mock_supabase):
-    # Mocking na walang nahanap na record (empty list)
-    mock_execute = MagicMock()
-    mock_execute.data = []
-    mock_supabase.table.return_value.select.return_value.eq.return_value.execute.return_value = (
-        mock_execute
+@patch("app.routes.portal.supabase_secondary")
+def test_get_profile_primary_fallback_success(
+    mock_supabase_sec, mock_supabase_pri
+):
+    # Secondary DB returns empty list
+    mock_execute_sec = MagicMock()
+    mock_execute_sec.data = []
+    mock_supabase_sec.table.return_value.select.return_value.eq.return_value.execute.return_value = (
+        mock_execute_sec
+    )
+
+    # Primary DB returns the user profile
+    mock_data_pri = [
+        {
+            "id": "admin-456",
+            "first_name": "Maria",
+            "last_name": "Clara",
+            "email": "maria@example.com",
+        }
+    ]
+    mock_execute_pri = MagicMock()
+    mock_execute_pri.data = mock_data_pri
+    mock_supabase_pri.table.return_value.select.return_value.eq.return_value.execute.return_value = (
+        mock_execute_pri
+    )
+
+    response = client.get(
+        "/api/v1/portal/profile", headers={"x-user-id": "admin-456"}
+    )
+
+    assert response.status_code == 200
+    data = response.json()
+    assert data["id"] == "admin-456"
+    assert data["full_name"] == "Maria Clara"
+    mock_supabase_pri.table.assert_called_once_with("profiles")
+
+
+# --- 4. TEST: Profile Not Found in Both DBs (404 Not Found) ---
+@patch("app.routes.portal.supabase")
+@patch("app.routes.portal.supabase_secondary")
+def test_get_profile_not_found(mock_supabase_sec, mock_supabase_pri):
+    mock_execute_empty = MagicMock()
+    mock_execute_empty.data = []
+
+    mock_supabase_sec.table.return_value.select.return_value.eq.return_value.execute.return_value = (
+        mock_execute_empty
+    )
+    mock_supabase_pri.table.return_value.select.return_value.eq.return_value.execute.return_value = (
+        mock_execute_empty
     )
 
     response = client.get(
@@ -81,15 +120,16 @@ def test_get_profile_not_found(mock_supabase):
     )
 
 
-# --- 4. TEST: Supabase/Database Error (500 Internal Server Error) ---
+# --- 5. TEST: Supabase Error Handled as Not Found ---
 @patch("app.routes.portal.supabase")
-def test_get_profile_database_error(mock_supabase):
-    # I-simulate ang error kapag nag-query sa Supabase
-    mock_supabase.table.side_effect = Exception("Connection Timeout")
+@patch("app.routes.portal.supabase_secondary")
+def test_get_profile_database_error(mock_supabase_sec, mock_supabase_pri):
+    mock_supabase_sec.table.side_effect = Exception("Connection Timeout")
+    mock_supabase_pri.table.side_effect = Exception("Connection Timeout")
 
     response = client.get(
         "/api/v1/portal/profile", headers={"x-user-id": "user-123"}
     )
 
-    assert response.status_code == 500
-    assert "Database query failed: Connection Timeout" in response.json()["detail"]
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Profile not found for user ID: user-123"

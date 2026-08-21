@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     # SECOND ACC
     SUPABASE_URL_2: str
     SUPABASE_KEY_2: str
+    SUPABASE_SERVICE_KEY_2: str
     
 
     #Automatic na babasahin ang .env file sa root folder
