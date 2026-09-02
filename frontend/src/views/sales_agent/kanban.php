@@ -1,5 +1,5 @@
 <?php
-$page_title = "Kanban Pipeline · SwiftFreight";
+$page_title = "Kanban Pipeline · PRIORITY HANDLING";
 
 include_once '../../includes/header.php';
 require_once '../../helpers/api_helper.php';
@@ -71,9 +71,7 @@ foreach ($all_leads as $lead) {
         </svg>
       </div>
 
-      <button class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-sm font-medium transition shadow-sm">
-        + New Quote
-      </button>
+      
     </div>
   </div>
 
@@ -106,7 +104,7 @@ foreach ($all_leads as $lead) {
           <?php else: ?>
             <?php foreach ($column['items'] as $lead): ?>
               
-              <!-- CLEAN KANBAN CARD (NO EXTRA BUTTONS) -->
+              <!-- CLEAN KANBAN CARD -->
               <div 
                 draggable="true" 
                 ondragstart="dragLead(event, '<?= $lead['id'] ?>')"
@@ -144,7 +142,7 @@ foreach ($all_leads as $lead) {
 </main>
 
 <!-- JAVASCRIPT FOR REAL-TIME SYNC & DRAG & DROP -->
-<script src="../../../assets/js/kanban.js"></script>
+<script src="../../../assets/js/sales_agent/kanban.js"></script>
 
 <?php include_once 'components/alert.php'; ?>
 <!-- FOOTER INCLUDE -->

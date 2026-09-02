@@ -13,11 +13,11 @@ def send_otp_email(to_email: str, otp_code: str):
     # 1. set up ang email Header
 
     msg = MIMEMultipart()
-    msg['From'] = f"Rising Red Dragon <{sender_email}>"
+    msg['From'] = f"Priority Handling Logistics Inc. <{sender_email}>"
     msg['To'] = to_email
-    msg['Subject'] = f"{otp_code} is your Rising Red Dragon Verification Code"
+    msg['Subject'] = f"{otp_code} is your Priority Handling Logistics Inc. Verification Code"
 
-    logo_url = "https://ueexljyfzygzhgjluqhm.supabase.co/storage/v1/object/public/assets/logoW-1.png"
+    logo_url = "https://ueexljyfzygzhgjluqhm.supabase.co/storage/v1/object/public/assets/logo1.jpg"
 
     # HTML Body clean look 
     html_content = f"""
@@ -60,7 +60,7 @@ def send_otp_email(to_email: str, otp_code: str):
                 
                 <!-- Footer Text -->
                 <p style="font-size: 11px; color: #888888; text-align: center; margin: 0; letter-spacing: 0.5px;">
-                    Rising Red Dragon System • Secure Auth Service
+                    Priority Handling Logistics Inc. • Secure Auth Service
                 </p>
             </div>
         </body>

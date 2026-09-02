@@ -1,5 +1,5 @@
 <?php
-$page_title = "Sales Agent Dashboard · SwiftFreight";
+$page_title = "Sales Agent Dashboard · PRIORITY HANDLING";
 
 include_once '../../includes/header.php';
 require_once '../../helpers/api_helper.php';
@@ -64,26 +64,29 @@ function getContractStatusBadge($status) {
 <main class="flex-1 overflow-y-auto bg-[#F8FAFC] p-6 lg:p-8">
 
   <!-- TOP HEADER & NAVBAR -->
-  <?php include_once 'components/top_header.php'; ?>
+  <?php include_once '../../components/top_header.php'; ?>
 
   <!-- ROW 1: TOP KPI METRICS -->
   <?php include_once 'components/kpi_cards.php'; ?>
 
-  <!-- ROW 2: MAIN DASHBOARD GRID -->
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-    <!-- LEFT COLUMN: PIPELINE SNAPSHOT -->
-    <?php include_once 'components/pipeline_snapshot.php'; ?>
-
-    <!-- RIGHT COLUMN WIDGETS -->
-    <div class="lg:col-span-4 space-y-6">
-      <?php include_once 'components/escalation_queue.php'; ?>
-      <?php include_once 'components/my_contracts.php'; ?>
-    </div>
-
+  <!-- ROW 3: PIPELINE ACTIVITY & TOP CUSTOMERS -->
+  <div class="mt-6">
+    <?php include_once 'components/top_routes.php'; ?>
+   
   </div>
 
+    <!-- MODALS -->
+  <?php include_once 'components/lead_modal.php'; ?>
+
 </main>
+
+<?php include_once 'components/alert.php'; ?>
+
+<!-- SCRIPT  -->
+
+<script src="../../../assets/js/sales_agent/kpi.js"></script>
+<script src="../../../assets/js/sales_agent/new_leads.js"></script>
+<script src="../../../assets/js/sales_agent/top_routes.js"></script>
 
 <!-- FOOTER INCLUDE -->
 <?php include_once '../../includes/footer.php'; ?>

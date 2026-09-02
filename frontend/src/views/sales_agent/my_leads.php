@@ -1,5 +1,5 @@
 <?php
-$page_title = "My Leads · SwiftFreight";
+$pageTitle  = "My Leads";
 
 include_once '../../includes/header.php';
 require_once '../../helpers/api_helper.php';
@@ -10,7 +10,7 @@ $search_query   = $_GET['search'] ?? '';
 $page           = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $limit          = 10;
 
-// 2. Fetch Live Stats mula sa FastAPI /api/v1/leads/stats
+// 2. Fetch Live Stats mula sa FastAPI 
 $stats_res  = make_api_request('/api/v1/leads/stats', 'GET');
 $stats_data = $stats_res['data'] ?? [];
 
@@ -65,21 +65,7 @@ function getLeadStatusBadge($status) {
 <main class="flex-1 overflow-y-auto bg-[#F8FAFC] p-6 lg:p-8">
 
   <!-- TOP HEADER & NAVBAR -->
-  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-    <div>
-      <h1 class="text-2xl font-bold text-slate-800">My Leads</h1>
-      <p class="text-sm text-slate-500">Manage and track customer inquiries assigned to you</p>
-    </div>
-
-    <!-- SEARCH & ACTION BUTTONS -->
-    <div class="flex items-center gap-3">
-      <?php include 'components/search.php'; ?>
-
-      <button class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-sm font-medium transition shadow-sm">
-        + New Quote
-      </button>
-    </div>
-  </div>
+  <?php include_once '../../components/top_header.php'; ?>
 
   <!-- STATUS FILTER TABS -->
   <div class="flex items-center gap-2 mb-6 overflow-x-auto pb-2">
@@ -136,7 +122,7 @@ function getLeadStatusBadge($status) {
         <tbody class="divide-y divide-slate-100 text-sm">
           <?php if (empty($leads_list)): ?>
             <tr>
-              <td colspan="6" class="py-8 text-center text-slate-400">
+              <td colspan="7" class="py-8 text-center text-slate-400">
                 No inquiries found.
               </td>
             </tr>
@@ -169,9 +155,9 @@ function getLeadStatusBadge($status) {
                   <?php endif; ?>
                 </td>
 
-                <!--  ESTIMATED PRICE DISPLAY -->
+                <!-- ESTIMATED PRICE DISPLAY -->
                 <td class="py-4 px-4 font-bold text-slate-800">
-                  ₱<?= number_format((float)($lead['estimated_amount'] ?? 0), 2) ?>
+                  ₱<?= number_format((float)($lead['estimated_amount'] ?? $lead['estimated_price'] ?? 0), 2) ?>
                 </td>
 
                 <!-- 4. STATUS -->
@@ -183,27 +169,19 @@ function getLeadStatusBadge($status) {
 
                 <!-- 5. CREATED AT -->
                 <td class="py-4 px-4 text-xs text-slate-500">
-                  <?= date('M d, Y • h:i A', strtotime($lead['created_at'])) ?>
+                  <?= !empty($lead['created_at']) ? date('M d, Y • h:i A', strtotime($lead['created_at'])) : 'N/A' ?>
                 </td>
 
-                <!-- 6. ACTIONS (VIEW & CONTACT) -->
+                <!-- 6. ACTIONS -->
                 <td class="py-4 px-4 text-center">
                   <div class="flex items-center justify-center gap-2">
-                    
-                    <!-- VIEW DETAILS MODAL TRIGGER -->
+                    <!-- FIXED  -->
                     <button 
-                      onclick="openViewModal(<?= htmlspecialchars(json_encode($lead)) ?>)" 
-                      class="px-3 py-1.5 bg-purple-50 hover:bg-purple-100 text-purple-600 font-semibold rounded-lg text-xs transition border border-purple-200">
-                      View
+                      type="button"
+                      onclick='openViewModal(<?= htmlspecialchars(json_encode($lead, JSON_HEX_APOS | JSON_HEX_QUOT), ENT_QUOTES, "UTF-8") ?>)' 
+                      class="px-3.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-bold rounded-xl text-xs transition-all active:scale-95 border border-indigo-100 inline-flex items-center gap-1.5">
+                      <i class="fa-solid fa-eye text-[11px]"></i> View & Manage
                     </button>
-
-                    <!-- DIRECT CONTACT ACTION -->
-                    <button 
-                      onclick="openContactModal('<?= htmlspecialchars(addslashes($lead['company_name'] ?? 'N/A')) ?>', '<?= htmlspecialchars(addslashes($lead['contact_person'] ?? '')) ?>', '<?= htmlspecialchars($lead['email'] ?? '') ?>', '<?= htmlspecialchars($lead['phone_number'] ?? '') ?>')" 
-                      class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-xs transition border border-slate-200 flex items-center gap-1">
-                      ✉️ Contact
-                    </button>
-
                   </div>
                 </td>
 
@@ -233,98 +211,11 @@ function getLeadStatusBadge($status) {
 
 </main>
 
-<!-- VIEW INQUIRY DETAILS MODAL -->
-<div id="viewModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-  <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 relative max-h-[90vh] overflow-y-auto">
-    
-    <button onclick="closeViewModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
-      ✕
-    </button>
-
-    <h3 class="text-lg font-bold text-slate-800 mb-1" id="modalCompany">Company Name</h3>
-    <p class="text-xs text-purple-600 font-semibold mb-4" id="modalCode">INQ-CODE</p>
-
-    <div class="space-y-3 text-xs text-slate-600 bg-slate-50 p-4 rounded-xl border border-slate-100 mb-5">
-      <div><strong>Contact Person:</strong> <span id="modalContact"></span></div>
-      <div><strong>Email Address:</strong> <span id="modalEmail"></span></div>
-      <div><strong>Phone Number:</strong> <span id="modalPhone"></span></div>
-      <div><strong>Platform:</strong> <span id="modalPlatform"></span></div>
-      <div><strong>Service Requested:</strong> <span id="modalService"></span></div>
-      <div><strong>Route:</strong> <span id="modalRoute"></span></div>
-      <div><strong>Cargo Details:</strong> <p id="modalCargo" class="mt-1 text-slate-700 italic bg-white p-2 rounded border border-slate-200"></p></div>
-    </div>
-
-    <!-- UPDATE STATUS FORM -->
-    <form id="statusUpdateForm" onsubmit="handleStatusUpdate(event)" class="space-y-4">
-      <input type="hidden" id="modalLeadId" value="">
-      
-      <!-- TOP ROW: Status and Price -->
-      <div class="grid grid-cols-2 gap-3">
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">Update Status:</label>
-          <select id="modalStatusSelect" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-purple-500">
-            <option value="new_inquiry">NEW INQUIRY</option>
-            <option value="qualifying">QUALIFYING</option>
-            <option value="quote_sent">QUOTE SENT</option>
-            <option value="negotiation">NEGOTIATION</option>
-            <option value="closed_won">CLOSED WON</option>
-            <option value="closed_lost">CLOSED LOST</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">Agreed Price / Quote (₱):</label>
-          <input 
-            type="number" 
-            step="0.01" 
-            id="modalPriceInput" 
-            placeholder="0.00" 
-            class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs focus:ring-2 focus:ring-purple-500 font-bold text-slate-800"
-          >
-        </div>
-      </div>
-
-      <!-- DYNAMIC PICKUP FIELDS SECTION  -->
-      <div id="pickupFieldsSection" class="hidden space-y-3 pt-3 border-t border-slate-200">
-        <div class="text-xs font-bold text-slate-700 flex items-center gap-1">
-           Pickup Details <span class="text-rose-500">*</span>
-        </div>
-        
-        <div>
-          <label class="block text-xs text-slate-500 mb-1">Full Pickup Address</label>
-          <textarea 
-            id="modalPickupAddress"
-            name="pickup_address" 
-            rows="2" 
-            placeholder="Enter complete street address, landmark, floor/unit..."
-            class="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-          ></textarea>
-        </div>
-
-        <div>
-          <label class="block text-xs text-slate-500 mb-1">Pickup Date & Time</label>
-          <input 
-            type="datetime-local" 
-            id="modalPickupDateTime" 
-            name="pickup_datetime"
-            class="w-full text-xs p-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-          />
-        </div>
-      </div>
-
-      <!-- SUBMIT BUTTON -->
-      <button type="submit" class="w-full py-2.5 bg-purple-600 text-white font-semibold rounded-xl text-xs hover:bg-purple-700 transition shadow-md shadow-purple-200">
-        Save Status
-      </button>
-    </form>
-
-  </div>
-</div>
-
-<?php include_once 'components/contact_modal.php'; ?>
+<?php include_once 'components/view_lead_modal.php'; ?>
+<?php include_once 'components/lead_modal.php'; ?>
 
 <!-- JAVASCRIPT FOR MODAL -->
-<script src="../../../assets/js/myleads.js"></script>
+<script src="../../../assets/js/sales_agent/myleads.js"></script>
 
 <?php include_once 'components/alert.php'; ?>
 

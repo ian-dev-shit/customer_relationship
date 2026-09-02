@@ -1,7 +1,8 @@
 from unittest.mock import MagicMock, patch
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
-from app.routes.leads import router
+from app.routes.sales_agent.leads import router
+from freezegun import freeze_time
 
 app = FastAPI()
 app.include_router(router)
@@ -24,7 +25,7 @@ MOCK_LEAD = {
 # ==========================================
 
 
-@patch("app.routes.leads.supabase_secondary")
+@patch("app.routes.sales_agent.leads.supabase_secondary")
 def test_get_leads_success(mock_supabase):
     mock_data = [
         MOCK_LEAD,
@@ -51,7 +52,7 @@ def test_get_leads_success(mock_supabase):
     assert len(res_json["data"]) == 2
 
 
-@patch("app.routes.leads.supabase_secondary")
+@patch("app.routes.sales_agent.leads.supabase_secondary")
 def test_get_leads_with_status_and_search_filter(mock_supabase):
     mock_data = [{**MOCK_LEAD, "status": "qualifying"}]
 
@@ -73,7 +74,7 @@ def test_get_leads_with_status_and_search_filter(mock_supabase):
     assert res_json["data"][0]["company_name"] == "ABC Corp"
 
 
-@patch("app.routes.leads.supabase_secondary")
+@patch("app.routes.sales_agent.leads.supabase_secondary")
 def test_get_leads_server_error(mock_supabase):
     mock_supabase.table.side_effect = Exception("Database connection error")
 
@@ -88,7 +89,7 @@ def test_get_leads_server_error(mock_supabase):
 # ==========================================
 
 
-@patch("app.routes.leads.supabase_secondary")
+@patch("app.routes.sales_agent.leads.supabase_secondary")
 def test_get_lead_stats_success(mock_supabase):
     mock_data = [
         {"status": "new_inquiry"},
@@ -120,7 +121,7 @@ def test_get_lead_stats_success(mock_supabase):
     assert stats["closed_lost"] == 1
 
 
-@patch("app.routes.leads.supabase_secondary")
+@patch("app.routes.sales_agent.leads.supabase_secondary")
 def test_get_lead_stats_error(mock_supabase):
     mock_supabase.table.side_effect = Exception("Stats fetch failed")
 
@@ -135,7 +136,7 @@ def test_get_lead_stats_error(mock_supabase):
 # ==========================================
 
 
-@patch("app.routes.leads.supabase_secondary")
+@patch("app.routes.sales_agent.leads.supabase_secondary")
 def test_update_lead_status_success(mock_supabase):
     updated_lead = {**MOCK_LEAD, "status": "quote_sent"}
 
@@ -162,7 +163,7 @@ def test_update_lead_status_success(mock_supabase):
     assert response.json()["status"] == "quote_sent"
 
 
-@patch("app.routes.leads.supabase_secondary")
+@patch("app.routes.sales_agent.leads.supabase_secondary")
 def test_update_lead_status_closed_won_success(mock_supabase):
     # Test for closed_won creating ticket successfully
     updated_lead = {
@@ -199,7 +200,7 @@ def test_update_lead_status_closed_won_success(mock_supabase):
     assert response.json()["status"] == "closed_won"
 
 
-@patch("app.routes.leads.supabase_secondary")
+@patch("app.routes.sales_agent.leads.supabase_secondary")
 def test_update_lead_status_closed_won_missing_fields(mock_supabase):
     # Missing pickup_address/datetime when status is closed_won
     mock_select_execute = MagicMock()
@@ -221,7 +222,7 @@ def test_update_lead_status_closed_won_missing_fields(mock_supabase):
     )
 
 
-@patch("app.routes.leads.supabase_secondary")
+@patch("app.routes.sales_agent.leads.supabase_secondary")
 def test_update_lead_status_not_found(mock_supabase):
     mock_select_execute = MagicMock()
     mock_select_execute.data = []
@@ -243,20 +244,21 @@ def test_update_lead_status_not_found(mock_supabase):
 # ==========================================
 
 
-@patch("app.routes.leads.supabase_secondary")
+@freeze_time("2026-08-20")  # Pinipigilan ang oras 
+@patch("app.routes.sales_agent.leads.supabase_secondary")
 def test_get_dashboard_kpis_success(mock_supabase):
     mock_closed_leads = [
         {
             "id": "1",
             "status": "closed_won",
             "estimated_amount": 5000.0,
-            "created_at": "2026-08-10T10:00:00Z",  # Current month (August 2026)
+            "created_at": "2026-08-10T10:00:00Z",  # Pasok sa Current Month (August)
         },
         {
             "id": "2",
             "status": "closed_won",
             "estimated_amount": 3000.0,
-            "created_at": "2026-07-15T10:00:00Z",  # Previous month (July 2026)
+            "created_at": "2026-07-15T10:00:00Z",  # Pasok sa Previous Month (July)
         },
     ]
 
@@ -279,7 +281,7 @@ def test_get_dashboard_kpis_success(mock_supabase):
     assert res_json["data"]["customers_closed"]["previous"] == 1
 
 
-@patch("app.routes.leads.supabase_secondary")
+@patch("app.routes.sales_agent.leads.supabase_secondary")
 def test_get_dashboard_kpis_error(mock_supabase):
     mock_supabase.table.side_effect = Exception("KPI query failed")
 

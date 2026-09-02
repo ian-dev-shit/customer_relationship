@@ -59,4 +59,4 @@
   </div>
 </div>
 
-<script src="../../../../assets/js/contact_modal.js"></script>
+<script src="../../../../assets/js/sales_agent/contact_modal.js"></script>

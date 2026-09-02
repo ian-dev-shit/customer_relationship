@@ -111,7 +111,7 @@ class SidebarService
         $alerts  = $stats['alerts'] ?? 0;
         $tickets = $stats['tickets'] ?? 0;
 
-        if ($role === 'admin'){
+        if ($role === 'admin') {
             return [
                 'portalLabel' => 'ADMIN PORTAL',
                 'sections' => [
@@ -123,47 +123,71 @@ class SidebarService
                             'label' => 'Account Tickets', 
                             'icon' => 'fa-ticket-simple', 
                             'url' => 'tickets.php',
-                            'badge' => (string)$tickets, // Dynamic count mula sa API
+                            'badge' => (string)$tickets,
                             'badgeColor' => $tickets > 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-800 text-slate-500'
                         ],
-                        'customers' => ['label' => 'Customer Accounts', 'icon' => 'fa-address-book', 'url' => 'customers.php'], 
+                        // SUBMENU: Accounts & Users Management
+                        'accounts_management' => [
+                            'label' => 'User Management',
+                            'icon' => 'fa-users-gear',
+                            'submenu' => [
+                                'customers' => ['label' => 'Customer Accounts', 'url' => 'customers.php'],
+                                'agents'    => ['label' => 'Sales Agents', 'url' => 'agents.php'],
+                            ]
+                        ]
                     ],
                 ]
             ];
         }
-
 
         if ($role === 'sales_agent') {
             return [
                 'portalLabel' => 'SALES AGENT PORTAL',
                 'sections' => [
                     'OVERVIEW' => [
-                        'dashboard' => ['label' => 'Dashboard', 'icon' => 'fa-chart-pie', 'url' => 'dashboard.php'],
+                        'dashboard' => ['label' => 'Dashboard', 'icon' => 'fa-chart-pie', 'url' => '/src/views/sales_agent/dashboard.php'],
                     ],
                     'PIPELINE' => [
-                        'leads'     => [
+                        'leads' => [
                             'label' => 'My Leads', 
                             'icon' => 'fa-users-line', 
-                            'url' => 'my_leads.php', 
+                            'url' => '/src/views/sales_agent/my_leads.php', 
                             'badge' => (string)$leads, 
                             'badgeColor' => 'bg-purple-500/20 text-purple-400'
                         ],
-                        'kanban'    => ['label' => 'Kanban Pipeline', 'icon' => 'fa-bars-staggered', 'url' => 'kanban.php'],
-                        'ai-alerts' => [
-                            'label' => 'AI Escalations', 
-                            'icon' => 'fa-robot', 
-                            'url' => 'ai-escalations.php', 
-                            'badge' => (string)$alerts, 
-                            'badgeColor' => 'bg-red-500/20 text-red-400'
-                        ],
+                        'kanban' => ['label' => 'Sales Board', 
+                                     'icon' => 'fa-columns', 
+                                     'url' => '/src/views/sales_agent/kanban.php'],
+                    ],
+                    'ACCOUNTS & CLIENTS' => [
+                        'accounts_group' => [
+                            'label' => 'Account & Clients',
+                            'icon' => 'fa-users-gear',
+                            'submenu' => [
+                                'customers' => ['label' => 'Customers', 'icon' => 'fa-users', 'url' => '/src/views/sales_agent/customer.php'],
+                                'book_shipment' => ['label' => 'Book Shipment', 'icon' => 'fa-box-archive', 'url' => 'book_shipment.php'],
+                                'shipment' => ['label' => 'Shipment Tracking', 'icon' => 'fa-truck-field', 'url' => 'shipment.php'],
+                            ]
+                        ]
                     ],
                     'DEALS' => [
-                        'quotes'    => ['label' => 'Quotes & Offer', 'icon' => 'fa-file-signature', 'url' => 'quotes.php'],
-                        'contracts' => ['label' => 'Contracts', 'icon' => 'fa-file-contract', 'url' => 'contracts.php'],
+                        // SUBMENU: Grouping Deals & Quotes together
+                        'deals_group' => [
+                            'label' => 'Deals & Offers',
+                            'icon' => 'fa-briefcase',
+                            'submenu' => [
+                                'rate_search' => ['label' => 'Rate Search', 'icon' => 'fa-calculator', 'url' => 'rates.php'],
+                                'invoices' => ['label' => 'Invoices & Billing', 'icon' => 'fa-file-invoice-dollar', 'url' => 'invoices.php'],
+                            ]
+                        ]
+                    ],
+                    'REPORT' => [
+                        'analytics' => ['label' => 'Analytics & Reports', 'icon' => 'fa-chart-line', 'url' => '/src/views/sales_agent/bi_analytics.php'],
+                        'post_sales' => ['label' => 'Post-Sales & Events', 'icon' => 'fa-calendar-check', 'url' => '/src/views/sales_agent/post_event.php'],
                     ],
                     'ROOMS' => [
-                        'chat'      => ['label' => 'Direct Chat', 'icon' => 'fa-comments', 'url' => 'chat.php'],
-                        'settings'  => ['label' => 'Settings', 'icon' => 'fa-gear', 'url' => 'settings.php'],
+                        'chat'     => ['label' => 'Direct Chat', 'icon' => 'fa-comments', 'url' => '../chat/chat.php'],
+                        'settings' => ['label' => 'Settings', 'icon' => 'fa-gear', 'url' => 'settings.php'],
                     ]
                 ]
             ];
@@ -176,9 +200,16 @@ class SidebarService
                     'dashboard' => ['label' => 'Dashboard', 'icon' => 'fa-border-all', 'url' => 'dashboard.php'],
                 ],
                 'FREIGHT' => [
-                    'shipments'      => ['label' => 'Shipments', 'icon' => 'fa-box', 'url' => 'shipments.php', 'badge' => '12', 'badgeColor' => 'bg-amber-500/20 text-amber-400'],
-                    'tracking'       => ['label' => 'Live Tracking', 'icon' => 'fa-location-dot', 'url' => 'tracking.php'],
-                    'sla-monitoring' => ['label' => 'SLA Monitoring', 'icon' => 'fa-clock-rotate-left', 'url' => 'sla-monitoring.php'],
+                    // SUBMENU: Freight Management Grouping
+                    'freight_group' => [
+                        'label' => 'Shipment Hub',
+                        'icon' => 'fa-box-archive',
+                        'submenu' => [
+                            'shipments'      => ['label' => 'Shipments', 'url' => 'shipments.php'],
+                            'tracking'       => ['label' => 'Live Tracking', 'url' => 'tracking.php'],
+                            'sla-monitoring' => ['label' => 'SLA Monitoring', 'url' => 'sla-monitoring.php'],
+                        ]
+                    ]
                 ],
                 'RECORDS' => [
                     'documents' => ['label' => 'Documents', 'icon' => 'fa-file-lines', 'url' => 'documents.php'],

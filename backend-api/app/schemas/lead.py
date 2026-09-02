@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from typing import Optional, Any, List, Literal
 from datetime import datetime
 
@@ -15,6 +15,9 @@ StatusType = Literal[
 class StatusUpdateSchema(BaseModel):
     status: StatusType
     estimated_amount: Optional[float] = None
+
+    # Dagdag 
+    cargo_details: Optional[str] = None
 
     # Dagdag: Pick-up deatials
     pickup_address: Optional[str] = None
@@ -67,3 +70,17 @@ class LeadStatsResponseSchema(BaseModel):
     negotiation: int = 0
     closed_won: int = 0
     closed_lost: int = 0
+
+
+class LeadCreateSchema(BaseModel):
+    company_name: str
+    contact_person: str
+    email: EmailStr
+    phone_number: str
+    service_type: str
+    origin: str
+    destination: str
+
+    # Default Value
+    platform_used: Optional[str] = "Manual Entry"
+    status: Optional[str] = "new_inquiry"

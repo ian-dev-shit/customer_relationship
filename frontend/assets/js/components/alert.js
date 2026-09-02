@@ -8,7 +8,7 @@ const SwiftAlert = Swal.mixin({
   buttonsStyling: false
 });
 
-// Toast Notification (Lumalabas sa top-right corner)
+// Toast Notification 
 function showToast(message, type = 'success') {
   const Toast = Swal.mixin({
     toast: true,

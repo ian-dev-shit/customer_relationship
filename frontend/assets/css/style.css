@@ -1,5 +1,5 @@
 /* ==========================================================================
-    CUSTOM STYLES & ANIMATIONS
+   PRIORITY HANDLING LOGISTICS SALES AGENT PORTAL - CUSTOM STYLES & ANIMATIONS
    ========================================================================== */
 
 /* Scroll Reveal Fade Animation */
@@ -18,15 +18,15 @@
 @keyframes pulseGlow {
     0% {
         transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7);
+        box-shadow: 0 0 0 0 rgba(29, 46, 106, 0.7);
     }
     70% {
         transform: scale(1.05);
-        box-shadow: 0 0 0 10px rgba(0, 102, 255, 0);
+        box-shadow: 0 0 0 10px rgba(29, 46, 106, 0);
     }
     100% {
         transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(0, 102, 255, 0);
+        box-shadow: 0 0 0 0 rgba(29, 46, 106, 0);
     }
 }
 
@@ -50,3 +50,144 @@
     opacity: 1 !important;
     pointer-events: auto !important;
 }
+
+/* ==========================================================================
+   DARK MODE NORMALIZATION
+   Dashboards and the chat widget (plus JS-rendered tables, timeline and
+   chat bubbles) were authored with hardcoded light utilities (bg-white,
+   text-slate-900, border-gray-200, bg-[#f4f7fa], bg-gray-200, etc.) and no
+   dark: variants, so they stayed light in dark mode. This block remaps
+   those generic light utilities to the dark palette whenever <html>.dark
+   is present.
+
+   Intentionally NO !important: pages that already ship their own dark:
+   variants (e.g. settings.php) keep their styling because Tailwind's
+   generated dark: utilities are injected after this file and win on equal
+   specificity.
+   ========================================================================== */
+
+
+/* 1. Page / main canvas -------------------------------------------------- */
+html.dark body { background-color: #0a1628; color: #cbd5e1; }
+html.dark .bg-\[#f4f7fa\] { background-color: #0a1628; }
+
+/* 2. Generic white cards / containers ------------------------------------ */
+html.dark .bg-white { background-color: #112240; }
+html.dark .border-gray-200,
+html.dark .border-gray-200\/80 { border-color: rgba(148, 163, 184, 0.18); }
+
+/* 3. Neutral light backgrounds (slate / stone / gray) -------------------- */
+html.dark .bg-slate-50,
+html.dark .bg-slate-50\/30,
+html.dark .bg-slate-50\/50,
+html.dark .bg-slate-50\/70 { background-color: #0f1f3a; }
+html.dark .bg-slate-100,
+html.dark .bg-slate-100\/70,
+html.dark .bg-slate-100\/80 { background-color: #112240; }
+html.dark .bg-slate-200,
+html.dark .bg-slate-200\/50 { background-color: #1b2c4d; }
+html.dark .bg-stone-200 { background-color: #1b2c4d; }
+html.dark .bg-gray-50 { background-color: #0f1f3a; }
+html.dark .bg-gray-200 { background-color: #1e3056; }
+
+/* 4. Form inputs / selects authored with light fills --------------------- */
+html.dark input.bg-slate-50,
+html.dark select.bg-slate-50,
+html.dark input.bg-gray-50,
+html.dark select.bg-gray-50,
+html.dark input.bg-white,
+html.dark select.bg-white,
+html.dark textarea.bg-slate-50,
+html.dark textarea.bg-white { background-color: #0f1f3a; border-color: rgba(148, 163, 184, 0.25); color: #e2e8f0; }
+html.dark input.bg-slate-50::placeholder,
+html.dark input.bg-gray-50::placeholder,
+html.dark textarea.bg-slate-50::placeholder { color: #64748b; }
+
+/* 5. Borders & dividers -------------------------------------------------- */
+html.dark .border-gray-100 { border-color: rgba(148, 163, 184, 0.14); }
+html.dark .border-gray-200 { border-color: rgba(148, 163, 184, 0.18); }
+html.dark .border-gray-200\/80 { border-color: rgba(148, 163, 184, 0.18); }
+html.dark .border-gray-300,
+html.dark .border-gray-300\/80 { border-color: rgba(148, 163, 184, 0.28); }
+html.dark .border-slate-100 { border-color: rgba(148, 163, 184, 0.14); }
+html.dark .border-slate-200,
+html.dark .border-slate-200\/80 { border-color: rgba(148, 163, 184, 0.18); }
+html.dark .border-slate-300 { border-color: rgba(148, 163, 184, 0.28); }
+html.dark .divide-gray-100 > * + * { border-color: rgba(148, 163, 184, 0.14); }
+html.dark .divide-gray-200 > * + * { border-color: rgba(148, 163, 184, 0.18); }
+html.dark .divide-slate-100 > * + *,
+html.dark .divide-y.divide-slate-100 > * + * { border-color: rgba(148, 163, 184, 0.14); }
+
+/* 6. Neutral text (slate / gray) ----------------------------------------- */
+html.dark .text-slate-900 { color: #e2e8f0; }
+html.dark .text-slate-800 { color: #cbd5e1; }
+html.dark .text-slate-700 { color: #94a3b8; }
+html.dark .text-slate-600 { color: #94a3b8; }
+html.dark .text-slate-500 { color: #94a3b8; }
+html.dark .text-slate-400 { color: #94a3b8; }
+html.dark .text-gray-700 { color: #cbd5e1; }
+html.dark .text-gray-600 { color: #cbd5e1; }
+html.dark .text-gray-500 { color: #94a3b8; }
+html.dark .text-gray-400 { color: #94a3b8; }
+html.dark .text-gray-50 { color: #cbd5e1; }
+html.dark .text-slate-50 { color: #cbd5e1; }
+
+/* 7. Colored status pills -> dark same-hue tints (preserve hue coding) --- */
+html.dark .bg-blue-50 { background-color: #142540; }
+html.dark .bg-blue-100,
+html.dark .bg-blue-100\/70 { background-color: #172a4d; }
+html.dark .text-blue-600 { color: #60a5fa; }
+html.dark .text-blue-700 { color: #93c5fd; }
+html.dark .border-blue-50 { border-color: rgba(59, 130, 246, 0.35); }
+html.dark .border-blue-100 { border-color: rgba(59, 130, 246, 0.40); }
+
+html.dark .bg-emerald-50 { background-color: #0f2a22; }
+html.dark .bg-emerald-100 { background-color: #123025; }
+html.dark .text-emerald-600 { color: #34d399; }
+html.dark .text-emerald-700 { color: #6ee7b7; }
+html.dark .border-emerald-50 { border-color: rgba(16, 185, 129, 0.35); }
+html.dark .border-emerald-100 { border-color: rgba(16, 185, 129, 0.40); }
+
+html.dark .bg-red-50 { background-color: #2a1414; }
+html.dark .bg-red-100 { background-color: #311818; }
+html.dark .text-red-600 { color: #f87171; }
+html.dark .text-red-700 { color: #fca5a5; }
+html.dark .border-red-50 { border-color: rgba(239, 68, 68, 0.35); }
+
+html.dark .bg-rose-50 { background-color: #2a141c; }
+html.dark .bg-rose-100 { background-color: #311822; }
+html.dark .text-rose-600 { color: #fb7185; }
+html.dark .text-rose-700 { color: #fda4af; }
+
+html.dark .bg-amber-50 { background-color: #2a2110; }
+html.dark .bg-amber-100 { background-color: #312715; }
+html.dark .text-amber-600 { color: #fbbf24; }
+html.dark .text-amber-700 { color: #fcd34d; }
+html.dark .border-amber-200\/60 { border-color: rgba(245, 158, 11, 0.40); }
+
+html.dark .bg-sky-50 { background-color: #0c2233; }
+html.dark .bg-sky-100 { background-color: #0f2a40; }
+html.dark .text-sky-600 { color: #38bdf8; }
+html.dark .text-sky-700 { color: #7dd3fc; }
+
+/* 8. Hover states -------------------------------------------------------- */
+html.dark .hover\:bg-slate-50:hover,
+html.dark .hover\:bg-slate-50\/50:hover { background-color: #16284a; }
+html.dark .hover\:bg-slate-100:hover { background-color: #16284a; }
+html.dark .hover\:bg-slate-200:hover { background-color: #1b2c4d; }
+html.dark .hover\:bg-gray-50:hover { background-color: #16284a; }
+html.dark .hover\:bg-blue-50:hover,
+html.dark .hover\:bg-blue-50\/40:hover,
+html.dark .hover\:bg-blue-50\/50:hover { background-color: #1a3056; }
+html.dark .hover\:bg-blue-100:hover { background-color: #1f3a66; }
+html.dark .hover\:text-slate-600:hover { color: #cbd5e1; }
+html.dark .hover\:text-amber-700:hover { color: #fcd34d; }
+html.dark .hover\:text-emerald-600:hover { color: #34d399; }
+html.dark .hover\:text-emerald-700:hover { color: #6ee7b7; }
+html.dark .hover\:text-red-400:hover { color: #fca5a5; }
+
+/* 9. Placeholder / ring extras ------------------------------------------- */
+html.dark .placeholder-slate-400::placeholder,
+html.dark .placeholder-slate-50::placeholder { color: #64748b; }
+html.dark .ring-blue-50 { --tw-ring-color: rgba(59, 130, 246, 0.35); }
+html.dark .ring-emerald-50 { --tw-ring-color: rgba(16, 185, 129, 0.35); }

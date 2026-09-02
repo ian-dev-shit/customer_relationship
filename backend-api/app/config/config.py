@@ -17,7 +17,12 @@ class Settings(BaseSettings):
     SUPABASE_URL_2: str
     SUPABASE_KEY_2: str
     SUPABASE_SERVICE_KEY_2: str
-    
+
+    # Gemini API
+    GEMINI_API_KEY: str
+
+    # MONGODB SETTING
+    MONGODB_URL: str
 
     #Automatic na babasahin ang .env file sa root folder
     model_config = SettingsConfigDict(

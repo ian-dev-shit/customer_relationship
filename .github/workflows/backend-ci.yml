@@ -49,6 +49,8 @@ jobs:
         SUPABASE_URL_2: "https://dummy-url-2.supabase.co"
         SUPABASE_SERVICE_KEY_2: "dummy-key-2"
         SUPABASE_JWT_SECRET: "dummy-jwt-secret"
+        GEMINI_API_KEY: "fake-gemini-api-key-for-testing"
+        MONGODB_URL: "mongodb://fake-mongo-url:27017"
         SMTP_SENDER: "test@gmail.com"
         SMTP_PASSWORD: "testpassword"
         APP_ENV: "testing"

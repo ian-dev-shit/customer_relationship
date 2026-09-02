@@ -92,144 +92,80 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OTP Verification · Rising Red Dragon</title>
-
-  <!-- ===== HEADER SECTION ===== -->
-  <!-- This block can be moved to a separate header include file -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="assets/css/otp.css">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- ===== END HEADER SECTION ===== -->
+    <?php include_once 'src/components/head.php'; ?>
 </head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col justify-between overflow-x-hidden">
 
-<body class="bg-slate-950 text-slate-100 antialiased">
+    <!-- REUSABLE HEADER -->
+    <?php include_once 'src/components/header.php'; ?>
 
-  <div class="min-h-screen mesh-bg relative overflow-hidden">
-
-    <!-- Decorative grid -->
-    <div class="absolute inset-0 opacity-20 pointer-events-none"
-         style="background-image:
-           linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
-           linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
-           background-size: 40px 40px;">
-    </div>
-
-    <div class="grid lg:grid-cols-12 min-h-screen relative z-10">
-
-      <!-- LEFT COLUMN – Branding -->
-      <div class="lg:col-span-7 flex flex-col justify-center px-8 py-12 lg:px-16 xl:px-24">
-
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-300 text-xs font-semibold tracking-wide uppercase mb-6 w-fit fade-in" style="animation-delay:.1s">
-          <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
-          Enterprise Logistics OS
+    <!-- MAIN AUTH SECTION WITH WAREHOUSE BACKGROUND -->
+    <main class="relative w-full min-h-[calc(100vh-120px)] flex items-center justify-center overflow-hidden bg-slate-950 text-white py-12">
+        
+        <!-- Background Image & Dark Overlay -->
+        <div class="absolute inset-0 opacity-30">
+            <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1600&q=80" alt="Warehouse Background" class="w-full h-full object-cover">
         </div>
+        <div class="absolute inset-0 bg-gradient-to-br from-slate-950/95 via-slate-950/80 to-brand-darkblue/50 z-10"></div>
 
-        <h1 class="text-4xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight text-white leading-[1.1] mb-6 fade-in" style="animation-delay:.2s">
-          Verify Your <br />
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-cyan-300">Identity</span>
-        </h1>
-
-        <p class="text-lg text-slate-300 max-w-xl mb-10 leading-relaxed fade-in" style="animation-delay:.3s">
-          We’ve sent a 6-digit code to your registered email address. Enter it below to continue.
-        </p>
-
-        <div class="grid sm:grid-cols-3 gap-6 mb-12 fade-in" style="animation-delay:.4s">
-          <div class="glass-panel rounded-xl p-5">
-            <div class="text-2xl font-bold text-white mb-1">📧</div>
-            <div class="text-sm text-slate-400">Code sent to your email</div>
-          </div>
-          <div class="glass-panel rounded-xl p-5">
-            <div class="text-2xl font-bold text-white mb-1">⏱️</div>
-            <div class="text-sm text-slate-400">Expires in 2 minutes</div>
-          </div>
-          <div class="glass-panel rounded-xl p-5">
-            <div class="text-2xl font-bold text-white mb-1">🔐</div>
-            <div class="text-sm text-slate-400">Secure verification</div>
-          </div>
-        </div>
-
-        <div class="flex flex-wrap items-center gap-6 text-sm text-slate-400 fade-in" style="animation-delay:.5s">
-          <span class="flex items-center gap-2">
-            <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.746 3.746 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"/></svg>
-            Protected by AES-256
-          </span>
-          <span class="flex items-center gap-2">
-            <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.746 3.746 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"/></svg>
-            Secure channel
-          </span>
-        </div>
-
-      </div>
-
-      <!-- RIGHT COLUMN – OTP Form -->
-      <div class="lg:col-span-5 flex items-center justify-center p-6 lg:p-12 bg-slate-900/50 backdrop-blur-sm border-l border-white/5">
-
-        <div class="w-full max-w-md fade-in" style="animation-delay:.3s">
-
-          <div class="bg-slate-900/80 border border-slate-700 rounded-2xl shadow-2xl p-8">
-
-            <div class="flex items-center gap-3 mb-2">
-              <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-sky-500 to-cyan-600 flex items-center justify-center shadow-lg">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-19.5-3h19.5m-19.5-3h19.5m-19.5-3h19.5M4.5 3h15a2.25 2.25 0 012.25 2.25v.75a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25v-.75A2.25 2.25 0 014.5 3z"/></svg>
-              </div>
-              <div>
-                <h2 class="text-xl font-bold text-white tracking-tight">CargoNet</h2>
-                <p class="text-xs text-slate-400">Secure Verification</p>
-              </div>
-            </div>
-
-            <div class="border-t border-slate-700/50 my-6"></div>
-
-                <?php if (!empty($error)): ?>
-                  <div class="bg-red-500/10 border border-red-500/50 text-red-400 text-sm p-3 rounded-lg mb-6 break-words">
-                      <?= htmlspecialchars(is_array($error) ? json_encode($error) : $error) ?>
-                  </div>
-              <?php endif; ?>
-
-            <form method="POST" action="otp_verification.php" class="space-y-6">
-                <div>
-                    <label for="otp_code" class="block text-sm font-medium text-slate-300 mb-2 text-center">
-                        Enter OTP Code
-                    </label>
-                    <input type="text" id="otp_code" name="otp_code" required maxlength="6" autofocus
-                          class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none text-white text-center text-2xl tracking-widest font-mono"
-                          placeholder="000000">
+        <!-- Centered OTP Card Container -->
+        <div class="relative z-20 max-w-md w-full px-4">
+            <div class="bg-slate-950/85 border border-white/15 p-8 sm:p-10 rounded-3xl backdrop-blur-2xl shadow-2xl relative">
+                
+                <!-- Header Icon & Title -->
+                <div class="text-center mb-6">
+                    <div class="w-12 h-12 bg-sky-500/20 border border-sky-500/30 rounded-2xl flex items-center justify-center text-sky-400 text-xl mx-auto mb-3 shadow-lg">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h2 class="text-2xl font-extrabold text-white tracking-tight">Security Verification</h2>
+                    <p class="text-xs text-slate-400 mt-1">Enter the 6-digit verification code sent to your registered email</p>
                 </div>
 
-                <button type="submit" 
-                        class="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 font-medium rounded-lg text-white text-sm transition duration-150">
-                    Verify Code
-                </button>
-            </form>
+                <!-- PHP Error Message Display -->
+               <?php include_once 'src/components/error_handling.php' ?>
 
-            <!-- Back to Login – now points to login.html -->
-            <div class="mt-6 pt-6 border-t border-white/5 text-center">
-              <a href="login.html" class="text-xs text-slate-400 hover:text-slate-300 transition">
-                ← Back to Login
-              </a>
+                <!-- OTP Form -->
+                <form method="POST" action="otp_verification.php" class="space-y-5">
+                    <div>
+                        <label for="otp_code" class="block text-xs font-semibold text-slate-300 mb-2 text-center">
+                            Enter OTP Code
+                        </label>
+                        <div class="relative">
+                            <input type="text" id="otp_code" name="otp_code" required maxlength="6" autofocus inputmode="numeric" pattern="[0-9]{6}"
+                                   class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-center text-2xl tracking-[0.4em] font-mono focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all placeholder:text-slate-600 placeholder:tracking-normal"
+                                   placeholder="000000">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs py-3.5 rounded-xl transition-all shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-check-circle"></i> Verify Code
+                    </button>
+                </form>
+
+                <!-- Navigation Controls -->
+                <div class="mt-6 pt-5 border-t border-white/10 flex items-center justify-between text-xs text-slate-400">
+                    <a href="login.php" class="hover:text-white transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-arrow-left text-[10px]"></i> Back to Login
+                    </a>
+                </div>
+
+                <!-- Info Alert Banner -->
+                <div class="mt-5 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 flex gap-2.5 items-start">
+                    <i class="fa-solid fa-circle-info text-amber-400 text-sm shrink-0 mt-0.5"></i>
+                    <p class="text-[11px] text-amber-200/80 leading-relaxed">
+                        If you didn’t receive the code, please check your spam folder or contact system support.
+                    </p>
+                </div>
+
             </div>
-
-            <div class="mt-3 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 flex gap-3 items-start">
-              <svg class="w-5 h-5 text-amber-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.949 3.374h14.71c1.73 0 2.813-1.874 1.949-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
-              <p class="text-xs text-amber-200/80 leading-relaxed">
-                If you didn’t receive the code, check your spam folder or request a new one.
-              </p>
-            </div>
-
-          </div>
-
-          <p class="text-center text-xs text-slate-500 mt-6">© 2026 CargoNet Systems. Global Logistics Solutions.</p>
-
         </div>
-      </div>
-    </div>
-  </div>
+
+    </main>
+
+    <!-- REUSABLE FOOTER -->
+    <?php include_once 'src/components/footer.php'; ?>
 
 </body>
 </html>

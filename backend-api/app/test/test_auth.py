@@ -39,7 +39,7 @@ def test_login_validation_failed():
 # 2. TEST: SUCCESSFUL SIGNUP (WITH MOCKING)
 # ==========================================
 
-@patch("app.routes.auth.supabase")
+@patch("app.routes.auth.auth.supabase")
 def test_signup_success(mock_supabase):
     mock_user = MagicMock()
     mock_user.id = "mocked-uuid-1234"
@@ -95,10 +95,10 @@ class FakeQueryChain:
 
 
 # 3a. Primary Auth Login Success (Admin / Sales)
-@patch("app.routes.auth.supabase_secondary")
-@patch("app.routes.auth.supabase")
-@patch("app.routes.auth.redis_client")
-@patch("app.routes.auth.send_otp_email")
+@patch("app.routes.auth.auth.supabase_secondary")
+@patch("app.routes.auth.auth.supabase")
+@patch("app.routes.auth.auth.redis_client")
+@patch("app.routes.auth.auth.send_otp_email")
 def test_login_primary_success(
     mock_send_email, mock_redis, mock_supabase_primary, mock_supabase_secondary
 ):
@@ -122,10 +122,10 @@ def test_login_primary_success(
 
 
 # 3b. Secondary Auth Fallback Success (Customer Portal)
-@patch("app.routes.auth.supabase_secondary")
-@patch("app.routes.auth.supabase")
-@patch("app.routes.auth.redis_client")
-@patch("app.routes.auth.send_otp_email")
+@patch("app.routes.auth.auth.supabase_secondary")
+@patch("app.routes.auth.auth.supabase")
+@patch("app.routes.auth.auth.redis_client")
+@patch("app.routes.auth.auth.send_otp_email")
 def test_login_secondary_fallback_success(
     mock_send_email, mock_redis, mock_supabase_primary, mock_supabase_secondary
 ):
@@ -167,8 +167,8 @@ def test_login_secondary_fallback_success(
 
 
 # 3c. Both Auth Fail (Unauthorized 401)
-@patch("app.routes.auth.supabase_secondary")
-@patch("app.routes.auth.supabase")
+@patch("app.routes.auth.auth.supabase_secondary")
+@patch("app.routes.auth.auth.supabase")
 def test_login_both_auth_failed(mock_supabase_primary, mock_supabase_secondary):
     mock_supabase_primary.auth.sign_in_with_password.side_effect = Exception(
         "Primary Auth failed"
@@ -190,7 +190,7 @@ def test_login_both_auth_failed(mock_supabase_primary, mock_supabase_secondary):
 # 4. TEST: VERIFY OTP (WITH MOCKING)
 # ==========================================
 
-@patch("app.routes.auth.redis_client")
+@patch("app.routes.auth.auth.redis_client")
 def test_login_verify_success(mock_redis):
     cached_session = {
         "otp": "123456",
@@ -212,7 +212,7 @@ def test_login_verify_success(mock_redis):
     mock_redis.delete.assert_called_once_with("pre_auth:christian@gmail.com")
 
 
-@patch("app.routes.auth.redis_client")
+@patch("app.routes.auth.auth.redis_client")
 def test_login_verify_wrong_otp(mock_redis):
     cached_session = {
         "otp": "123456",

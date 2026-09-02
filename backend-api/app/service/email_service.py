@@ -18,8 +18,7 @@ def send_customer_welcome_email(
     msg['To'] = to_email
     msg['Subject'] = "Welcome to SwiftFreight - Your Customer Portal Account Credentials"
 
-    # SwiftFreight Logo URL or placeholder
-    logo_url = "https://ueexljyfzygzhgjluqhm.supabase.co/storage/v1/object/public/assets/logoW-1.png"
+    logo_url = "https://ueexljyfzygzhgjluqhm.supabase.co/storage/v1/object/public/assets/logo1.jpg"
 
     html_content = f"""
     <html>

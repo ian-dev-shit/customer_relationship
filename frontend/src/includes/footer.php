@@ -47,5 +47,6 @@
   <!-- JS Script File Includes -->
   <script src="/assets/js/dashboard.js"></script>
   <script src="/assets/js/logout.js"></script>
+
 </body>
 </html>

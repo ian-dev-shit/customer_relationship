@@ -1,69 +1,61 @@
-<!-- PIPELINE SNAPSHOT -->
-<div class="lg:col-span-8 bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+<!-- Pipeline Analytics Section -->
+<div class="bg-white p-6 rounded-[2.2rem] shadow-sm border border-gray-100 flex flex-col justify-between h-full w-full min-h-[440px]">
   <div>
-    <div class="flex items-center justify-between mb-1">
-      <h2 class="text-xl font-bold text-slate-900 tracking-tight">Pipeline Snapshot</h2>
-      <a href="/kanban" class="text-xs font-bold text-purple-600 hover:text-purple-700">Open board →</a>
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-8">
+        <div>
+          <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Total Leads</span>
+          <h3 id="chart-total-leads" class="text-2xl font-black text-gray-900 mt-0.5">0</h3>
+        </div>
+        <div>
+          <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Won (MTD)</span>
+          <h3 id="chart-won-mtd" class="text-2xl font-black text-indigo-600 mt-0.5">0</h3>
+        </div>
+      </div>
+
+      <div>
+        <select id="timeframe-select" class="text-xs bg-gray-50 border border-gray-200 text-gray-700 rounded-xl px-3 py-2 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer">
+          <option value="30">Last 30 days</option>
+          <option value="7">Last 7 days</option>
+          <option value="90">Last 90 days</option>
+        </select>
+      </div>
     </div>
-    <p class="text-xs text-slate-400 mb-8">Leads by stage, this month</p>
 
-    <div class="space-y-6">
-      
-      <!-- New Inquiry -->
-      <div>
-        <div class="flex justify-between items-center text-xs font-bold text-slate-800 mb-2">
-          <span class="text-sm">New Inquiry</span>
-          <span class="text-slate-500 font-normal"><?= htmlspecialchars((string)$pipeline['new_inquiry']['count']) ?></span>
-        </div>
-        <div class="w-full bg-slate-200 rounded-full h-3">
-          <div class="bg-purple-400 h-3 rounded-full" style="width: <?= $pipeline['new_inquiry']['percentage'] ?>%;"></div>
-        </div>
-      </div>
+    <!-- Area Chart Container -->
+    <div id="pipelineActivityChart" class="w-full min-h-[260px]"></div>
+  </div>
 
-      <!-- Qualifying -->
-      <div>
-        <div class="flex justify-between items-center text-xs font-bold text-slate-800 mb-2">
-          <span class="text-sm">Qualifying</span>
-          <span class="text-slate-500 font-normal"><?= htmlspecialchars((string)$pipeline['qualifying']['count']) ?></span>
-        </div>
-        <div class="w-full bg-slate-200 rounded-full h-3">
-          <div class="bg-amber-400 h-3 rounded-full" style="width: <?= $pipeline['qualifying']['percentage'] ?>%;"></div>
-        </div>
-      </div>
-
-      <!-- Quote Sent -->
-      <div>
-        <div class="flex justify-between items-center text-xs font-bold text-slate-800 mb-2">
-          <span class="text-sm">Quote Sent</span>
-          <span class="text-slate-500 font-normal"><?= htmlspecialchars((string)$pipeline['quote_sent']['count']) ?></span>
-        </div>
-        <div class="w-full bg-slate-200 rounded-full h-3">
-          <div class="bg-purple-400 h-3 rounded-full" style="width: <?= $pipeline['quote_sent']['percentage'] ?>%;"></div>
-        </div>
-      </div>
-
-      <!-- Negotiation -->
-      <div>
-        <div class="flex justify-between items-center text-xs font-bold text-slate-800 mb-2">
-          <span class="text-sm">Negotiation</span>
-          <span class="text-slate-500 font-normal"><?= htmlspecialchars((string)$pipeline['negotiation']['count']) ?></span>
-        </div>
-        <div class="w-full bg-slate-200 rounded-full h-3">
-          <div class="bg-amber-400 h-3 rounded-full" style="width: <?= $pipeline['negotiation']['percentage'] ?>%;"></div>
-        </div>
-      </div>
-
-      <!-- Won (MTD) -->
-      <div>
-        <div class="flex justify-between items-center text-xs font-bold text-slate-800 mb-2">
-          <span class="text-sm">Won (MTD)</span>
-          <span class="text-slate-500 font-normal"><?= htmlspecialchars((string)$pipeline['won_mtd']['count']) ?></span>
-        </div>
-        <div class="w-full bg-slate-200 rounded-full h-3">
-          <div class="bg-emerald-500 h-3 rounded-full" style="width: <?= $pipeline['won_mtd']['percentage'] ?>%;"></div>
-        </div>
-      </div>
-
+  <!-- Stage Legend & Full Report Link -->
+  <div class="pt-4 mt-2 border-t border-gray-100 flex flex-wrap items-center justify-between gap-4">
+    <div class="flex flex-wrap items-center gap-4 text-xs font-semibold text-gray-600" id="stage-legend">
+      <span class="flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span> 
+        New Inquiry <b id="cnt-new" class="text-gray-900 font-bold ml-0.5">0</b>
+      </span>
+      <span class="flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span> 
+        Qualifying <b id="cnt-qualifying" class="text-gray-900 font-bold ml-0.5">0</b>
+      </span>
+      <span class="flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-purple-400"></span> 
+        Quote Sent <b id="cnt-quote" class="text-gray-900 font-bold ml-0.5">0</b>
+      </span>
+      <span class="flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span> 
+        Negotiation <b id="cnt-negotiation" class="text-gray-900 font-bold ml-0.5">0</b>
+      </span>
+      <span class="flex items-center gap-1.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> 
+        Won (MTD) <b id="cnt-won" class="text-gray-900 font-bold ml-0.5">0</b>
+      </span>
     </div>
+
+    <a href="reports.php" class="inline-flex items-center gap-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-2.5 rounded-xl transition-all shadow-sm">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+      </svg>
+      View full report
+    </a>
   </div>
 </div>

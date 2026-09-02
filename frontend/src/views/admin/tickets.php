@@ -222,9 +222,9 @@ $total_tickets = count($tickets_list);
 </div>
 
 <!-- JAVASCRIPT LOGIC FOR COUNTDOWN ENGINE -->
-<script src="../../../assets/js/countdown.js"></script>
+<script src="../../../assets/js/admin/countdown.js"></script>
 
-<script src="../../../assets/js/tickets.js"></script>
+<script src="../../../assets/js/admin/tickets.js"></script>
 
 <!-- FOOTER INCLUDE -->
 <?php include_once '../../includes/footer.php'; ?>

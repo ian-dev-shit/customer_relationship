@@ -2,13 +2,14 @@ import uuid
 from datetime import datetime
 import dateutil.parser
 from typing import Optional
-from fastapi import APIRouter, HTTPException, Query, Path
+from fastapi import APIRouter, HTTPException, Query, Path, status
 from app.supabase_config.supabase import supabase_secondary
 from app.schemas.lead import (
     LeadResponseSchema, 
     PaginatedLeadResponseSchema, 
     LeadStatsResponseSchema, 
-    StatusUpdateSchema
+    StatusUpdateSchema,
+    LeadCreateSchema
 )
 
 router = APIRouter(
@@ -86,6 +87,9 @@ async def update_lead_status(
         # 2. I-prep ang dictionary para sa inquiries table update
         update_data = {"status": payload.status}
 
+        if payload.cargo_details is not None:
+            update_data["cargo_details"] = payload.cargo_details
+
         if payload.estimated_amount is not None:
             update_data["estimated_amount"] = payload.estimated_amount
 
@@ -137,10 +141,11 @@ async def update_lead_status(
                 "service_type": current_lead.get("service_type"),
                 "origin": current_lead.get("origin"),
                 "destination": current_lead.get("destination"),
+                "cargo_details": payload.cargo_details if payload.cargo_details is not None else current_lead.get("cargo_details"),
                 "pickup_address": payload.pickup_address,
                 "pickup_datetime": payload.pickup_datetime.isoformat() if payload.pickup_datetime else None,
                 "agreed_amount": payload.estimated_amount or current_lead.get("estimated_amount") or 0.0,
-                "ticket_status": "pending_pickup",
+                "ticket_status": "for account",
                 "agent_id": safe_agent_id,  
                 "agent_name": payload.agent_name or current_lead.get("assigned_agent_name"),
                 "agent_email": payload.agent_email or current_lead.get("assigned_agent_email")
@@ -170,8 +175,6 @@ async def update_lead_status(
         raise HTTPException(status_code=500, detail=str(e))
     
 
-from datetime import datetime
-import dateutil.parser
 
 @router.get("/dashboard-kpis")
 async def get_dashboard_kpis(agent_id: Optional[str] = Query(None)):
@@ -240,6 +243,28 @@ async def get_dashboard_kpis(agent_id: Optional[str] = Query(None)):
                     "diff": customers_this_month - customers_last_month
                 }
             }
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# Create new leads
+@router.post("/leads", status_code=status.HTTP_201_CREATED)
+async def create_new_leads(payload: LeadCreateSchema):
+    try:
+        data = payload.model_dump()
+
+        # Insert papunta sa supabase inquire table
+        res = supabase_secondary.table("inquiries").insert(data).execute()
+
+        if not res.data:
+            raise HTTPException(status_code=400, detail="Field to create lead")
+
+        return {
+            "status": "success",
+            "message": "Lead created successfully",
+            "data": res.data[0]
         }
 
     except Exception as e:
