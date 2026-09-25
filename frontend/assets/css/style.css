@@ -2,6 +2,31 @@
    PRIORITY HANDLING LOGISTICS SALES AGENT PORTAL - CUSTOM STYLES & ANIMATIONS
    ========================================================================== */
 
+
+/* ==========================================================================
+   APP SHELL - STATIC SIDEBAR / SCROLLING MAIN
+   --------------------------------------------------------------------------
+   header.php locks <body> to viewport height (h-screen overflow-hidden) so
+   only <main> scrolls and the sidebar stays static. The 4 legacy customer
+   pages (bi_analytics, customer_sla, documents, notification) wrap the
+   sidebar + main in .app-container instead of being direct flex children of
+   <body>, so they need these rules to keep the same side-by-side shell and
+   their own internal scroll region.
+   ========================================================================== */
+.app-container {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+.main-content {
+    flex: 1 1 0%;
+    min-width: 0;
+    overflow-y: auto;
+}
+
 /* Scroll Reveal Fade Animation */
 .reveal {
     opacity: 0;

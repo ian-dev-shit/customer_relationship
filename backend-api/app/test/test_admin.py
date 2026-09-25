@@ -2,6 +2,9 @@ import pytest
 from unittest.mock import patch, MagicMock
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+import sys
+
+sys.modules["weasyprint"] = MagicMock()
 
 from app.routes.admin.admin import router
 

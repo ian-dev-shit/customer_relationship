@@ -1,0 +1,173 @@
+/**
+ * Auth screens - shared styles for the legal modals
+ * (Privacy Policy + Terms of Service).
+ *
+ * Required by src/components/legal_modals.php.
+ * Loaded on every public auth screen via src/components/head.php.
+ */
+
+.legal-root {
+    /* Wrapper only - the overlays inside are position: fixed. */
+}
+
+.legal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: rgba(2, 6, 23, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.legal-overlay[hidden] {
+    display: none;
+}
+
+.legal-sheet {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 48rem;
+    max-height: min(85vh, 860px);
+    background: #0f172a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+}
+
+.legal-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.875rem;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.legal-head-ico {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.75rem;
+    background: rgba(29, 46, 106, 0.25);
+    border: 1px solid rgba(29, 46, 106, 0.5);
+    color: #93c5fd;
+    font-size: 1rem;
+}
+
+.legal-title {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.legal-caption {
+    margin: 0.2rem 0 0;
+    font-size: 0.7rem;
+    color: #94a3b8;
+}
+
+.legal-close {
+    margin-left: auto;
+    flex-shrink: 0;
+    width: 2.25rem;
+    height: 2.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.6rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.legal-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+.legal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    overflow-y: auto;
+    font-size: 0.8rem;
+    line-height: 1.7;
+    color: #cbd5e1;
+}
+
+.legal-body [data-legal="head"] {
+    margin: 0.5rem 0 0;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.legal-p {
+    margin: 0;
+}
+
+.legal-sub {
+    margin: 0;
+    padding-left: 0.75rem;
+    border-left: 2px solid rgba(29, 46, 106, 0.9);
+    color: #94a3b8;
+}
+
+.legal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.legal-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.legal-body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 999px;
+}
+
+.legal-foot {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.auth-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.auth-btn--primary {
+    background: #1d2e6a;
+    color: #ffffff;
+}
+
+.auth-btn--primary:hover {
+    background: #152252;
+}
+
+.legal-btn {
+    padding: 0.65rem 1.5rem;
+    border: none;
+    border-radius: 0.75rem;
+    font-size: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgba(29, 46, 106, 0.4);
+}

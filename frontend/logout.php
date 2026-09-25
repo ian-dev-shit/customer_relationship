@@ -1,5 +1,8 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 require_once 'src/helpers/api_helper.php';
 
 // Burahin ang lahat ng Session Data
@@ -21,6 +24,13 @@ if (ini_get("session.use_cookies")) {
 // I-destroy ang Session
 session_destroy();
 
-// I-redirect sa Login Page
+// Kung galing sa JavaScript Fetch Request (Auto-logout)
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    http_response_code(200);
+    echo json_encode(["status" => "success", "message" => "Logged out successfully"]);
+    exit();
+}
+
+// Kung galing sa Manual Click (Direct Link Access)
 header("Location: login.php");
 exit();

@@ -131,7 +131,6 @@ class SidebarService
                             'label' => 'User Management',
                             'icon' => 'fa-users-gear',
                             'submenu' => [
-                                'customers' => ['label' => 'Customer Accounts', 'url' => 'customers.php'],
                                 'agents'    => ['label' => 'Sales Agents', 'url' => 'agents.php'],
                             ]
                         ]
@@ -158,6 +157,44 @@ class SidebarService
                             ]
                         ]
                     ],
+                ]
+            ];
+        }
+
+        if ($role === 'super_admin') {
+            return [
+                'portalLabel' => 'SUPER ADMIN PORTAL',
+                'sections' => [
+                    'OVERVIEW' => [
+                        'dashboard' => ['label' => 'Dashboard', 'icon' => 'fa-chart-pie', 'url' => 'dashboard.php'],
+                    ],
+                    'ACCOUNT MANAGEMENT' => [
+                        'create_customer' => [
+                            'label' => 'Create Customer Acc', 
+                            'icon'  => 'fa-user-plus', 
+                            'url'   => 'create_customer.php'
+                        ],
+                        'user_management' => [
+                            'label'   => 'User Management',
+                            'icon'    => 'fa-users-gear',
+                            'submenu' => [
+                                'customers' => ['label' => 'Customer Accounts', 'url' => 'customer.php'],
+                            ]
+                        ]
+                    ],
+                    'SECURITY & CONTROL' => [
+                        'restrictions' => [
+                            'label' => 'Restrictions & Access', 
+                            'icon'  => 'fa-user-lock', 
+                            'url'   => 'restriction.php'
+                        ],
+                        'audit_logs' => [
+                            'label' => 'Audit Logs', 
+                            'icon'  => 'fa-clipboard-list', 
+                            'url'   => 'audit_logs.php'
+                        ],
+                    ],
+                    
                 ]
             ];
         }
@@ -192,6 +229,15 @@ class SidebarService
                             ]
                         ]
                     ],
+                    'DOCUMENTS' => [
+                        'documents_group' => [
+                            'label' => 'Documents Manager',
+                            'icon' => 'fa-folder-open',
+                            'submenu' => [
+                                'documents' => ['label' => 'Documents', 'icon' => 'fa-file-lines', 'url' => 'document.php'],
+                            ]
+                        ]
+                    ],
                     'DEALS' => [
                         // SUBMENU: Grouping Deals & Quotes together
                         'deals_group' => [
@@ -199,7 +245,7 @@ class SidebarService
                             'icon' => 'fa-briefcase',
                             'submenu' => [
                                 'rate_search' => ['label' => 'Rate Search', 'icon' => 'fa-calculator', 'url' => 'rates_search.php'],
-                                'invoices' => ['label' => 'Invoices & Billing', 'icon' => 'fa-file-invoice-dollar', 'url' => 'invoices.php'],
+                                
                             ]
                         ]
                     ],
@@ -215,34 +261,35 @@ class SidebarService
             ];
         }
 
-        return [
-            'portalLabel' => 'CUSTOMER PORTAL',
-            'sections' => [
-                'OVERVIEW' => [
-                    'dashboard' => ['label' => 'Dashboard', 'icon' => 'fa-border-all', 'url' => 'dashboard.php'],
-                ],
-                'FREIGHT' => [
-                    // SUBMENU: Freight Management Grouping
-                    'freight_group' => [
-                        'label' => 'Shipment Hub',
-                        'icon' => 'fa-box-archive',
-                        'submenu' => [
-                            'shipments'      => ['label' => 'Shipments', 'url' => 'shipments.php'],
-                            'tracking'       => ['label' => 'Live Tracking', 'url' => 'tracking.php'],
-                            'sla-monitoring' => ['label' => 'SLA Monitoring', 'url' => 'sla-monitoring.php'],
+       if ($role === 'customer') {
+            return [
+                'portalLabel' => 'CUSTOMER PORTAL',
+                'sections' => [
+                    'OVERVIEW' => [
+                        'dashboard' => ['label' => 'Dashboard', 'icon' => 'fa-chart-pie', 'url' => '/src/views/customer/dashboard.php'],
+                    ],
+                    'SHIPMENTS' => [
+                        'book_shipment' => ['label' => 'Book Shipment', 'icon' => 'fa-box-archive', 'url' => '/src/views/customer/book_shipment.php'],
+                        'shipment_tracking' => ['label' => 'Shipment Tracking', 'icon' => 'fa-truck-field', 'url' => '/src/views/customer/shipment.php'],
+                    ],
+                    'DOCUMENTS' => [
+                        'documents_group' => [
+                            'label' => 'Documents Manager',
+                            'icon'  => 'fa-folder-open',
+                            'submenu' => [
+                                'documents' => ['label' => 'Documents', 'icon'  => 'fa-file-lines',  'url'   => '/src/views/customer/document.php'],
+                            ]
                         ]
-                    ]
-                ],
-                'RECORDS' => [
-                    'documents' => ['label' => 'Documents', 'icon' => 'fa-file-lines', 'url' => 'documents.php'],
-                    'invoices'  => ['label' => 'Invoices & Billing', 'icon' => 'fa-file-invoice-dollar', 'url' => 'invoices.php'],
-                    'analytics' => ['label' => 'BI Analytics', 'icon' => 'fa-chart-column', 'url' => 'analytics.php'],
-                ],
-                'SUPPORT' => [
-                    'tickets'  => ['label' => 'Support Tickets', 'icon' => 'fa-comments', 'url' => 'tickets.php', 'badge' => '2', 'badgeColor' => 'bg-amber-500/20 text-amber-400'],
-                    'settings' => ['label' => 'Settings', 'icon' => 'fa-gear', 'url' => 'settings.php'],
-                ],
-            ]
+                    ],
+                    // Additional sections for customers can be added here
+                ]
+            ];
+        }
+
+        // Default fallback if role is unrecognized
+        return [
+            'portalLabel' => strtoupper($role) . " PORTAL",
+            'sections'    => []
         ];
     }
 }

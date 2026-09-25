@@ -3,6 +3,9 @@ from uuid import uuid4
 from unittest.mock import MagicMock, patch
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+import sys
+
+sys.modules["weasyprint"] = MagicMock()
 
 from app.routes.customers.customers import router
 
