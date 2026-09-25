@@ -1,5 +1,5 @@
 <?php
-// 1. I-import at tawagin ang Service
+// 1. I-import 
 require_once __DIR__ . '/../services/SidebarService.php';
 
 use App\services\SidebarService;
@@ -26,7 +26,7 @@ $navSections = $sidebar['navSections'];
         <!-- Brand Logo & Dynamic Badge -->
         <div class="flex items-center gap-3 px-1.5 py-2">
             <div class="w-10 h-10 rounded-xl overflow-hidden shadow-lg shadow-blue-500/30 flex items-center justify-center bg-white/5 border border-white/10 shrink-0">
-                <img src="../../../assets/image/logo.png" alt="Company Logo" class="w-full h-full object-contain p-1">
+                <img src="../../../assets/image/new_logo.png" alt="Company Logo" class="w-full h-full object-contain p-1">
             </div>
             <div class="leading-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap overflow-hidden">
                 <h1 class="text-[12px] font-black tracking-wider text-white uppercase">PRIORITY <span class="text-brand-blue">HANDLING</span></h1>

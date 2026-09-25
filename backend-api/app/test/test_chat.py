@@ -2,6 +2,9 @@ import pytest
 from unittest.mock import AsyncMock, patch, MagicMock
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+import sys
+
+sys.modules["weasyprint"] = MagicMock()
 
 from app.routes.chat.chat import router as customer_router
 

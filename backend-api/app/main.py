@@ -13,6 +13,11 @@ from app.routes.chat.chat import router as chat_router
 from app.routes.analytics import router as analytic_router
 from app.routes.admin.analytics import router as admin_analytics_router
 from app.routes.sales_agent.rates import router as sales_rates_router
+from app.routes.sales_agent.send_docs import router as send_docs_router
+from app.routes.super_admin.restriction import router as super_admin_restriction_router
+from app.routes.super_admin.audit import router as super_admin_audit_router
+from app.routes.super_admin.dashboard import router as super_admin_dashboard_router
+from app.routes.customers.dashboard import router as customer_dashboard_router
 from app.service.inactivity_checker import check_5hr_agent_inactivity
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
@@ -35,7 +40,11 @@ def start_scheduler():
 # 2. CORS Middleware 
 app.add_middleware(
     CORSMiddleware,
-   allow_origins=["https://core3.priority-handling.com"],  # Sa production, palitan  ito ng mismong URL ng PHP frontend 
+    allow_origins=[
+        "https://core3.priority-handling.com",
+        "http://localhost:8080",
+        "http://127.0.0.1:8080"
+    ], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -55,7 +64,11 @@ app.include_router(campaign_router)
 app.include_router(admin_analytics_router)
 app.include_router(admin_descriptive_router)
 app.include_router(sales_rates_router)
-
+app.include_router(send_docs_router)
+app.include_router(super_admin_restriction_router)
+app.include_router(super_admin_audit_router)
+app.include_router(super_admin_dashboard_router)
+app.include_router(customer_dashboard_router)
 # 3. Simple Root Route 
 @app.get("/")
 def read_root():

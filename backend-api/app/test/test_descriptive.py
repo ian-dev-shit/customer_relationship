@@ -1,7 +1,10 @@
 import pytest
 from fastapi.testclient import TestClient
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 from app.main import app
+import sys
+
+sys.modules["weasyprint"] = MagicMock()
 
 client = TestClient(app)
 BASE_URL = "/api/v1/admin/analytics/bi"

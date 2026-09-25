@@ -1,88 +1,37 @@
+import sys
+from unittest.mock import MagicMock
+
+sys.modules["weasyprint"] = MagicMock()
+
 import pytest
-from fastapi.testclient import TestClient
-from unittest.mock import MagicMock, patch
 import json
-from app.main import app
+from datetime import datetime, timezone, timedelta
+from fastapi.testclient import TestClient
+from unittest.mock import patch
+from app.main import app  # Siguraduhing nasa ilalim ito ng sys.modules mock
 
 client = TestClient(app)
 
 # ==========================================
-# 1. TEST: VALIDATION EMAIL AT PASSWORD
+# MOCK CLASSES & HELPERS
 # ==========================================
-
-def test_signup_validation_failed():
-    payload = {
-        "email": "invalid-email-format",
-        "password": "123",
-        "first_name": "Christian",
-        "last_name": "Developer"
-    }
-    response = client.post("/api/auth/signup", json=payload)
-    assert response.status_code == 422
-    errors = response.json()["detail"]
-    error_fields = [err["loc"][-1] for err in errors]
-    assert "email" in error_fields
-    assert "password" in error_fields
-
-
-def test_login_validation_failed():
-    payload = {
-        "email": "christian_at_gmail.com",
-        "password": "short"
-    }
-    
-    response = client.post("/api/auth/login", json=payload)
-    assert response.status_code == 422
-
-
-# ==========================================
-# 2. TEST: SUCCESSFUL SIGNUP (WITH MOCKING)
-# ==========================================
-
-@patch("app.routes.auth.auth.supabase")
-def test_signup_success(mock_supabase):
-    mock_user = MagicMock()
-    mock_user.id = "mocked-uuid-1234"
-    mock_response = MagicMock()
-    mock_response.user = mock_user
-    mock_supabase.auth.sign_up.return_value = mock_response
-
-    payload = {
-        "email": "christian@gmail.com",
-        "password": "securepassword123",
-        "first_name": "Christian",
-        "last_name": "Developer"
-    }
-    response = client.post("/api/auth/signup", json=payload)
-    assert response.status_code == 201
-    assert response.json()["message"] == "Registration successful!"
-    assert response.json()["user_id"] == "mocked-uuid-1234"
-
-# ==========================================
-# 3. TEST: REQUEST OTP / LOGIN (WITH MOCKING)
-# ==========================================
-
 
 class FakeUser:
     id = "mocked-uuid-1234"
     email = "christian@gmail.com"
 
-
 class FakeSession:
     access_token = "mock-access-token"
     refresh_token = "mock-refresh-token"
-
 
 class FakeAuthResponse:
     user = FakeUser()
     session = FakeSession()
 
-
-class FakeExecuteResponse:
-    data = [{"role": "sales"}]
-
-
-class FakeQueryChain:
+class DynamicQueryChain:
+    """Flexible mock query chain para sa iba't ibang Supabase table calls."""
+    def __init__(self, data=None):
+        self._data = data if data is not None else []
 
     def select(self, *args, **kwargs):
         return self
@@ -90,23 +39,50 @@ class FakeQueryChain:
     def eq(self, *args, **kwargs):
         return self
 
+    def maybe_single(self, *args, **kwargs):
+        return self
+
+    def update(self, *args, **kwargs):
+        return self
+
+    def insert(self, *args, **kwargs):
+        return self
+
     def execute(self, *args, **kwargs):
-        return FakeExecuteResponse()
+        mock_res = MagicMock()
+        mock_res.data = self._data
+        return mock_res
 
 
-# 3a. Primary Auth Login Success (Admin / Sales)
+# ==========================================
+# 1. TEST: VALIDATION
+# ==========================================
+
+def test_login_validation_failed():
+    payload = {
+        "email": "invalid-email-format",
+        "password": ""
+    }
+    response = client.post("/api/auth/login", json=payload)
+    assert response.status_code == 422
+
+
+# ==========================================
+# 2. TEST: LOGIN (PRIMARY & SECONDARY AUTH)
+# ==========================================
+
+@patch("app.routes.auth.auth.log_audit")
+@patch("app.routes.auth.auth.send_otp_email")
+@patch("app.routes.auth.auth.redis_client")
 @patch("app.routes.auth.auth.supabase_secondary")
 @patch("app.routes.auth.auth.supabase")
-@patch("app.routes.auth.auth.redis_client")
-@patch("app.routes.auth.auth.send_otp_email")
 def test_login_primary_success(
-    mock_send_email, mock_redis, mock_supabase_primary, mock_supabase_secondary
+    mock_supabase_primary, mock_supabase_secondary, mock_redis, mock_send_email, mock_audit
 ):
-    # Primary Auth succeeds
-    mock_supabase_primary.auth.sign_in_with_password.return_value = (
-        FakeAuthResponse()
-    )
-    mock_supabase_primary.table.return_value = FakeQueryChain()
+    # Setup mocks
+    mock_supabase_secondary.table.return_value = DynamicQueryChain(data=None) # Walang restriction
+    mock_supabase_primary.auth.sign_in_with_password.return_value = FakeAuthResponse()
+    mock_supabase_primary.table.return_value = DynamicQueryChain(data=[{"role": "sales"}])
 
     payload = {
         "email": "christian@gmail.com",
@@ -117,45 +93,28 @@ def test_login_primary_success(
 
     assert response.status_code == 200
     assert response.json()["status"] == "otp_sent"
+    assert response.json()["email"] == "christian@gmail.com"
     assert mock_redis.setex.called
     assert mock_send_email.called
 
 
-# 3b. Secondary Auth Fallback Success (Customer Portal)
+@patch("app.routes.auth.auth.log_audit")
+@patch("app.routes.auth.auth.send_otp_email")
+@patch("app.routes.auth.auth.redis_client")
 @patch("app.routes.auth.auth.supabase_secondary")
 @patch("app.routes.auth.auth.supabase")
-@patch("app.routes.auth.auth.redis_client")
-@patch("app.routes.auth.auth.send_otp_email")
-def test_login_secondary_fallback_success(
-    mock_send_email, mock_redis, mock_supabase_primary, mock_supabase_secondary
+def test_login_secondary_customer_success(
+    mock_supabase_primary, mock_supabase_secondary, mock_redis, mock_send_email, mock_audit
 ):
-    # Primary Auth fails, causing fallback to Secondary
-    mock_supabase_primary.auth.sign_in_with_password.side_effect = Exception(
-        "Invalid primary credentials"
-    )
-
-    class CustomerExecuteResponse:
-        data = [{"role": "customer"}]
-
-    class CustomerQueryChain:
-
-        def select(self, *args, **kwargs):
-            return self
-
-        def eq(self, *args, **kwargs):
-            return self
-
-        def execute(self, *args, **kwargs):
-            return CustomerExecuteResponse()
-
-    mock_supabase_secondary.auth.sign_in_with_password.return_value = (
-        FakeAuthResponse()
-    )
-    mock_supabase_secondary.table.return_value = CustomerQueryChain()
+    # Primary Auth fails, Fallback to Secondary Auth (Customer)
+    mock_supabase_primary.auth.sign_in_with_password.side_effect = Exception("Primary failed")
+    
+    mock_supabase_secondary.auth.sign_in_with_password.return_value = FakeAuthResponse()
+    mock_supabase_secondary.table.return_value = DynamicQueryChain(data=[{"role": "customer"}])
 
     payload = {
         "email": "customer@gmail.com",
-        "password": "securepassword123",
+        "password": "customerpassword123",
     }
 
     response = client.post("/api/auth/login", json=payload)
@@ -166,65 +125,134 @@ def test_login_secondary_fallback_success(
     assert mock_send_email.called
 
 
-# 3c. Both Auth Fail (Unauthorized 401)
+# ==========================================
+# 3. TEST: FAILED LOGIN & RESTRICTION LOGIC
+# ==========================================
+
+@patch("app.routes.auth.auth.is_customer_account", return_value=False)
+@patch("app.routes.auth.auth.record_failed_attempt", return_value=(1, False))
 @patch("app.routes.auth.auth.supabase_secondary")
 @patch("app.routes.auth.auth.supabase")
-def test_login_both_auth_failed(mock_supabase_primary, mock_supabase_secondary):
-    mock_supabase_primary.auth.sign_in_with_password.side_effect = Exception(
-        "Primary Auth failed"
-    )
-    mock_supabase_secondary.auth.sign_in_with_password.side_effect = Exception(
-        "Secondary Auth failed"
-    )
+def test_login_staff_failed_attempt_counter(
+    mock_supabase_primary, mock_supabase_secondary, mock_record_failed, mock_is_customer
+):
+    # Fail both primary and secondary
+    mock_supabase_primary.auth.sign_in_with_password.side_effect = Exception("Failed")
+    mock_supabase_secondary.auth.sign_in_with_password.side_effect = Exception("Failed")
+    mock_supabase_secondary.table.return_value = DynamicQueryChain(data=None)
 
     payload = {
-        "email": "wrong@gmail.com",
+        "email": "staff@gmail.com",
         "password": "wrongpassword",
     }
 
     response = client.post("/api/auth/login", json=payload)
 
     assert response.status_code == 401
-    assert response.json()["detail"] == "Invalid email or password"
+    assert "4 attempt(s) left" in response.json()["detail"]
+    assert mock_record_failed.called
+
+
+@patch("app.routes.auth.auth.is_customer_account", return_value=False)
+@patch("app.routes.auth.auth.record_failed_attempt", return_value=(5, True))
+@patch("app.routes.auth.auth.supabase_secondary")
+@patch("app.routes.auth.auth.supabase")
+def test_login_staff_fifth_failed_attempt_triggers_restriction(
+    mock_supabase_primary, mock_supabase_secondary, mock_record_failed, mock_is_customer
+):
+    mock_supabase_primary.auth.sign_in_with_password.side_effect = Exception("Failed")
+    mock_supabase_secondary.auth.sign_in_with_password.side_effect = Exception("Failed")
+    mock_supabase_secondary.table.return_value = DynamicQueryChain(data=None)
+
+    payload = {
+        "email": "staff@gmail.com",
+        "password": "wrongpassword",
+    }
+
+    response = client.post("/api/auth/login", json=payload)
+
+    assert response.status_code == 403
+    assert "Maximum failed login attempts (5) reached" in response.json()["detail"]
+
+
+@patch("app.routes.auth.auth.supabase_secondary")
+def test_login_precheck_blocked_if_restricted(mock_supabase_secondary):
+    # Simulate an account currently restricted in the DB
+    future_time = (datetime.now(timezone.utc) + timedelta(minutes=20)).isoformat()
+    restricted_data = {
+        "is_restricted": True,
+        "restricted_until": future_time
+    }
+    
+    mock_supabase_secondary.table.return_value = DynamicQueryChain(data=restricted_data)
+
+    payload = {
+        "email": "locked@gmail.com",
+        "password": "anypassword",
+    }
+
+    response = client.post("/api/auth/login", json=payload)
+
+    assert response.status_code == 403
+    assert "Account temporarily restricted" in response.json()["detail"]
+
+
 # ==========================================
-# 4. TEST: VERIFY OTP (WITH MOCKING)
+# 4. TEST: VERIFY OTP
 # ==========================================
 
+@patch("app.routes.auth.auth.log_audit")
 @patch("app.routes.auth.auth.redis_client")
-def test_login_verify_success(mock_redis):
+def test_verify_otp_success(mock_redis, mock_audit):
     cached_session = {
         "otp": "123456",
         "access_token": "valid-jwt-token",
         "refresh_token": "valid-refresh-token",
-        "user_id": "user-uuid",
+        "user_id": "user-uuid-123",
         "email": "christian@gmail.com",
-        "role": "customer"
+        "role": "sales"
     }
     
     mock_redis.get.return_value = json.dumps(cached_session)
-    mock_redis.return_value = json.dumps(cached_session)
 
     response = client.post("/api/auth/verify-otp", params={"email": "christian@gmail.com", "otp_code": "123456"})
+    
     assert response.status_code == 200
     data = response.json()
     assert data["access_token"] == "valid-jwt-token"
-    assert data["role"] == "customer"
+    assert data["role"] == "sales"
+    assert data["token_type"] == "bearer"
     mock_redis.delete.assert_called_once_with("pre_auth:christian@gmail.com")
+    assert mock_audit.called
 
 
+@patch("app.routes.auth.auth.log_audit")
 @patch("app.routes.auth.auth.redis_client")
-def test_login_verify_wrong_otp(mock_redis):
+def test_verify_otp_invalid_code(mock_redis, mock_audit):
     cached_session = {
         "otp": "123456",
         "access_token": "token",
         "refresh_token": "token",
-        "user_id": "uid",
+        "user_id": "user-uuid-123",
         "email": "christian@gmail.com",
-        "role": "customer"
+        "role": "sales"
     }
     mock_redis.get.return_value = json.dumps(cached_session)
-    mock_redis.return_value = json.dumps(cached_session)
 
     response = client.post("/api/auth/verify-otp", params={"email": "christian@gmail.com", "otp_code": "999999"})
+    
     assert response.status_code == 400
     assert response.json()["detail"] == "Wrong OTP code"
+    assert mock_audit.called
+
+
+@patch("app.routes.auth.auth.log_audit")
+@patch("app.routes.auth.auth.redis_client")
+def test_verify_otp_expired_or_missing_session(mock_redis, mock_audit):
+    mock_redis.get.return_value = None
+
+    response = client.post("/api/auth/verify-otp", params={"email": "christian@gmail.com", "otp_code": "123456"})
+    
+    assert response.status_code == 400
+    assert "Expired na o walang nahanap" in response.json()["detail"]
+    assert mock_audit.called

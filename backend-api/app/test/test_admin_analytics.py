@@ -2,6 +2,9 @@ import pytest
 from fastapi.testclient import TestClient
 from unittest.mock import patch, MagicMock
 from app.main import app  
+import sys
+
+sys.modules["weasyprint"] = MagicMock()
 
 client = TestClient(app)
 

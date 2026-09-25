@@ -22,7 +22,12 @@ async function submitNewLead(event) {
     contact_person: form.contact_person.value.trim(),
     email: form.email.value.trim(),
     phone_number: form.phone_number.value.trim(),
-    service_type: form.service_type.value,
+    
+    // I-map sa tamang property names ng Pydantic Schema:
+    service_type: form.freight_mode ? form.freight_mode.value : form.service_type.value,
+    handling: form.handling_requirements ? form.handling_requirements.value : null,
+    service: form.service_level ? form.service_level.value : null,
+    
     origin: form.origin.value.trim(),
     destination: form.destination.value.trim()
   };

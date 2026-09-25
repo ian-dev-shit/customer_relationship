@@ -40,7 +40,7 @@ def send_otp_email(to_email: str, otp_code: str):
                     Hello,
                 </p>
                 <p style="font-size: 14px; line-height: 1.6; color: #444444; margin-top: 0; margin-bottom: 30px;">
-                    You requested a One-Time Password (OTP) to log in to your account. This code is valid for <strong style="color: #ff3838;">5 minutes</strong>.
+                    You requested a One-Time Password (OTP) to log in to your account. This code is valid for <strong style="color: #ff3838;">2 minutes</strong>.
                 </p>
                 
                 <!-- OTP Box -->

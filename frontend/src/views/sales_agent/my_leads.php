@@ -100,9 +100,6 @@ function getLeadStatusBadge($status) {
         <h2 class="text-base font-bold text-slate-800">Inquiry Leads Directory</h2>
         <p class="text-xs text-slate-400">Manage status updates and customer inquiries</p>
       </div>
-      <button class="text-sm font-semibold text-purple-600 hover:text-purple-700 flex items-center gap-1">
-        Export CSV ➔
-      </button>
     </div>
 
     <!-- MAIN TABLE -->
@@ -113,6 +110,8 @@ function getLeadStatusBadge($status) {
             <th class="py-3 px-4">Inquiry Code</th>
             <th class="py-3 px-4">Company & Contact</th>
             <th class="py-3 px-4">Service Type</th>
+            <th class="py-3 px-4">Service</th>
+            <th class="py-3 px-4">Handling</th>
             <th class="py-3 px-4">Estimated Price</th>
             <th class="py-3 px-4">Status</th>
             <th class="py-3 px-4">Date Submitted</th>
@@ -122,7 +121,7 @@ function getLeadStatusBadge($status) {
         <tbody class="divide-y divide-slate-100 text-sm">
           <?php if (empty($leads_list)): ?>
             <tr>
-              <td colspan="7" class="py-8 text-center text-slate-400">
+              <td colspan="9" class="py-8 text-center text-slate-400">
                 No inquiries found.
               </td>
             </tr>
@@ -155,6 +154,15 @@ function getLeadStatusBadge($status) {
                   <?php endif; ?>
                 </td>
 
+                <td class="py-4 px-4 text-slate-600 font-medium">
+                  <?= htmlspecialchars($lead['service'] ?? 'N/A') ?>
+                </td>
+
+                <!-- HANDLING -->
+                <td class="py-4 px-4 text-slate-600 font-medium">
+                  <?= htmlspecialchars($lead['handling'] ?? 'N/A') ?>
+                </td>
+
                 <!-- ESTIMATED PRICE DISPLAY -->
                 <td class="py-4 px-4 font-bold text-slate-800">
                   ₱<?= number_format((float)($lead['estimated_amount'] ?? $lead['estimated_price'] ?? 0), 2) ?>
@@ -182,6 +190,14 @@ function getLeadStatusBadge($status) {
                       class="px-3.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-bold rounded-xl text-xs transition-all active:scale-95 border border-indigo-100 inline-flex items-center gap-1.5">
                       <i class="fa-solid fa-eye text-[11px]"></i> View & Manage
                     </button>
+
+                   <button 
+                      type="button"
+                      onclick='openQuotationModal(<?= htmlspecialchars(json_encode($lead, JSON_HEX_APOS | JSON_HEX_QUOT), ENT_QUOTES, "UTF-8") ?>)' 
+                      class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold shadow-sm flex items-center gap-1 transition-all active:scale-95">
+                      📄 Send Quote
+                    </button>
+
                   </div>
                 </td>
 
@@ -209,16 +225,20 @@ function getLeadStatusBadge($status) {
 
   </div>
 
+  <?php include_once 'components/lead_modal.php'; ?>
+
 </main>
 
-<?php include_once 'components/send_quote_modal.php'; ?>
+
+
 <?php include_once 'components/view_lead_modal.php'; ?>
 <?php include_once 'components/lead_modal.php'; ?>
+<?php include_once 'components/quotation_modal.php'; ?>
 
 
 <!-- JAVASCRIPT FOR MODAL -->
 <script src="../../../assets/js/sales_agent/myleads.js"></script>
-<script src="../../../assets/js/sales_agent/quote_modal.js"></script>
+<script src="../../../assets/js/sales_agent/new_leads.js"></script>
 
 <?php include_once 'components/alert.php'; ?>
 

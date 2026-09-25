@@ -57,7 +57,7 @@
       <div class="flex-1 overflow-y-auto px-6 py-5 space-y-6">
         
         <!-- SUMMARY CHIPS -->
-        <div class="grid grid-cols-3 gap-2">
+        <div class="grid grid-cols-4 gap-2">
           <div class="rounded-xl border border-slate-100 bg-slate-50/50 p-2.5 text-center">
             <span class="block text-[9px] font-semibold tracking-wider text-slate-400 uppercase">Service</span>
             <span id="modalService" class="block mt-0.5 truncate text-xs font-semibold text-slate-700">--</span>
@@ -90,17 +90,18 @@
             <span class="text-slate-400">Platform</span>
             <span class="font-semibold text-slate-800" id="modalPlatform">--</span>
           </div>
+          <div class="flex items-center justify-between text-slate-600 py-1 border-t border-slate-100">
+            <span class="text-slate-400">Handling Type</span>
+            <span class="font-semibold text-slate-800" id="modalHandling">--</span>
+          </div>
+          <div class="flex items-center justify-between text-slate-600 py-1 border-t border-slate-100">
+            <span class="text-slate-400">Service</span>
+            <span class="font-semibold text-slate-800" id="modalServices">--</span>
+          </div> 
         </div>
 
         <!-- DIRECT ACTIONS WITH SEND QUOTE BUTTON -->
         <div class="space-y-2">
-          <!-- BAGONG BUTTON PARA SA QUOTATION -->
-          <button type="button" 
-                  onclick="openSendQuoteModalFromDrawer()" 
-                  class="w-full flex items-center justify-center gap-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white py-2.5 px-3 text-xs font-bold shadow-md shadow-purple-200 transition">
-            <i class="fa-solid fa-file-pdf"></i> Send Quotation PDF
-          </button>
-
           <div class="grid grid-cols-2 gap-2">
             <a id="contactModalEmailBtn" href="#" target="_blank" class="flex items-center justify-center gap-2 rounded-xl border border-slate-200 py-2 px-3 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
               <i class="fa-solid fa-envelope text-indigo-500"></i> Email Client
@@ -129,7 +130,7 @@
               <option value="closed_lost">CLOSED LOST</option>
             </select>
           </div>
-
+        
           <div>
             <label class="block text-xs font-semibold text-slate-700 mb-1">Agreed Price / Quote (₱)</label>
             <input type="number" step="0.01" id="modalPriceInput" placeholder="0.00" class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">

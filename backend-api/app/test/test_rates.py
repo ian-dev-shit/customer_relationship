@@ -1,7 +1,10 @@
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 import pytest
+import sys
+
+sys.modules["weasyprint"] = MagicMock()
 
 from app.routes.sales_agent.rates import router, load_rates_data
 

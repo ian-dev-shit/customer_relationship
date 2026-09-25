@@ -3,6 +3,9 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from app.routes.analytics import router
+import sys
+
+sys.modules["weasyprint"] = MagicMock()
 app = FastAPI()
 app.include_router(router)
 

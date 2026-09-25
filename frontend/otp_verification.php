@@ -80,7 +80,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 header("Location: /src/views/admin/dashboard.php");
             } else if ($user_role === "sales_agent" || $user_role === "sales") {
                 header("Location: /src/views/sales_agent/dashboard.php");
+            } else if ($user_role === "super_admin") {
+                header("Location: /src/views/super_admin/dashboard.php");
+            } else if($user_role === "customer") {
+                header("Location: /src/views/customer/dashboard.php");
             } else {
+                // Default fallback
                 header("Location: /src/views/customer/dashboard.php");
             }
             exit();

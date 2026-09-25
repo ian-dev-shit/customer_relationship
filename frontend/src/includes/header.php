@@ -39,7 +39,10 @@ $isChatPage = (strpos($currentScript, 'chat.php') !== false);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $page_title ?? 'SwiftFreight - Sales Portal' ?></title>
+    <title><?= $page_title ?? 'Priority Handling Logistics - Sales Portal' ?></title>
+    
+    <!-- Browser Tab Favicon (New Logo) -->
+     <link rel="icon" type="image/png" href="../../../assets/image/new_logo.png">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -76,7 +79,7 @@ $isChatPage = (strpos($currentScript, 'chat.php') !== false);
     
 </head>
 <body 
-    class="bg-[#f8fafc] text-slate-800 font-sans antialiased min-h-screen flex"
+    class="bg-[#f8fafc] text-slate-800 font-sans antialiased h-screen overflow-hidden flex"
     data-agent-id="<?= htmlspecialchars($agentId) ?>"
     data-agent-name="<?= htmlspecialchars($agentName) ?>"
     data-agent-email="<?= htmlspecialchars($agentEmail) ?>"

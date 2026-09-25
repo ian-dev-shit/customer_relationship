@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Official Quotation</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 15mm;
+        }
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            color: #1f2937;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+        /* Header */
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #1e3a8a;
+            padding-bottom: 10px;
+        }
+        .company-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #1e3a8a;
+            text-transform: uppercase;
+        }
+        .quote-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #0f172a;
+            text-align: right;
+        }
+        .quote-number {
+            font-size: 12px;
+            color: #2563eb;
+            text-align: right;
+            font-weight: bold;
+        }
+        /* Metadata Grid */
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+        }
+        .info-table td {
+            padding: 8px 12px;
+            vertical-align: top;
+        }
+        .label {
+            font-weight: bold;
+            color: #64748b;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+        .value {
+            color: #0f172a;
+            font-weight: 600;
+        }
+        /* Items Table */
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .items-table th {
+            background-color: #1e3a8a;
+            color: #ffffff;
+            text-align: left;
+            padding: 8px 10px;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+        .items-table td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .text-right {
+            text-align: right;
+        }
+        /* Totals Box */
+        .totals-table {
+            width: 40%;
+            float: right;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        .totals-table td {
+            padding: 6px 10px;
+        }
+        .grand-total {
+            background-color: #1e3a8a;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .clear {
+            clear: both;
+        }
+        /* Terms */
+        .terms {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 10px;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+
+    <table class="header-table">
+        <tr>
+            <td>
+                <div class="company-title">Priority Handling Logistics Inc.</div>
+                <div style="color: #4b5563; font-size: 11px;">Reliable & Express Freight Solutions</div>
+            </td>
+            <td>
+                <div class="quote-title">QUOTATION</div>
+                <div class="quote-number">Ref: {{ quote_number }}</div>
+            </td>
+        </tr>
+    </table>
+
+    <table class="info-table">
+        <tr>
+            <td width="50%">
+                <span class="label">Customer / Company</span><br>
+                <span class="value">{{ customer_name }}</span> {% if company_name != "N/A" %}({{ company_name }}){% endif %}<br>
+                <span class="value">{{ customer_email }}</span>
+            </td>
+            <td width="50%">
+                <span class="label">Date Issued:</span> <span class="value">{{ date_issued }}</span><br>
+                <span class="label">Valid Until:</span> <span class="value">{{ valid_until }}</span><br>
+                <span class="label">Service:</span> <span class="value">{{ service_type }}</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="border-top: 1px solid #e2e8f0;">
+                <span class="label">Route:</span> 
+                <span class="value">{{ origin }}</span> ➔ <span class="value">{{ destination }}</span>
+            </td>
+        </tr>
+    </table>
+
+    <table class="items-table">
+        <thead>
+            <tr>
+                <th>Description / Particulars</th>
+                <th class="text-right" width="15%">Qty</th>
+                <th class="text-right" width="20%">Unit Price</th>
+                <th class="text-right" width="20%">Total (PHP)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.description }}</td>
+                <td class="text-right">{{ item.quantity }}</td>
+                <td class="text-right">₱{{ "{:,.2f}".format(item.unit_price) }}</td>
+                <td class="text-right">₱{{ "{:,.2f}".format(item.total_price) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <table class="totals-table">
+        <tr>
+            <td class="label">Subtotal:</td>
+            <td class="text-right value">₱{{ "{:,.2f}".format(subtotal) }}</td>
+        </tr>
+        {% if tax_amount > 0 %}
+        <tr>
+            <td class="label">Tax / VAT:</td>
+            <td class="text-right value">₱{{ "{:,.2f}".format(tax_amount) }}</td>
+        </tr>
+        {% endif %}
+        {% if discount_amount > 0 %}
+        <tr>
+            <td class="label">Discount:</td>
+            <td class="text-right value" style="color: #dc2626;">-₱{{ "{:,.2f}".format(discount_amount) }}</td>
+        </tr>
+        {% endif %}
+        <tr class="grand-total">
+            <td>TOTAL:</td>
+            <td class="text-right">₱{{ "{:,.2f}".format(total_amount) }}</td>
+        </tr>
+    </table>
+
+    <div class="clear"></div>
+
+    <div class="terms">
+        <strong>Terms & Conditions:</strong>
+        <ul>
+            <li>Rates are based on current tariffs and subject to change if cargo dimensions/weight vary.</li>
+            <li>This quotation is valid until the date specified above.</li>
+        </ul>
+    </div>
+
+</body>
+</html>
