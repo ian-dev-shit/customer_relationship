@@ -1,5 +1,6 @@
 import os
 
+
 def pytest_configure(config):
     """Piliting i-load ang dummy env variables BAGO pa i-collect ng pytest ang mga modules."""
     os.environ.setdefault("SUPABASE_URL", "https://mock.supabase.co")

@@ -43,7 +43,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             } else if($_SESSION["role"] === 'admin' || $_SESSION["role"] === 'administrator') {
                 header("Location: src/views/admin/dashboard.php"); // Path ng Admin Dashboard mo
-            } 
+            } else if($_SESSION["role"] === 'super_admin') {
+                header("Location: src/views/super_admin/dashboard.php"); // Path ng Manager Dashboard mo
+            }
             else if($_SESSION["role"] === 'customer') {
                 header("Location: src/views/customer/dashboard.php"); // Path ng Customer Dashboard mo
             } 
@@ -54,7 +56,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } 
         // 4. Handling ng Error
         else {
-            $error = $response['error'] ?? ($response['data']['detail'] ?? "Maling email o password.");
+            if (isset($response['data']['detail'])) {
+                if (is_array($response['data']['detail'])) {
+                    $error = $response['data']['detail'][0]['msg'] ?? "Wrong email or Password.";
+                } else {
+                    $error = $response['data']['detail'];
+                }
+            } elseif (isset($response['error'])) {
+                $error = $response['error'];
+            } else {
+                $error = "Wrong email or Password.";
+            }
         }
     }
 }
@@ -139,6 +151,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <?php include 'src/components/footer.php'; ?>
 
-    <script src="assets/js/footer.js"></script>
 </body>
 </html>

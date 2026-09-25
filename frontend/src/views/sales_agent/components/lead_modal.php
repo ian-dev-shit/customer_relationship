@@ -39,20 +39,46 @@
         </div>
       </div>
 
-      <!-- PHONE NUMBER & SERVICE TYPE -->
+      <!-- PHONE NUMBER & FREIGHT MODE -->
       <div class="grid grid-cols-2 gap-3">
         <div>
           <label class="text-[11px] font-bold text-slate-600 block mb-1">Phone Number</label>
           <input type="text" name="phone_number" required placeholder="09123456789" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all">
         </div>
         <div>
-          <label class="text-[11px] font-bold text-slate-600 block mb-1">Service Type</label>
-          <select name="service_type" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all bg-white">
-            <option value="" disabled selected>Select Service</option>
+          <label class="text-[11px] font-bold text-slate-600 block mb-1">Freight Mode</label>
+          <select name="freight_mode" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all bg-white">
+            <option value="" disabled selected>Select Freight Mode</option>
             <option value="Full Truckload (FTL)">Full Truckload (FTL)</option>
             <option value="Less Than Truckload (LTL)">Less Than Truckload (LTL)</option>
             <option value="Sea Freight">Sea Freight</option>
             <option value="Air Freight">Air Freight</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- SERVICE LEVEL & HANDLING REQUIREMENTS -->
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="text-[11px] font-bold text-slate-600 block mb-1">Service Level</label>
+          <select name="service_level" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all bg-white">
+            <option value="" disabled selected>Select Service Level</option>
+            <option value="Door-to-Door">Door-to-Door</option>
+            <option value="Door-to-Port">Door-to-Port</option>
+            <option value="Port-to-Door">Port-to-Door</option>
+            <option value="Port-to-Port">Port-to-Port</option>
+            <option value="Express / Rush">Express / Rush</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-[11px] font-bold text-slate-600 block mb-1">Special Handling</label>
+          <select name="handling_requirements" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all bg-white">
+            <option value="" disabled selected>Select Handling Type</option>
+            <option value="Standard Cargo">Standard Cargo</option>
+            <option value="Fragile / Delicate">Fragile / Delicate</option>
+            <option value="Temperature-Controlled (Cold Chain)">Temperature-Controlled</option>
+            <option value="Hazardous / DG">Hazardous / DG</option>
+            <option value="Over-Dimensional Cargo">Over-Dimensional Cargo</option>
           </select>
         </div>
       </div>

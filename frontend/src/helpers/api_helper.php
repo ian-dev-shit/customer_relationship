@@ -38,6 +38,10 @@ function make_api_request($endpoint, $method = 'GET', $data = null, $is_form_dat
         $headers[] = 'Authorization: Bearer ' . $_SESSION['access_token'];
     }
 
+    if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
+        $headers[] = 'x-user-id: ' . $_SESSION['user_id'];
+    }
+
     // Isama ang Anumang Custom Headers (tulad ng x-user-id)
     if (!empty($custom_headers) && is_array($custom_headers)) {
         $headers = array_merge($headers, $custom_headers);

@@ -136,6 +136,8 @@ function openViewModal(lead) {
   document.getElementById('modalPlatform').innerText = (lead.platform_used === 'Google Forms') ? 'Gmail' : (lead.platform_used || 'N/A');
   document.getElementById('modalService').innerText = lead.service_type || lead.service || 'N/A';
   document.getElementById('modalRoute').innerText = (lead.origin || 'N/A') + ' ➔ ' + (lead.destination || 'N/A');
+  document.getElementById('modalHandling').innerText = lead.handling || 'N/A';
+  document.getElementById('modalServices').innerText = lead.service || 'N/A';
 
   // 4. Action Buttons 
   const emailBtn = document.getElementById('contactModalEmailBtn');

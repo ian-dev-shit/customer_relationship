@@ -1,0 +1,303 @@
+[
+  {
+    "ref": "BK-94820",
+    "service": "Freight Transport",
+    "date": "Aug 20, 2026",
+    "amount": 15400.00,
+    "status": "Completed",
+    "origin": "Manila",
+    "destination": "Cebu",
+    "consignor": {
+      "name": "Acme Foods Inc.",
+      "tel": "+63 917 123 4567",
+      "address": "Building 4, Metro Industrial Park",
+      "city": "Pasig",
+      "country": "Philippines",
+      "zip": "1600"
+    },
+    "consignee": {
+      "attention": "Juan Dela Cruz",
+      "company": "Cebu Retail Inc.",
+      "address": "88 Osmena Blvd",
+      "city": "Cebu",
+      "state": "Cebu",
+      "country": "Philippines",
+      "zip": "6000",
+      "tel": "+63 932 555 0188"
+    },
+    "cargo": {
+      "courier_date": "2026-08-20",
+      "courier_time": "09:00",
+      "goodsDesc": "Frozen food cartons - keep chilled",
+      "declared_amount": "15400",
+      "qty_pcs": "120",
+      "wt_kilos": "850",
+      "wt_grams": "0",
+      "dim_length": "120",
+      "dim_width": "100",
+      "dim_height": "80",
+      "service": ["Air Freight"],
+      "shipment_type": ["Documents"],
+      "pkg_size": ["Large"],
+      "charges": ["DDP"]
+    }
+  },
+  {
+    "ref": "BK-93102",
+    "service": "Cargo Logistics",
+    "date": "Jul 14, 2026",
+    "amount": 8200.00,
+    "status": "Completed",
+    "origin": "Pasig",
+    "destination": "Davao",
+    "consignor": {
+      "name": "Acme Foods Inc.",
+      "tel": "+63 917 123 4567",
+      "address": "Building 4, Metro Industrial Park",
+      "city": "Pasig",
+      "country": "Philippines",
+      "zip": "1600"
+    },
+    "consignee": {
+      "attention": "Maria Santos",
+      "company": "Davao Fresh Mart",
+      "address": "Km 7 JP Laurel Ave",
+      "city": "Davao",
+      "state": "Davao del Sur",
+      "country": "Philippines",
+      "zip": "8000",
+      "tel": "+63 917 555 0142"
+    },
+    "cargo": {
+      "courier_date": "2026-07-14",
+      "courier_time": "13:30",
+      "goodsDesc": "Dry goods - canned products",
+      "declared_amount": "8200",
+      "qty_pcs": "80",
+      "wt_kilos": "420",
+      "wt_grams": "500",
+      "dim_length": "110",
+      "dim_width": "90",
+      "dim_height": "70",
+      "service": ["Sea Freight"],
+      "shipment_type": ["Packages"],
+      "pkg_size": ["Medium"],
+      "charges": ["Non DDP"]
+    }
+  },
+  {
+    "ref": "BK-92511",
+    "service": "Cold Chain",
+    "date": "Jun 30, 2026",
+    "amount": 11250.00,
+    "status": "Completed",
+    "origin": "Quezon",
+    "destination": "Iloilo",
+    "consignor": {
+      "name": "Acme Foods Inc.",
+      "tel": "+63 917 123 4567",
+      "address": "Building 4, Metro Industrial Park",
+      "city": "Pasig",
+      "country": "Philippines",
+      "zip": "1600"
+    },
+    "consignee": {
+      "attention": "Ramon Uy",
+      "company": "Iloilo Cold Storage",
+      "address": "12 Delgado St",
+      "city": "Iloilo",
+      "state": "Iloilo",
+      "country": "Philippines",
+      "zip": "5000",
+      "tel": "+63 933 555 0119"
+    },
+    "cargo": {
+      "courier_date": "2026-06-30",
+      "courier_time": "08:00",
+      "goodsDesc": "Dairy products - reefer required",
+      "declared_amount": "11250",
+      "qty_pcs": "60",
+      "wt_kilos": "600",
+      "wt_grams": "0",
+      "dim_length": "100",
+      "dim_width": "100",
+      "dim_height": "90",
+      "service": ["Air Freight", "Sea Freight"],
+      "shipment_type": ["International"],
+      "pkg_size": ["Large"],
+      "charges": ["DDP", "ADD"]
+    }
+  },
+  {
+    "ref": "BK-91904",
+    "service": "Freight Transport",
+    "date": "Jun 02, 2026",
+    "amount": 9800.00,
+    "status": "In Transit",
+    "origin": "Manila",
+    "destination": "Batangas",
+    "consignor": {
+      "name": "Acme Foods Inc.",
+      "tel": "+63 917 123 4567",
+      "address": "Building 4, Metro Industrial Park",
+      "city": "Pasig",
+      "country": "Philippines",
+      "zip": "1600"
+    },
+    "consignee": {
+      "attention": "Liza Ramos",
+      "company": "Batangas Port Traders",
+      "address": "Port Area, Calicanto",
+      "city": "Batangas",
+      "state": "Batangas",
+      "country": "Philippines",
+      "zip": "4200",
+      "tel": "+63 917 555 0177"
+    },
+    "cargo": {
+      "courier_date": "2026-06-02",
+      "courier_time": "15:00",
+      "goodsDesc": "Beverage crates - fragile",
+      "declared_amount": "9800",
+      "qty_pcs": "200",
+      "wt_kilos": "950",
+      "wt_grams": "250",
+      "dim_length": "130",
+      "dim_width": "110",
+      "dim_height": "75",
+      "service": ["Land Freight"],
+      "shipment_type": ["Local"],
+      "pkg_size": ["Extra Large"],
+      "charges": ["Non DDP"]
+    }
+  },
+  {
+    "ref": "BK-90788",
+    "service": "Warehousing",
+    "date": "May 18, 2026",
+    "amount": 6400.00,
+    "status": "Completed",
+    "origin": "Makati",
+    "destination": "Laguna",
+    "consignor": {
+      "name": "Acme Foods Inc.",
+      "tel": "+63 917 123 4567",
+      "address": "Building 4, Metro Industrial Park",
+      "city": "Pasig",
+      "country": "Philippines",
+      "zip": "1600"
+    },
+    "consignee": {
+      "attention": "Paolo Aquino",
+      "company": "Laguna Distributors",
+      "address": "Lot 9 BI Southwoods",
+      "city": "Binan",
+      "state": "Laguna",
+      "country": "Philippines",
+      "zip": "4024",
+      "tel": "+63 927 555 0131"
+    },
+    "cargo": {
+      "courier_date": "2026-05-18",
+      "courier_time": "10:30",
+      "goodsDesc": "Warehouse transfer - assorted SKUs",
+      "declared_amount": "6400",
+      "qty_pcs": "45",
+      "wt_kilos": "300",
+      "wt_grams": "0",
+      "dim_length": "90",
+      "dim_width": "80",
+      "dim_height": "60",
+      "service": ["Land Freight"],
+      "shipment_type": ["Packages"],
+      "pkg_size": ["Medium"],
+      "charges": ["CI"]
+    }
+  },
+  {
+    "ref": "BK-89910",
+    "service": "Cargo Logistics",
+    "date": "Apr 27, 2026",
+    "amount": 7300.00,
+    "status": "Cancelled",
+    "origin": "Cavite",
+    "destination": "Pampanga",
+    "consignor": {
+      "name": "Acme Foods Inc.",
+      "tel": "+63 917 123 4567",
+      "address": "Building 4, Metro Industrial Park",
+      "city": "Pasig",
+      "country": "Philippines",
+      "zip": "1600"
+    },
+    "consignee": {
+      "attention": "Katrina Lim",
+      "company": "Pampanga Grocery Corp",
+      "address": "McArthur Highway, San Fernando",
+      "city": "San Fernando",
+      "state": "Pampanga",
+      "country": "Philippines",
+      "zip": "2000",
+      "tel": "+63 917 555 0108"
+    },
+    "cargo": {
+      "courier_date": "2026-04-27",
+      "courier_time": "11:00",
+      "goodsDesc": "Cancelled - snacks consignment",
+      "declared_amount": "7300",
+      "qty_pcs": "50",
+      "wt_kilos": "180",
+      "wt_grams": "0",
+      "dim_length": "80",
+      "dim_width": "70",
+      "dim_height": "60",
+      "service": ["Land Freight"],
+      "shipment_type": ["Local"],
+      "pkg_size": ["Small"],
+      "charges": ["ED"]
+    }
+  },
+  {
+    "ref": "BK-88431",
+    "service": "Freight Transport",
+    "date": "Mar 15, 2026",
+    "amount": 12500.00,
+    "status": "Completed",
+    "origin": "Manila",
+    "destination": "Cagayan",
+    "consignor": {
+      "name": "Acme Foods Inc.",
+      "tel": "+63 917 123 4567",
+      "address": "Building 4, Metro Industrial Park",
+      "city": "Pasig",
+      "country": "Philippines",
+      "zip": "1600"
+    },
+    "consignee": {
+      "attention": "Daniel Torres",
+      "company": "Cagayan Valley Foods",
+      "address": "Maharlika Highway, Tuguegarao",
+      "city": "Tuguegarao",
+      "state": "Cagayan",
+      "country": "Philippines",
+      "zip": "3500",
+      "tel": "+63 917 555 0166"
+    },
+    "cargo": {
+      "courier_date": "2026-03-15",
+      "courier_time": "07:30",
+      "goodsDesc": "Rice sacks - 50kg each",
+      "declared_amount": "12500",
+      "qty_pcs": "150",
+      "wt_kilos": "1200",
+      "wt_grams": "0",
+      "dim_length": "140",
+      "dim_width": "120",
+      "dim_height": "100",
+      "service": ["Sea Freight", "Land Freight"],
+      "shipment_type": ["Packages"],
+      "pkg_size": ["Extra Large"],
+      "charges": ["DDP", "CI"]
+    }
+  }
+]

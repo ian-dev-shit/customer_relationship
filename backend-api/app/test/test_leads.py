@@ -1,4 +1,9 @@
+import sys
 from unittest.mock import MagicMock, patch
+
+# 1. PREVENT WEASYPRINT ERROR ON WINDOWS ENVIRONMENT
+sys.modules["weasyprint"] = MagicMock()
+
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from app.routes.sales_agent.leads import router
@@ -140,7 +145,6 @@ def test_get_lead_stats_error(mock_supabase):
 def test_update_lead_status_success(mock_supabase):
     updated_lead = {**MOCK_LEAD, "status": "quote_sent"}
 
-    # Mock DB response para sa initial check (select) at update execute
     mock_select_execute = MagicMock()
     mock_select_execute.data = [MOCK_LEAD]
 
@@ -165,11 +169,10 @@ def test_update_lead_status_success(mock_supabase):
 
 @patch("app.routes.sales_agent.leads.supabase_secondary")
 def test_update_lead_status_closed_won_success(mock_supabase):
-    # Test for closed_won creating ticket successfully
     updated_lead = {
         **MOCK_LEAD,
         "status": "closed_won",
-        "pickup_address": "Manila",
+        "pickup_address": "123 Warehouse St., Manila",
     }
 
     mock_select_execute = MagicMock()
@@ -183,6 +186,9 @@ def test_update_lead_status_closed_won_success(mock_supabase):
     )
     mock_supabase.table.return_value.update.return_value.eq.return_value.execute.return_value = (
         mock_update_execute
+    )
+    mock_supabase.table.return_value.insert.return_value.execute.return_value = (
+        MagicMock(data=[{"id": "ticket-001"}])
     )
 
     payload = {
@@ -202,7 +208,6 @@ def test_update_lead_status_closed_won_success(mock_supabase):
 
 @patch("app.routes.sales_agent.leads.supabase_secondary")
 def test_update_lead_status_closed_won_missing_fields(mock_supabase):
-    # Missing pickup_address/datetime when status is closed_won
     mock_select_execute = MagicMock()
     mock_select_execute.data = [MOCK_LEAD]
 
@@ -244,7 +249,7 @@ def test_update_lead_status_not_found(mock_supabase):
 # ==========================================
 
 
-@freeze_time("2026-08-20")  # Pinipigilan ang oras 
+@freeze_time("2026-08-20")
 @patch("app.routes.sales_agent.leads.supabase_secondary")
 def test_get_dashboard_kpis_success(mock_supabase):
     mock_closed_leads = [
@@ -252,13 +257,13 @@ def test_get_dashboard_kpis_success(mock_supabase):
             "id": "1",
             "status": "closed_won",
             "estimated_amount": 5000.0,
-            "created_at": "2026-08-10T10:00:00Z",  # Pasok sa Current Month (August)
+            "created_at": "2026-08-10T10:00:00Z",  # August 2026
         },
         {
             "id": "2",
             "status": "closed_won",
             "estimated_amount": 3000.0,
-            "created_at": "2026-07-15T10:00:00Z",  # Pasok sa Previous Month (July)
+            "created_at": "2026-07-15T10:00:00Z",  # July 2026
         },
     ]
 
@@ -289,3 +294,60 @@ def test_get_dashboard_kpis_error(mock_supabase):
 
     assert response.status_code == 500
     assert "KPI query failed" in response.json()["detail"]
+
+
+# ==========================================
+# 5. TEST: POST /api/v1/leads/leads
+# ==========================================
+
+
+@patch("app.routes.sales_agent.leads.supabase_secondary")
+def test_create_new_leads_success(mock_supabase):
+    new_lead = {**MOCK_LEAD, "company_name": "New Tech Corp"}
+
+    mock_execute = MagicMock()
+    mock_execute.data = [new_lead]
+
+    mock_supabase.table.return_value.insert.return_value.execute.return_value = (
+        mock_execute
+    )
+
+    # Idinagdag ang lahat ng required fields ayon sa LeadCreateSchema
+    payload = {
+        "company_name": "New Tech Corp",
+        "contact_person": "Juan Dela Cruz",
+        "email": "juan@abc.com",
+        "phone_number": "09171234567",
+        "service_type": "Freight",
+        "origin": "Manila",
+        "destination": "Cebu",
+    }
+
+    response = client.post("/api/v1/leads/leads", json=payload)
+
+    assert response.status_code == 201
+    res_json = response.json()
+    assert res_json["status"] == "success"
+    assert res_json["message"] == "Lead created successfully"
+    assert res_json["data"]["company_name"] == "New Tech Corp"
+
+
+@patch("app.routes.sales_agent.leads.supabase_secondary")
+def test_create_new_leads_server_error(mock_supabase):
+    # Simulate DB Connection / Query Failure
+    mock_supabase.table.side_effect = Exception("Database insertion failed")
+
+    payload = {
+        "company_name": "New Tech Corp",
+        "contact_person": "Juan Dela Cruz",
+        "email": "juan@abc.com",
+        "phone_number": "09171234567",
+        "service_type": "Freight",
+        "origin": "Manila",
+        "destination": "Cebu",
+    }
+
+    response = client.post("/api/v1/leads/leads", json=payload)
+
+    assert response.status_code == 500
+    assert "Database insertion failed" in response.json()["detail"]

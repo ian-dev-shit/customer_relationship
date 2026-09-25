@@ -1,4 +1,4 @@
-# 1. PHP image na may kasamang Apache web server
+# 1. PHP image 
 FROM php:8.2-apache
 
 # 2. Kopyahin ang lahat ng frontend files 
