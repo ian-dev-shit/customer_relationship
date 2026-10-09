@@ -3,7 +3,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-require_once 'src/helpers/api_helper.php';
+require_once __DIR__ . '/../src/helpers/api_helper.php';
 
 // Burahin ang lahat ng Session Data
 $_SESSION = array();
@@ -32,5 +32,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Kung galing sa Manual Click (Direct Link Access)
-header("Location: login.php");
+header("Location: ../login.html");
 exit();

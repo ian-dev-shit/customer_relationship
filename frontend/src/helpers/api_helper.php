@@ -68,10 +68,11 @@ function make_api_request($endpoint, $method = 'GET', $data = null, $is_form_dat
     
     // Handler kapag offline/down ang FastAPI Backend Server
     if ($response === false) {
+        error_log('API request failed: ' . $method . ' ' . $url . ' -> cURL: ' . $curl_error);
         return [
-            'status_code' => 500,
+            'status_code' => 503,
             'data' => null,
-            'error' => 'Couldn\'t connect to Backend Server: ' . $curl_error
+            'error' => 'Backend Server is offline (tried ' . $url . '). Please start FastAPI on port 8000: ..\\venv\\Scripts\\uvicorn app.main:app --host 127.0.0.1 --port 8000 (run inside backend-api/). Details: ' . $curl_error
         ];
     }
     

@@ -6,7 +6,12 @@ from typing import List, Optional
 from io import BytesIO
 from fastapi import APIRouter, HTTPException, BackgroundTasks, Query
 from jinja2 import Environment, FileSystemLoader
-from weasyprint import HTML
+try:
+    from weasyprint import HTML
+    _WEASYPRINT_AVAILABLE = True
+except ImportError:  # Windows dev without GTK/Cairo system libs
+    HTML = None
+    _WEASYPRINT_AVAILABLE = False
 from app.supabase_config.supabase import supabase_secondary
 from app.middleware.quotation import send_quotation_email
 from app.schemas.quotation import QuotationCreate, QuotationResponse
@@ -22,6 +27,8 @@ jinja_env = Environment(loader=FileSystemLoader("app/templates"))
 
 def generate_pdf_bytes(quotation_data: dict) -> bytes:
     """I-re-render ang HTML template papuntang PDF bytes gamit ang WeasyPrint."""
+    if not _WEASYPRINT_AVAILABLE:
+        raise RuntimeError('PDF generation unavailable: weasyprint system libs not installed on this host.')
     template = jinja_env.get_template("quotation_pdf.html")
     rendered_html = template.render(**quotation_data)
     return HTML(string=rendered_html).write_pdf()

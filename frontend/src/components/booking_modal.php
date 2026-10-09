@@ -10,7 +10,7 @@ if (session_status() === PHP_SESSION_NONE) { session_start(); }
 // agent can book on the customer's behalf; otherwise fall back to the session.
 $customer_id = $booking_customer_id_preset ?? $_SESSION['customer_id'] ?? $_SESSION['user_id'] ?? '';
 ?>
-<style>
+<style type="text/tailwindcss">
     :root {
       --primary-navy: #0e1e38;
       --navy-header: #0d1b36;

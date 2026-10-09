@@ -10,15 +10,28 @@
 (function () {
     'use strict';
 
-    var root = document.querySelector('.legal-root');
     var lastFocused = null;
+
+    // The .legal-root wrapper is looked up lazily (NOT cached at load time).
+    // Static auth pages (login.html / otp_verification.html / test.html) inject
+    // legal_modals.html via an async fetch() that resolves AFTER this script
+    // runs, so a load-time querySelector would capture null and openModal()
+    // would bail on its first guard. Dashboard pages inject the wrapper via a
+    // server-side PHP include, so it is present immediately. Re-querying on
+    // each call satisfies both load paths.
+    function getRoot() {
+        return document.querySelector('.legal-root');
+    }
 
     function openModal(id) {
         var modal = document.getElementById(id);
+        var root = getRoot();
         if (!modal || !root) return;
         lastFocused = document.activeElement;
         root.removeAttribute('inert');
         modal.hidden = false;
+        // Inspiration theme fades via .is-open; keep hidden-attr logic as source of truth.
+        requestAnimationFrame(function () { modal.classList.add('is-open'); });
         document.body.style.overflow = 'hidden';
         var closeBtn = modal.querySelector('.legal-close');
         if (closeBtn) closeBtn.focus();
@@ -27,9 +40,11 @@
     function closeModal(id) {
         var modal = document.getElementById(id);
         if (!modal || modal.hidden) return;
+        modal.classList.remove('is-open');
         modal.hidden = true;
         // Re-inert the wrapper only when no other legal modal is still open.
-        if (!root.querySelector('.legal-overlay:not([hidden])')) {
+        var root = getRoot();
+        if (root && !root.querySelector('.legal-overlay:not([hidden])')) {
             root.setAttribute('inert', '');
             document.body.style.overflow = '';
             if (lastFocused && typeof lastFocused.focus === 'function') {

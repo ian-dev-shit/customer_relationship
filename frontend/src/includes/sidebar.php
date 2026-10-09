@@ -1,5 +1,5 @@
 <?php
-// 1. I-import 
+// 1. I-import at tawagin ang Service
 require_once __DIR__ . '/../services/SidebarService.php';
 
 use App\services\SidebarService;
@@ -17,65 +17,70 @@ $portalLabel = $sidebar['portalLabel'];
 $navSections = $sidebar['navSections'];
 ?>
 <!-- MOBILE OVERLAY BACKDROP -->
-<div id="sidebarOverlay" class="fixed inset-0 bg-slate-950/60 z-30 hidden md:hidden backdrop-blur-sm transition-opacity"></div>
+<div id="sidebarOverlay" class="fixed inset-0 bg-navy-950/60 z-30 hidden md:hidden backdrop-blur-sm transition-opacity"></div>
 
 <!-- SIDEBAR NAVIGATION CONTAINER -->
-<aside id="sidebar" class="group w-20 hover:w-64 bg-[#080e1e] text-slate-300 min-h-screen flex flex-col justify-between p-4 border-r border-slate-800 shrink-0 z-40 transition-all duration-300 ease-in-out -translate-x-full md:translate-x-0 fixed md:relative overflow-x-hidden">
+<!--
+  Desktop pinning: h-screen (NOT min-h-screen) caps the rail at one viewport so
+  it can slide within the taller body, and md:sticky md:top-0 holds it there
+  while <main> scrolls past. md:self-start stops flex `stretch` from re-growing
+  it, and md:overflow-y-auto lets the nav list scroll internally if it is taller
+  than the viewport. Every added utility is md:-scoped (Tailwind md = 768px),
+  which matches the off-canvas breakpoint in includes/tailwind_css.php section 16 (MOBILE RAIL),
+  so the -translate-x-full / fixed drawer behaviour is untouched on mobile.
+  Do not reintroduce md:relative or min-h-screen here - either one breaks the pin.
+-->
+<aside id="sidebar" class="group crm-sidebar w-20 hover:w-64 text-slate-300 h-screen flex flex-col justify-between p-4 shrink-0 z-40 transition-all duration-300 ease-in-out -translate-x-full md:translate-x-0 fixed md:sticky md:top-0 md:self-start overflow-x-hidden md:overflow-y-auto">
     <div class="space-y-6">
-        
+
         <!-- Brand Logo & Dynamic Badge -->
         <div class="flex items-center gap-3 px-1.5 py-2">
-            <div class="w-10 h-10 rounded-xl overflow-hidden shadow-lg shadow-blue-500/30 flex items-center justify-center bg-white/5 border border-white/10 shrink-0">
+            <div class="w-10 h-10 rounded-xl overflow-hidden shadow-lg shadow-navy flex items-center justify-center bg-white/5 border border-white/10 shrink-0">
                 <img src="../../../assets/image/new_logo.png" alt="Company Logo" class="w-full h-full object-contain p-1">
             </div>
-            <div class="leading-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap overflow-hidden">
-                <h1 class="text-[12px] font-black tracking-wider text-white uppercase">PRIORITY <span class="text-brand-blue">HANDLING</span></h1>
-                <span class="text-[9px] text-blue-400 uppercase tracking-widest font-bold"><?= $portalLabel ?></span>
+            <div class="leading-none crm-reveal whitespace-nowrap overflow-hidden">
+                <h1 class="crm-brand-name">PRIORITY <span class="text-brand-blue">HANDLING</span></h1>
+                <span class="crm-brand-badge"><?= htmlspecialchars($portalLabel) ?></span>
             </div>
         </div>
 
         <!-- Dynamic Navigation Links Loop -->
-        <nav class="space-y-4 text-xs font-medium">
+        <nav class="space-y-5 text-xs font-medium">
             <?php foreach ($navSections as $sectionTitle => $items): ?>
                 <div>
-                    <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider px-2 block mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap overflow-hidden">
+                    <span class="crm-nav-group crm-reveal whitespace-nowrap overflow-hidden">
                         <?= htmlspecialchars($sectionTitle) ?>
                     </span>
                     <ul class="space-y-1">
-                        <?php foreach ($items as $key => $item): 
+                        <?php foreach ($items as $key => $item):
                             $isActive = ($activePage === $key);
                             $hasSubmenu = isset($item['submenu']) && is_array($item['submenu']);
-                            $linkClass = $isActive 
-                                ? 'bg-blue-600/20 text-white rounded-xl font-semibold border border-blue-500/30 shadow-sm' 
-                                : 'text-slate-400 hover:text-white hover:bg-white/5 rounded-lg';
-                            $iconClass = $isActive ? 'text-blue-400' : 'text-slate-400';
                         ?>
                             <li>
                                 <?php if ($hasSubmenu): ?>
                                     <!-- DROPDOWN ITEM -->
-                                    <button type="button" onclick="toggleSubmenu('sub-<?= $key ?>', 'arrow-<?= $key ?>')" class="w-full flex items-center justify-between px-3 py-2 <?= $linkClass ?> transition-colors group/btn">
-                                        <span class="flex items-center gap-3 shrink-0">
-                                            <i class="fa-solid <?= $item['icon'] ?> text-sm <?= $iconClass ?> w-5 text-center"></i> 
-                                            <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap overflow-hidden">
+                                    <button type="button" onclick="toggleSubmenu('sub-<?= $key ?>', 'arrow-<?= $key ?>')" class="crm-nav-item <?= $isActive ? 'is-active' : '' ?> group/btn">
+                                        <span class="flex items-center gap-2.5 min-w-0 shrink-0">
+                                            <span class="crm-nav-ico"><i class="fa-solid <?= $item['icon'] ?>"></i></span>
+                                            <span class="crm-reveal whitespace-nowrap overflow-hidden">
                                                 <?= htmlspecialchars($item['label']) ?>
                                             </span>
                                         </span>
-                                        <i id="arrow-<?= $key ?>" class="fa-solid fa-chevron-down text-[10px] text-slate-500 opacity-0 group-hover:opacity-100 transition-transform duration-200"></i>
+                                        <i id="arrow-<?= $key ?>" class="fa-solid fa-chevron-down text-[10px] crm-reveal opacity-60 transition-transform duration-200"></i>
                                     </button>
-                                    
+
                                     <!-- SUBMENU LIST -->
-                                    <ul id="sub-<?= $key ?>" class="hidden pl-8 pr-2 py-1 space-y-1 opacity-0 group-hover:opacity-100 transition-all">
-                                        <?php foreach ($item['submenu'] as $subKey => $subItem): 
+                                    <?php $isChildActive = in_array($activePage, array_keys($item['submenu'])); ?>
+                                    <ul id="sub-<?= $key ?>" class="<?= $isChildActive ? '' : 'hidden ' ?>pl-4 pr-1 pt-1 pb-1 space-y-0.5 crm-reveal">
+                                        <?php foreach ($item['submenu'] as $subKey => $subItem):
                                             $isSubActive = ($activePage === $subKey);
-                                            $subLinkClass = $isSubActive ? 'text-white font-semibold bg-white/10' : 'text-slate-400 hover:text-white hover:bg-white/5';
-                                            $subIconClass = $isSubActive ? 'text-blue-400' : 'text-slate-500 group-hover/sub:text-slate-300';
                                         ?>
                                             <li>
-                                                <a href="<?= $subItem['url'] ?>" class="flex items-center gap-2.5 py-1.5 px-2.5 text-[11px] <?= $subLinkClass ?> rounded-lg transition-colors whitespace-nowrap group/sub">
+                                                <a href="<?= $subItem['url'] ?>" class="crm-sub-item <?= $isSubActive ? 'is-active' : '' ?>">
                                                     <?php if (isset($subItem['icon'])): ?>
-                                                        <i class="fa-solid <?= $subItem['icon'] ?> text-xs <?= $subIconClass ?> w-4 text-center shrink-0"></i>
+                                                        <i class="fa-solid <?= $subItem['icon'] ?> crm-sub-ico"></i>
                                                     <?php endif; ?>
-                                                    <span><?= htmlspecialchars($subItem['label']) ?></span>
+                                                    <span class="truncate"><?= htmlspecialchars($subItem['label']) ?></span>
                                                 </a>
                                             </li>
                                         <?php endforeach; ?>
@@ -83,17 +88,15 @@ $navSections = $sidebar['navSections'];
 
                                 <?php else: ?>
                                     <!-- STANDARD ITEM -->
-                                    <a href="<?= $item['url'] ?>" class="flex items-center justify-between px-3 py-2 <?= $linkClass ?> transition-colors">
-                                        <span class="flex items-center gap-3 shrink-0">
-                                            <i class="fa-solid <?= $item['icon'] ?> text-sm <?= $iconClass ?> w-5 text-center"></i> 
-                                            <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap overflow-hidden">
+                                    <a href="<?= $item['url'] ?>" class="crm-nav-item <?= $isActive ? 'is-active' : '' ?>">
+                                        <span class="flex items-center gap-2.5 min-w-0 shrink-0">
+                                            <span class="crm-nav-ico"><i class="fa-solid <?= $item['icon'] ?>"></i></span>
+                                            <span class="crm-reveal whitespace-nowrap overflow-hidden">
                                                 <?= htmlspecialchars($item['label']) ?>
                                             </span>
                                         </span>
                                         <?php if (isset($item['badge'])): ?>
-                                            <span class="<?= $item['badgeColor'] ?? 'bg-blue-500/20 text-blue-400' ?> font-bold px-1.5 py-0.5 rounded text-[10px] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                                <?= $item['badge'] ?>
-                                            </span>
+                                            <span class="crm-nav-badge crm-reveal"><?= htmlspecialchars($item['badge']) ?></span>
                                         <?php endif; ?>
                                     </a>
                                 <?php endif; ?>
@@ -106,43 +109,43 @@ $navSections = $sidebar['navSections'];
     </div>
 
     <!-- Sidebar Bottom Footer -->
-    <div class="space-y-4 pt-4 border-t border-slate-800/80">
+    <div class="crm-side-foot space-y-3 pt-4">
         <?php if ($userRole === 'customer'): ?>
             <!-- SLA Widget (Customer Only) -->
-            <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800 text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-300 overflow-hidden">
+            <div class="crm-sla-box crm-reveal">
                 <div class="flex justify-between items-center text-[10px] font-semibold text-slate-400 mb-1.5 whitespace-nowrap">
                     <span>SLA compliance</span>
                     <span class="text-emerald-400 font-bold">94%</span>
                 </div>
-                <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
-                    <div class="bg-emerald-500 h-full w-[94%] rounded-full"></div>
+                <div class="crm-sla-track">
+                    <div class="crm-sla-fill w-[94%]"></div>
                 </div>
             </div>
         <?php endif; ?>
 
         <!-- Profile Card & Logout Button -->
-        <div class="flex items-center justify-between p-2 bg-slate-900/80 border border-slate-800 rounded-xl">
+        <div class="crm-side-card">
             <div class="flex items-center gap-2.5 min-w-0">
                 <!-- Dynamic Initials -->
-                <div class="w-9 h-9 bg-purple-600/20 text-purple-400 font-bold rounded-lg flex items-center justify-center text-xs border border-purple-500/30 shrink-0">
+                <div class="crm-avatar-navy">
                     <?= htmlspecialchars($initials) ?>
                 </div>
-                
+
                 <!-- Dynamic Name -->
-                <div class="leading-tight min-w-0 flex-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap overflow-hidden">
-                    <h4 class="text-xs font-bold text-white truncate">
+                <div class="leading-tight min-w-0 flex-1 crm-reveal whitespace-nowrap overflow-hidden">
+                    <h4 class="crm-side-name">
                         <?= htmlspecialchars($displayName) ?>
                     </h4>
-                    <span class="text-[10px] text-slate-400 block truncate">
-                        <?= $userRole === 'sales_agent' 
-                            ? 'Sales Agent • ' . htmlspecialchars($agentId) 
+                    <span class="crm-side-meta">
+                        <?= $userRole === 'sales_agent'
+                            ? 'Sales Agent • ' . htmlspecialchars($agentId)
                             : htmlspecialchars($displayName) . ' • Acct #' . htmlspecialchars($agentId) ?>
                     </span>
                 </div>
             </div>
-            
+
             <!-- Logout Button -->
-            <a href="logout.php" id="logoutBtn" title="Logout" class="text-slate-400 hover:text-red-400 p-1.5 transition-colors shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <a href="../../php/logout.php" id="logoutBtn" title="Logout" class="crm-logout-btn crm-reveal">
                 <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
             </a>
         </div>

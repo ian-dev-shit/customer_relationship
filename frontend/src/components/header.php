@@ -30,7 +30,7 @@
     <div class="max-w-[1400px] mx-auto flex justify-between items-center">
         
         <!-- LEFT SIDE: Logo & Company Name -->
-        <a href="index.php" class="flex items-center gap-3">
+        <a href="/index.html" class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-700 to-indigo-900 flex items-center justify-center text-white shadow-lg shadow-blue-900/40">
                 <i class="fa-solid fa-cube text-lg"></i>
             </div>

@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }, 1000);
 
       setTimeout(() => {
-        window.location.href = '/logout.php'; 
+        window.location.href = '/php/logout.php'; 
       }, 1400);
     });
   }

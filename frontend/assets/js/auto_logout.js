@@ -12,15 +12,15 @@ function triggerAutoLogout() {
     localStorage.clear();
     sessionStorage.clear();
 
-    // 2. Tawagin ang iyong frontend/logout.php
-    fetch('../logout.php', { method: 'POST' })
+    // 2. Tawagin ang iyong frontend/php/logout.php
+    fetch('../php/logout.php', { method: 'POST' })
         .then(() => {
             // 3. Automatic redirect sa login page
-            window.location.href = '../login.php?status=session_expired';
+            window.location.href = '../login.html?status=session_expired';
         })
         .catch(() => {
             // Fallback redirect kung sakaling mag-fail ang fetch
-            window.location.href = '../login.php?status=session_expired';
+            window.location.href = '../login.html?status=session_expired';
         });
 }
 

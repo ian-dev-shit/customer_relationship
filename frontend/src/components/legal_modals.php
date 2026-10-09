@@ -8,7 +8,7 @@
  * emitted duplicate ids and getElementById() resolved the wrong modal.
  * This component is now the single source of truth.
  *
- * Requires assets/css/auth.css + assets/js/auth.js.
+ * Requires the consolidated Tailwind block (includes/tailwind_css.php) + assets/js/auth.js.
  */
 ?>
 <div class="legal-root" inert>

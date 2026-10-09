@@ -1,0 +1,1286 @@
+﻿    color: var(--on-navy-400);
+    font-size: .6875rem;
+    font-weight: 500;
+    transition: background-color .16s ease, color .16s ease;
+}
+.crm-sub-item:hover {
+    background: rgba(255, 255, 255, .06);
+    color: #ffffff;
+}
+.crm-sub-item.is-active {
+    background: rgba(255, 255, 255, .10);
+    color: #ffffff;
+    font-weight: 700;
+}
+.crm-sub-item.is-active .crm-sub-ico { color: var(--brand); }
+.crm-sub-ico { width: 1rem; text-align: center; font-size: .625rem; flex-shrink: 0; }
+
+/* Count badge on a nav row */
+.crm-nav-badge {
+    flex-shrink: 0;
+    min-width: 1.15rem;
+    padding: .05rem .35rem;
+    border-radius: var(--radius-pill);
+    background: rgba(148, 163, 184, .18);
+    color: #b9c4e3;
+    font-size: .5625rem;
+    font-weight: 800;
+    text-align: center;
+    line-height: 1.15rem;
+}
+.crm-nav-item.is-active .crm-nav-badge {
+    background: var(--navy-900);
+    color: #ffffff;
+}
+
+/* Footer card */
+.crm-side-foot {
+    border-top: 1px solid rgba(148, 163, 184, .14);
+}
+.crm-side-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    padding: .45rem;
+    border-radius: .875rem;
+    background: rgba(255, 255, 255, .04);
+    border: 1px solid rgba(255, 255, 255, .07);
+    transition: background-color .18s ease, border-color .18s ease;
+}
+.crm-side-card:hover {
+    background: rgba(255, 255, 255, .07);
+    border-color: rgba(255, 255, 255, .13);
+}
+.crm-avatar-navy {
+    flex-shrink: 0;
+    width: 2.125rem;
+    height: 2.125rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: .625rem;
+    background: linear-gradient(140deg, var(--navy-700) 0%, var(--navy-950) 100%);
+    border: 1px solid rgba(255, 255, 255, .12);
+    color: #ffffff;
+    font-size: .6875rem;
+    font-weight: 800;
+    letter-spacing: .02em;
+}
+.crm-side-name {
+    font-size: .6875rem;
+    font-weight: 700;
+    color: #eef1f9;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.crm-side-meta {
+    display: block;
+    font-size: .5625rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--on-navy-400);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.crm-logout-btn {
+    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: .5rem;
+    color: var(--on-navy-400);
+    transition: background-color .16s ease, color .16s ease;
+}
+.crm-logout-btn:hover {
+    background: rgba(244, 63, 94, .14);
+    color: #fb7185;
+}
+
+/* Reveal-on-hover labels (rail stays collapsed at w-20) */
+.crm-reveal {
+    opacity: 0;
+    transition: opacity .22s ease;
+}
+.group:hover .crm-reveal { opacity: 1; }
+
+/* SLA mini-widget (customer rail) */
+.crm-sla-box {
+    padding: .625rem .75rem;
+    border-radius: .875rem;
+    background: rgba(255, 255, 255, .04);
+    border: 1px solid rgba(255, 255, 255, .07);
+}
+.crm-sla-track {
+    height: .3125rem;
+    border-radius: var(--radius-pill);
+    background: rgba(148, 163, 184, .22);
+    overflow: hidden;
+}
+.crm-sla-fill {
+    height: 100%;
+    border-radius: var(--radius-pill);
+    background: linear-gradient(90deg, #34d399, #10b981);
+}
+
+/* --------------------------------------------------------------------------
+   4. SURFACES  -  cards, panels
+   -------------------------------------------------------------------------- */
+.crm-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+}
+
+.crm-card-hover {
+    transition: box-shadow .22s ease, transform .22s ease, border-color .22s ease;
+}
+.crm-card-hover:hover {
+    box-shadow: var(--shadow-lift);
+    border-color: var(--line-strong);
+    transform: translateY(-2px);
+}
+
+/* Panel header: title row inside a card */
+.crm-panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--line);
+}
+.crm-panel-title {
+    font-size: .9375rem;
+    font-weight: 700;
+    color: var(--fg-heading);
+    letter-spacing: -0.01em;
+}
+.crm-panel-sub {
+    display: block;
+    margin-top: .125rem;
+    font-size: .75rem;
+    font-weight: 500;
+    color: var(--fg-muted);
+}
+.crm-panel-body { padding: 1.25rem; }
+
+/* Section eyebrow above a card grid */
+.crm-section-label {
+    font-size: .6875rem;
+    font-weight: 800;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+}
+
+/* --------------------------------------------------------------------------
+   5. BUTTONS
+   -------------------------------------------------------------------------- */
+.crm-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    height: 2.25rem;
+    padding: 0 1rem;
+    border-radius: var(--radius-ctl);
+    border: 1px solid transparent;
+    font-size: .8125rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color .16s ease, border-color .16s ease,
+                color .16s ease, box-shadow .16s ease, transform .12s ease;
+}
+.crm-btn:active { transform: scale(.98); }
+.crm-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--ring); }
+.crm-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+/* Primary: navy - the structural action */
+.crm-btn-primary {
+    background: var(--navy-800);
+    color: #ffffff;
+    box-shadow: var(--shadow-navy);
+}
+.crm-btn-primary:hover { background: var(--navy-900); }
+html.dark .crm-btn-primary {
+    background: var(--on-navy-strong);
+    color: var(--navy-950);
+    box-shadow: none;
+}
+html.dark .crm-btn-primary:hover { background: #ffffff; }
+
+/* Accent: follows the picker - reserved for the single hero action */
+.crm-btn-accent {
+    background: var(--brand);
+    color: #ffffff;
+}
+.crm-btn-accent:hover { background: var(--brand-strong); }
+
+/* Ghost: bordered, transparent */
+.crm-btn-ghost {
+    background: var(--surface);
+    border-color: var(--line-strong);
+    color: var(--navy-700);
+}
+.crm-btn-ghost:hover {
+    background: var(--surface-hover);
+    border-color: var(--navy-300);
+    color: var(--navy-900);
+}
+html.dark .crm-btn-ghost { color: var(--fg-body); }
+html.dark .crm-btn-ghost:hover {
+    background: var(--surface-hover);
+    color: #ffffff;
+}
+
+/* Subtle: borderless quiet action */
+.crm-btn-subtle {
+    background: transparent;
+    color: var(--navy-500);
+}
+.crm-btn-subtle:hover {
+    background: var(--surface-hover);
+    color: var(--navy-900);
+}
+
+/* Danger */
+.crm-btn-danger {
+    background: #dc2626;
+    color: #ffffff;
+}
+.crm-btn-danger:hover { background: #b91c1c; }
+
+/* Sizes */
+.crm-btn-sm { height: 1.875rem; padding: 0 .75rem; font-size: .75rem; border-radius: .5rem; }
+.crm-btn-lg { height: 2.75rem; padding: 0 1.375rem; font-size: .875rem; }
+
+/* Icon-only */
+.crm-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-ctl);
+    border: 1px solid transparent;
+    color: var(--navy-500);
+    cursor: pointer;
+    transition: background-color .16s ease, color .16s ease, border-color .16s ease;
+}
+.crm-icon-btn:hover {
+    background: var(--surface-hover);
+    border-color: var(--line);
+    color: var(--navy-900);
+}
+.crm-icon-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--ring); }
+html.dark .crm-icon-btn { color: var(--fg-muted); }
+html.dark .crm-icon-btn:hover { color: #ffffff; }
+
+
+/* --------------------------------------------------------------------------
+   6. FORMS
+   -------------------------------------------------------------------------- */
+.crm-input,
+.crm-select,
+.crm-textarea {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-ctl);
+    padding: .55rem .75rem;
+    font-size: .8125rem;
+    color: var(--navy-800);
+    transition: border-color .16s ease, box-shadow .16s ease, background-color .16s ease;
+}
+.crm-input::placeholder,
+.crm-textarea::placeholder { color: var(--navy-300); }
+.crm-input:hover,
+.crm-select:hover,
+.crm-textarea:hover { border-color: var(--navy-300); }
+.crm-input:focus,
+.crm-select:focus,
+.crm-textarea:focus {
+    outline: none;
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px var(--ring);
+}
+html.dark .crm-input,
+html.dark .crm-select,
+html.dark .crm-textarea {
+    background: var(--surface-muted);
+    color: var(--on-navy-strong);
+}
+
+.crm-label {
+    display: block;
+    margin-bottom: .375rem;
+    font-size: .6875rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--navy-500);
+}
+html.dark .crm-label { color: var(--fg-muted); }
+
+/* Search field with leading icon */
+.crm-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.crm-search .crm-search-ico {
+    position: absolute;
+    left: .75rem;
+    font-size: .75rem;
+    color: var(--navy-300);
+    pointer-events: none;
+}
+.crm-search .crm-input { padding-left: 2.125rem; }
+
+/* --------------------------------------------------------------------------
+   7. TABLES
+   -------------------------------------------------------------------------- */
+.crm-table-wrap {
+    overflow-x: auto;
+    border-radius: var(--radius-card);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-card);
+}
+.crm-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: .8125rem;
+}
+.crm-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--surface-muted);
+    padding: .75rem 1rem;
+    border-bottom: 1px solid var(--line);
+    font-size: .625rem;
+    font-weight: 800;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--navy-500);
+    text-align: left;
+    white-space: nowrap;
+}
+html.dark .crm-table thead th {
+    background: var(--surface-muted);
+    color: var(--fg-muted);
+}
+.crm-table tbody td {
+    padding: .8125rem 1rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--fg-body);
+    vertical-align: middle;
+}
+.crm-table tbody tr { transition: background-color .14s ease; }
+.crm-table tbody tr:hover td { background: var(--surface-hover); }
+.crm-table tbody tr:last-child td { border-bottom: none; }
+.crm-table .cell-strong {
+    font-weight: 600;
+    color: var(--fg-heading);
+}
+html.dark .crm-table tbody tr:hover td { background: var(--surface-hover); }
+
+
+/* --------------------------------------------------------------------------
+   8. BADGES, CHIPS, PILLS
+   -------------------------------------------------------------------------- */
+.crm-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    padding: .2rem .6rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid transparent;
+    font-size: .6875rem;
+    font-weight: 700;
+    line-height: 1.1;
+    white-space: nowrap;
+}
+.crm-badge-dot {
+    width: .375rem;
+    height: .375rem;
+    border-radius: var(--radius-pill);
+    background: currentColor;
+    flex-shrink: 0;
+}
+.crm-badge-navy   { background: var(--navy-50);       color: var(--navy-700); border-color: var(--navy-100); }
+.crm-badge-green  { background: #ecfdf5;              color: #047857;          border-color: #a7f3d0; }
+.crm-badge-amber  { background: #fffbeb;              color: #b45309;          border-color: #fde68a; }
+.crm-badge-red    { background: #fef2f2;              color: #b91c1c;          border-color: #fecaca; }
+.crm-badge-blue   { background: #eff6ff;              color: #1d4ed8;          border-color: #bfdbfe; }
+.crm-badge-violet { background: #f5f3ff;              color: #6d28d9;          border-color: #ddd6fe; }
+.crm-badge-slate  { background: var(--surface-muted); color: var(--navy-500);  border-color: var(--line); }
+html.dark .crm-badge-navy,
+html.dark .crm-badge-green,
+html.dark .crm-badge-amber,
+html.dark .crm-badge-red,
+html.dark .crm-badge-blue,
+html.dark .crm-badge-violet,
+html.dark .crm-badge-slate {
+    border-color: rgba(148, 163, 184, .22);
+}
+
+/* Filter pill (segmented control item) */
+.crm-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .375rem .8125rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--line-strong);
+    background: var(--surface);
+    color: var(--navy-500);
+    font-size: .75rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color .16s ease, border-color .16s ease, color .16s ease;
+}
+.crm-pill:hover {
+    border-color: var(--navy-300);
+    color: var(--navy-900);
+    background: var(--surface-hover);
+}
+.crm-pill.is-active {
+    background: var(--navy-800);
+    border-color: var(--navy-800);
+    color: #ffffff;
+    box-shadow: var(--shadow-navy);
+}
+html.dark .crm-pill.is-active {
+    background: var(--on-navy-strong);
+    border-color: var(--on-navy-strong);
+    color: var(--navy-950);
+}
+
+/* --------------------------------------------------------------------------
+   9. TOPBAR + AVATAR
+   -------------------------------------------------------------------------- */
+.crm-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 4rem;
+    padding: 0 1.25rem;
+    background: rgba(255, 255, 255, .82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+}
+html.dark .crm-topbar {
+    background: rgba(15, 23, 52, .82);
+    border-bottom-color: var(--line);
+}
+.crm-topbar-title {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--fg-heading);
+}
+.crm-topbar-sub {
+    display: block;
+    font-size: .6875rem;
+    font-weight: 500;
+    color: var(--fg-muted);
+}
+.crm-topbar-group {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+.crm-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.125rem;
+    height: 2.125rem;
+    border-radius: .625rem;
+    background: linear-gradient(140deg, var(--navy-700), var(--navy-950));
+    color: #ffffff;
+    font-size: .6875rem;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+
+/* --------------------------------------------------------------------------
+   10. KPI / STAT CARDS
+   -------------------------------------------------------------------------- */
+.crm-kpi {
+    position: relative;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    padding: 1.125rem 1.25rem;
+    box-shadow: var(--shadow-card);
+    transition: box-shadow .22s ease, transform .22s ease, border-color .22s ease;
+}
+.crm-kpi:hover {
+    box-shadow: var(--shadow-lift);
+    border-color: var(--line-strong);
+    transform: translateY(-2px);
+}
+/* Navy hairline along the top edge */
+.crm-kpi::after {
+    content: "";
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--navy-800), transparent 65%);
+    opacity: .55;
+}
+.crm-kpi-label {
+    font-size: .625rem;
+    font-weight: 800;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+}
+.crm-kpi-value {
+    margin-top: .375rem;
+    font-size: 1.625rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: var(--fg-heading);
+    font-variant-numeric: tabular-nums;
+}
+.crm-kpi-foot {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin-top: .5rem;
+    font-size: .6875rem;
+    font-weight: 600;
+    color: var(--fg-muted);
+}
+.crm-delta { display: inline-flex; align-items: center; gap: .2rem; font-weight: 700; }
+.crm-delta-up   { color: #059669; }
+.crm-delta-down { color: #e11d48; }
+html.dark .crm-delta-up   { color: #34d399; }
+html.dark .crm-delta-down { color: #fb7185; }
+
+/* Icon tile on a KPI card */
+.crm-kpi-ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: .75rem;
+    background: var(--navy-50);
+    border: 1px solid var(--navy-100);
+    color: var(--navy-700);
+    font-size: .875rem;
+    flex-shrink: 0;
+}
+html.dark .crm-kpi-ico {
+    background: rgba(148, 163, 184, .10);
+    border-color: rgba(148, 163, 184, .18);
+    color: var(--on-navy-200);
+}
+
+/* --------------------------------------------------------------------------
+   11. MODALS
+   -------------------------------------------------------------------------- */
+.crm-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(5, 9, 20, .55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+.crm-modal {
+    width: 100%;
+    max-width: 28rem;
+    max-height: calc(100vh - 3rem);
+    overflow-y: auto;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 1.25rem;
+    box-shadow: var(--shadow-lift);
+    animation: crm-pop .22s cubic-bezier(.16, 1, .3, 1);
+}
+.crm-modal-lg { max-width: 44rem; }
+.crm-modal-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--line);
+}
+.crm-modal-body { padding: 1.5rem; }
+.crm-modal-foot {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: .625rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--line);
+    background: var(--surface-muted);
+}
+
+/* --------------------------------------------------------------------------
+   12. EMPTY STATE + PAGINATION
+   -------------------------------------------------------------------------- */
+.crm-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    padding: 3rem 1.5rem;
+    text-align: center;
+}
+.crm-empty-ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    margin-bottom: .25rem;
+    border-radius: 1rem;
+    background: var(--navy-50);
+    border: 1px solid var(--navy-100);
+    color: var(--navy-300);
+    font-size: 1.125rem;
+}
+.crm-empty-title {
+    font-size: .875rem;
+    font-weight: 700;
+    color: var(--fg-heading);
+}
+.crm-empty-sub {
+    font-size: .75rem;
+    color: var(--fg-muted);
+    max-width: 24rem;
+}
+
+.crm-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: .875rem 1.25rem;
+    border-top: 1px solid var(--line);
+    font-size: .75rem;
+    color: var(--fg-muted);
+}
+.crm-page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.875rem;
+    height: 1.875rem;
+    padding: 0 .5rem;
+    border-radius: .5rem;
+    border: 1px solid var(--line-strong);
+    background: var(--surface);
+    color: var(--navy-600);
+    font-size: .75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color .16s ease, border-color .16s ease, color .16s ease;
+}
+.crm-page-btn:hover:not(:disabled) {
+    background: var(--surface-hover);
+    border-color: var(--navy-300);
+    color: var(--navy-900);
+}
+.crm-page-btn.is-active {
+    background: var(--navy-800);
+    border-color: var(--navy-800);
+    color: #ffffff;
+}
+.crm-page-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* --------------------------------------------------------------------------
+   13. MOTION
+   -------------------------------------------------------------------------- */
+@keyframes crm-pop {
+    from { opacity: 0; transform: translateY(8px) scale(.98); }
+    to   { opacity: 1; transform: none; }
+}
+@keyframes crm-fade-up {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: none; }
+}
+.crm-fade-up { animation: crm-fade-up .4s cubic-bezier(.16, 1, .3, 1) both; }
+.crm-d1 { animation-delay: .04s; }
+.crm-d2 { animation-delay: .08s; }
+.crm-d3 { animation-delay: .12s; }
+.crm-d4 { animation-delay: .16s; }
+.crm-d5 { animation-delay: .20s; }
+.crm-d6 { animation-delay: .24s; }
+
+@media (prefers-reduced-motion: reduce) {
+    .crm-fade-up, .crm-modal { animation: none; }
+    .crm-kpi:hover, .crm-card-hover:hover { transform: none; }
+    .crm-btn:active { transform: none; }
+}
+
+/* --------------------------------------------------------------------------
+   14. SCROLLBAR
+   -------------------------------------------------------------------------- */
+.crm-scroll { scrollbar-width: thin; scrollbar-color: var(--navy-200) transparent; }
+.crm-scroll::-webkit-scrollbar { width: .375rem; height: .375rem; }
+.crm-scroll::-webkit-scrollbar-track { background: transparent; }
+.crm-scroll::-webkit-scrollbar-thumb {
+    background: var(--navy-200);
+    border-radius: var(--radius-pill);
+}
+.crm-scroll::-webkit-scrollbar-thumb:hover { background: var(--navy-300); }
+html.dark .crm-scroll { scrollbar-color: rgba(148, 163, 184, .28) transparent; }
+
+/* --------------------------------------------------------------------------
+   15. DENSITY  -  honours the existing compact preference
+   -------------------------------------------------------------------------- */
+html[data-density="compact"] .crm-kpi { padding: .8125rem .9375rem; }
+html[data-density="compact"] .crm-kpi-value { font-size: 1.375rem; }
+html[data-density="compact"] .crm-table tbody td { padding: .5rem .75rem; }
+html[data-density="compact"] .crm-table thead th { padding: .5rem .75rem; }
+html[data-density="compact"] .crm-panel-head { padding: .75rem 1rem; }
+html[data-density="compact"] .crm-panel-body { padding: .875rem 1rem; }
+
+
+/* --------------------------------------------------------------------------
+   16. MOBILE RAIL
+   On small screens the sidebar is off-canvas and slides in fully expanded,
+   so hover-reveal labels must always be visible there.
+   -------------------------------------------------------------------------- */
+@media (max-width: 767px) {
+    #sidebar { width: 16rem; }
+    #sidebar .crm-reveal { opacity: 1; }
+    #sidebar .crm-nav-item.is-active::before { left: -.25rem; }
+    /* Off-canvas drawer. The markup carries Tailwind's -translate-x-full;
+       these id-scoped rules win on specificity and drive the open state. */
+    #sidebar.is-open { transform: translateX(0); }
+    #sidebarOverlay.is-active { display: block; }
+}
+
+
+/* --------------------------------------------------------------------------
+   17. BRAND RECONCILIATION  -  [data-brand="priority"]
+   --------------------------------------------------------------------------
+   The sales_agent views were written before this token layer existed and
+   hand-roll Tailwind utilities, using purple / violet / indigo as a primary
+   colour (~250 occurrences) plus generic blue and several one-off hexes.
+   That gives three competing "brand" hues side by side, so nothing reads as
+   the Priority navy.
+
+   Rather than rewrite every view, these rules retint the off-brand utilities
+   onto the token scale. They are scoped to [data-brand="priority"], which the
+   sales_agent <main> elements carry, so the admin and customer portals are
+   untouched. Specificity (0,2,0) beats a Tailwind utility (0,1,0), and the
+   :hover / :focus forms beat (0,2,0) at (0,3,0).
+
+   This is a deliberate bridge, not the end state: new markup should use the
+   .crm-* component classes or priority.*/
+
+
+
+/* --- A. Primary fills: every "brand" hue collapses to the navy anchor ---- */
+[data-brand="priority"] .bg-purple-600,
+[data-brand="priority"] .bg-purple-500,
+[data-brand="priority"] .bg-indigo-600,
+[data-brand="priority"] .bg-indigo-500,
+[data-brand="priority"] .bg-blue-600,
+[data-brand="priority"] .bg-blue-500 {
+    background-color: var(--navy-700);
+}
+[data-brand="priority"] .checked\:bg-indigo-600:checked {
+    background-color: var(--navy-700);
+}
+
+/* --- B. Hover fills: one step darker ------------------------------------- */
+[data-brand="priority"] .hover\:bg-purple-700:hover,
+[data-brand="priority"] .hover\:bg-purple-600:hover,
+[data-brand="priority"] .hover\:bg-indigo-700:hover,
+[data-brand="priority"] .hover\:bg-indigo-600:hover,
+[data-brand="priority"] .hover\:bg-blue-700:hover {
+    background-color: var(--navy-800);
+}
+
+/* --- C. Soft tints: one light fill instead of five ----------------------- */
+[data-brand="priority"] .bg-purple-50,
+[data-brand="priority"] .bg-purple-100,
+[data-brand="priority"] .bg-violet-50,
+[data-brand="priority"] .bg-indigo-50,
+[data-brand="priority"] .bg-indigo-100,
+[data-brand="priority"] .bg-blue-50,
+[data-brand="priority"] .bg-blue-100,
+[data-brand="priority"] .hover\:bg-purple-50:hover,
+[data-brand="priority"] .hover\:bg-blue-100:hover {
+    background-color: var(--brand-soft);
+}
+/* Decorative blur blobs and translucent chart backdrops. */
+[data-brand="priority"] .bg-violet-200\/30,
+[data-brand="priority"] .bg-indigo-50\/30,
+[data-brand="priority"] .bg-blue-500\/10,
+[data-brand="priority"] .hover\:bg-blue-500\/20:hover {
+    background-color: var(--brand-softer);
+}
+
+/* --- D. Text: navy for emphasis, navy-400 for icon accents --------------- */
+[data-brand="priority"] .text-purple-600,
+[data-brand="priority"] .text-purple-700,
+[data-brand="priority"] .text-violet-600,
+[data-brand="priority"] .text-indigo-500,
+[data-brand="priority"] .text-indigo-600,
+[data-brand="priority"] .text-indigo-700,
+[data-brand="priority"] .text-indigo-800,
+[data-brand="priority"] .text-blue-600,
+[data-brand="priority"] .text-blue-700,
+[data-brand="priority"] .text-blue-800 {
+    color: var(--navy-600);
+}
+[data-brand="priority"] .hover\:text-purple-600:hover,
+[data-brand="priority"] .hover\:text-purple-700:hover,
+[data-brand="priority"] .hover\:text-indigo-700:hover,
+[data-brand="priority"] .hover\:text-indigo-800:hover,
+[data-brand="priority"] .hover\:text-blue-600:hover,
+[data-brand="priority"] .hover\:text-blue-800:hover {
+    color: var(--navy-700);
+}
+/* Tailwind emits `.group:hover .group-hover\:x` at (0,3,0), which would tie
+   with a plain [attr] .class:hover rule and win on source order. Repeating the
+   .group:hover chain keeps these above it. */
+[data-brand="priority"] .group:hover .group-hover\:text-purple-600,
+[data-brand="priority"] .group:hover .group-hover\:text-purple-700,
+[data-brand="priority"] .group:hover .group-hover\:text-indigo-600 {
+    color: var(--navy-700);
+}
+[data-brand="priority"] .text-purple-400,
+[data-brand="priority"] .text-indigo-400,
+[data-brand="priority"] .text-blue-400 {
+    color: var(--navy-400);
+}
+
+
+/* --- E. Borders ---------------------------------------------------------- */
+[data-brand="priority"] .border-purple-100,
+[data-brand="priority"] .border-purple-200,
+[data-brand="priority"] .border-purple-500,
+[data-brand="priority"] .border-indigo-100,
+[data-brand="priority"] .border-indigo-200,
+[data-brand="priority"] .border-indigo-300,
+[data-brand="priority"] .border-indigo-400,
+[data-brand="priority"] .border-indigo-500,
+[data-brand="priority"] .border-blue-100,
+[data-brand="priority"] .border-blue-200,
+[data-brand="priority"] .border-blue-500,
+[data-brand="priority"] .border-blue-500\/20 {
+    border-color: var(--brand-line);
+}
+[data-brand="priority"] .hover\:border-purple-100:hover,
+[data-brand="priority"] .hover\:border-purple-200:hover,
+[data-brand="priority"] .hover\:border-indigo-300:hover,
+[data-brand="priority"] .hover\:border-indigo-400:hover {
+    border-color: var(--navy-200);
+}
+[data-brand="priority"] .focus\:border-purple-500:focus,
+[data-brand="priority"] .focus\:border-indigo-400:focus,
+[data-brand="priority"] .focus\:border-indigo-500:focus,
+[data-brand="priority"] .focus\:border-blue-500:focus {
+    border-color: var(--navy-700);
+}
+
+/* --- F. Focus rings ------------------------------------------------------ */
+[data-brand="priority"] .ring-purple-500,
+[data-brand="priority"] .ring-indigo-500,
+[data-brand="priority"] .ring-blue-500,
+[data-brand="priority"] .focus\:ring-purple-500:focus,
+[data-brand="priority"] .focus\:ring-indigo-500:focus,
+[data-brand="priority"] .focus\:ring-blue-500:focus {
+    --tw-ring-color: var(--navy-700);
+}
+[data-brand="priority"] .ring-purple-500\/20,
+[data-brand="priority"] .ring-indigo-500\/40,
+[data-brand="priority"] .ring-violet-100,
+[data-brand="priority"] .focus\:ring-purple-500\/20:focus,
+[data-brand="priority"] .focus\:ring-indigo-500\/40:focus {
+    --tw-ring-color: var(--brand-line);
+}
+
+/* --- G. Coloured shadows -> navy-tinted ---------------------------------- */
+[data-brand="priority"] .shadow-purple-200,
+[data-brand="priority"] .shadow-indigo-100,
+[data-brand="priority"] .shadow-indigo-200,
+[data-brand="priority"] .shadow-indigo-500\/30,
+[data-brand="priority"] .shadow-indigo-900\/20,
+[data-brand="priority"] .shadow-blue-500\/20,
+[data-brand="priority"] .hover\:shadow-indigo-200:hover,
+[data-brand="priority"] .hover\:shadow-indigo-500\/30:hover {
+    --tw-shadow-color: rgba(29, 46, 106, .18);
+    --tw-shadow: var(--tw-shadow-colored);
+}
+
+
+/* --- H. Gradients: brand ramp instead of violet -> indigo ---------------- */
+[data-brand="priority"] .from-purple-500,
+[data-brand="priority"] .from-violet-500,
+[data-brand="priority"] .from-violet-600,
+[data-brand="priority"] .from-violet-700,
+[data-brand="priority"] .from-indigo-500,
+[data-brand="priority"] .from-indigo-600 {
+    --tw-gradient-from: var(--navy-700);
+    --tw-gradient-to: rgba(29, 46, 106, 0);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+[data-brand="priority"] .via-indigo-600,
+[data-brand="priority"] .via-indigo-500 {
+    --tw-gradient-to: rgba(24, 37, 84, 0);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--navy-800), var(--tw-gradient-to);
+}
+[data-brand="priority"] .to-violet-500,
+[data-brand="priority"] .to-violet-600,
+[data-brand="priority"] .to-indigo-600,
+[data-brand="priority"] .to-indigo-700 {
+    --tw-gradient-to: var(--teal-600);
+}
+[data-brand="priority"] .hover\:from-violet-700:hover {
+    --tw-gradient-from: var(--navy-800);
+    --tw-gradient-stops: var(--tw-gradient-from), rgba(24, 37, 84, 0);
+}
+[data-brand="priority"] .hover\:to-indigo-700:hover {
+    --tw-gradient-to: var(--teal-700);
+}
+/* Soft gradient washes used as card-header backdrops. */
+[data-brand="priority"] .from-violet-50\/80,
+[data-brand="priority"] .from-indigo-50\/60,
+[data-brand="priority"] .from-indigo-50\/70 {
+    --tw-gradient-from: var(--brand-soft);
+    --tw-gradient-stops: var(--tw-gradient-from), rgba(238, 241, 249, 0);
+}
+[data-brand="priority"] .via-indigo-50\/60 {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--brand-softer), var(--tw-gradient-to);
+}
+
+/* --- I. Canvas: one page background -------------------------------------- */
+/* Only the <main> itself carries the page canvas; inner bg-slate-50 fills are
+   left alone because they are used as subtle table-head / icon-tile fills.
+   Scoped to main so it cannot paint over a modal's dark backdrop. */
+main[data-brand="priority"] { background-color: var(--canvas); }
+[data-brand="priority"] .bg-\[\#F8FAFC\] { background-color: var(--canvas); }
+/* One-off fills that duplicated the soft tint. */
+[data-brand="priority"] .bg-\[\#ebf3fa\] { background-color: var(--navy-50); }
+
+/* --- J. Typography: 9/10/11px carried real content, not decoration ------- */
+[data-brand="priority"] .text-\[9px\],
+[data-brand="priority"] .text-\[10px\],
+[data-brand="priority"] .text-\[11px\] {
+    font-size: var(--text-micro);
+}
+/* slate-300/400 were used for meaningful secondary text at ~2.5:1. */
+[data-brand="priority"] .text-slate-300,
+[data-brand="priority"] .text-slate-400 {
+    color: var(--fg-muted);
+}
+
+/* --- K. Radii: two steps, no 2rem "hero" corners ------------------------- */
+[data-brand="priority"] .rounded-\[2rem\],
+[data-brand="priority"] .rounded-\[2\.2rem\],
+[data-brand="priority"] .rounded-3xl {
+    border-radius: var(--radius-card);
+}
+
+/* --- L. Elevation: one rest shadow, hover lifts -------------------------- */
+[data-brand="priority"] .shadow-sm,
+[data-brand="priority"] .shadow-md {
+    box-shadow: var(--shadow-card);
+}
+
+/* --- M. One-off arbitrary-value hexes ------------------------------------ */
+/* The two "hero" stat cards each invented their own blue gradient. */
+[data-brand="priority"] .from-\[\#689dff\] {
+    --tw-gradient-from: var(--navy-600);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--teal-600), var(--navy-800);
+}
+[data-brand="priority"] .via-\[\#4b82f6\],
+[data-brand="priority"] .to-\[\#3b70e6\] {
+    --tw-gradient-to: var(--teal-700);
+}
+/* view_customer.php profile banner: navy -> purple. The stops are declared in
+   full on both the from- and via- rules so the cascade order between them
+   cannot flatten the gradient. */
+[data-brand="priority"] .from-\[\#0f1b3d\],
+[data-brand="priority"] .via-\[\#1d2e6a\] {
+    --tw-gradient-from: var(--navy-800);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--navy-700), var(--teal-700);
+}
+[data-brand="priority"] .to-\[\#3b1d6e\] { --tw-gradient-to: var(--teal-700); }
+/* settings.php invented a second, darker navy for its surfaces. */
+[data-brand="priority"] .dark\:bg-\[\#0e1b33\]:is(.dark *),
+[data-brand="priority"] .dark\:bg-\[\#112240\]:is(.dark *) {
+    background-color: var(--surface-muted);
+}
+[data-brand="priority"] .dark\:bg-\[\#0e1b33\]\/95:is(.dark *) {
+    background-color: rgba(19, 29, 67, .95);
+}
+[data-brand="priority"] .from-\[\#0b1528\] {
+    --tw-gradient-from: var(--navy-900);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--navy-800), var(--navy-700);
+}
+[data-brand="priority"] .via-\[\#0e1b33\],
+[data-brand="priority"] .to-\[\#103a8a\] { --tw-gradient-to: var(--navy-700); }
+
+/* --- N. dark: variants --------------------------------------------------- */
+/* Tailwind's CDN injects its stylesheet after theme.css, so a rule that only
+   ties with `.dark .foo` on specificity would lose. These match the dark:
+   compound selectors directly and add the [data-brand] attribute on top. */
+[data-brand="priority"] .dark\:bg-blue-500\/10:is(.dark *),
+[data-brand="priority"] .dark\:hover\:bg-blue-500\/20:hover:is(.dark *) {
+    background-color: var(--brand-soft);
+}
+[data-brand="priority"] .dark\:border-blue-500\/20:is(.dark *) {
+    border-color: var(--brand-line);
+}
+
+
+/* --------------------------------------------------------------------------
+   18. ADMIN RECONCILIATION  -  [data-brand="priority"]  (neutral + accent)
+   --------------------------------------------------------------------------
+   Section 17 was written for the sales_agent portal, whose off-brand colour
+   was purple / violet / indigo. The admin views instead lean on two families
+   that 17 never touched:
+
+     1. The Tailwind "gray" scale (agents.php, logs.php) - a warm neutral that
+        sits visibly beside the cool "slate" scale used everywhere else, so
+        adjacent cards read as two different greys.
+     2. teal / sky / cyan used as a *brand accent* (customer_monitoring.php
+        paints its card icons and "View All" links teal-600) - a fourth hue
+        competing with the navy.
+
+   Status colours (green / emerald / rose / red / amber / yellow) are
+   deliberately NOT remapped here. They carry meaning - a Closed Won badge
+   must stay green - and the token layer already reserves green/red for the
+   won/lost terminal states. Collapsing them would cost information.
+
+   Every light-mode rule below is paired with an html.dark counterpart at
+   (0,3,0). style.css already ships html.dark remaps for the slate scale at
+   (0,2,0); because theme.css loads after it, an unpaired (0,2,0) rule here
+   would win the tie and freeze those surfaces light in dark mode.
+   -------------------------------------------------------------------------- */
+
+/* --- A. Warm "gray" scale -> the cool neutral token scale ---------------- */
+[data-brand="priority"] .text-gray-900,
+[data-brand="priority"] .text-gray-800 {
+    color: var(--fg-heading);
+}
+[data-brand="priority"] .text-gray-700,
+[data-brand="priority"] .text-gray-600 {
+    color: var(--fg-body);
+}
+[data-brand="priority"] .text-gray-500,
+[data-brand="priority"] .text-gray-400 {
+    color: var(--fg-muted);
+}
+[data-brand="priority"] .border-gray-100,
+[data-brand="priority"] .border-gray-200,
+[data-brand="priority"] .border-gray-200\/80 {
+    border-color: var(--line);
+}
+[data-brand="priority"] .border-gray-300 {
+    border-color: var(--line-strong);
+}
+[data-brand="priority"] .divide-gray-100 > * + *,
+[data-brand="priority"] .divide-gray-200 > * + * {
+    border-color: var(--line);
+}
+[data-brand="priority"] .bg-gray-50,
+[data-brand="priority"] .bg-gray-100 {
+    background-color: var(--surface-muted);
+}
+[data-brand="priority"] .hover\:bg-gray-50:hover,
+[data-brand="priority"] .hover\:bg-gray-100:hover {
+    background-color: var(--surface-hover);
+}
+
+/* --- B. Slate text tiers -> the three documented roles ------------------- */
+/* slate-300/400 are already lifted to --fg-muted by 17-J; the darker tiers
+   map onto the heading / body roles so the hierarchy matches the .crm-*
+   components instead of Tailwind's blue-tinted greys. */
+[data-brand="priority"] .text-slate-900,
+[data-brand="priority"] .text-slate-800 {
+    color: var(--fg-heading);
+}
+[data-brand="priority"] .text-slate-700,
+[data-brand="priority"] .text-slate-600 {
+    color: var(--fg-body);
+}
+[data-brand="priority"] .text-slate-500 {
+    color: var(--fg-muted);
+}
+[data-brand="priority"] .border-slate-100,
+[data-brand="priority"] .border-slate-200,
+[data-brand="priority"] .border-slate-200\/80,
+[data-brand="priority"] .divide-slate-100 > * + * {
+    border-color: var(--line);
+}
+[data-brand="priority"] .bg-slate-50,
+[data-brand="priority"] .bg-slate-50\/30,
+[data-brand="priority"] .bg-slate-50\/50,
+[data-brand="priority"] .bg-slate-50\/70 {
+    background-color: var(--surface-muted);
+}
+[data-brand="priority"] .bg-slate-100,
+[data-brand="priority"] .bg-slate-100\/70,
+[data-brand="priority"] .bg-slate-100\/80 {
+    background-color: var(--navy-50);
+}
+[data-brand="priority"] .hover\:bg-slate-50:hover,
+[data-brand="priority"] .hover\:bg-slate-100:hover {
+    background-color: var(--surface-hover);
+}
+
+/* --- C. teal / sky / cyan as brand accents -> the navy family ------------ */
+[data-brand="priority"] .bg-teal-600,
+[data-brand="priority"] .bg-teal-500,
+[data-brand="priority"] .bg-sky-500,
+[data-brand="priority"] .bg-cyan-500 {
+    background-color: var(--navy-700);
+}
+[data-brand="priority"] .text-teal-600,
+[data-brand="priority"] .text-teal-700,
+[data-brand="priority"] .text-teal-800,
+[data-brand="priority"] .text-sky-600,
+[data-brand="priority"] .text-sky-700,
+[data-brand="priority"] .text-cyan-600 {
+    color: var(--navy-600);
+}
+[data-brand="priority"] .hover\:text-teal-700:hover,
+[data-brand="priority"] .hover\:text-teal-800:hover,
+[data-brand="priority"] .hover\:text-sky-700:hover,
+[data-brand="priority"] .hover\:text-sky-800:hover {
+    color: var(--navy-800);
+}
+[data-brand="priority"] .bg-teal-50,
+[data-brand="priority"] .bg-teal-100,
+[data-brand="priority"] .bg-sky-50,
+[data-brand="priority"] .bg-sky-100 {
+    background-color: var(--brand-soft);
+}
+[data-brand="priority"] .border-teal-200,
+[data-brand="priority"] .border-sky-200 {
+    border-color: var(--brand-line);
+}
+
+/* --- D. Modal scrims and dark fills -------------------------------------- */
+/* bg-slate-900 does double duty in the admin views: it is the modal scrim on
+   the fixed inset-0 root, and a solid button fill inside customers.php. The
+   scrim form is matched structurally so the button keeps an opaque colour.
+   Tailwind writes the /40 alpha straight into background-color, so the
+   override has to carry its own. */
+[data-brand="priority"] .fixed.inset-0.bg-slate-900\/40,
+[data-brand="priority"] .fixed.inset-0.bg-slate-900 {
+    background-color: rgba(10, 15, 36, .55);
+}
+[data-brand="priority"] .bg-gray-600 {
+    background-color: var(--navy-950);
+}
+[data-brand="priority"] .bg-slate-900 {
+    background-color: var(--navy-950);
+}
+[data-brand="priority"] .hover\:bg-slate-800:hover {
+    background-color: var(--navy-800);
+}
+
+/* --- E. Dark-mode counterparts ------------------------------------------- */
+html.dark [data-brand="priority"] .text-gray-900,
+html.dark [data-brand="priority"] .text-gray-800,
+html.dark [data-brand="priority"] .text-slate-900,
+html.dark [data-brand="priority"] .text-slate-800 { color: #eef1f9; }
+html.dark [data-brand="priority"] .text-gray-700,
+html.dark [data-brand="priority"] .text-gray-600,
+html.dark [data-brand="priority"] .text-slate-700,
+html.dark [data-brand="priority"] .text-slate-600 { color: #c3cbe0; }
+html.dark [data-brand="priority"] .text-gray-500,
+html.dark [data-brand="priority"] .text-gray-400,
+html.dark [data-brand="priority"] .text-slate-500 { color: #a2aecb; }
+
+html.dark [data-brand="priority"] .border-gray-100,
+html.dark [data-brand="priority"] .border-gray-200,
+html.dark [data-brand="priority"] .border-gray-200\/80,
+html.dark [data-brand="priority"] .border-slate-100,
+html.dark [data-brand="priority"] .border-slate-200,
+html.dark [data-brand="priority"] .border-slate-200\/80,
+html.dark [data-brand="priority"] .divide-gray-100 > * + *,
+html.dark [data-brand="priority"] .divide-gray-200 > * + *,
+html.dark [data-brand="priority"] .divide-slate-100 > * + * {
+    border-color: rgba(148, 163, 184, .18);
+}
+html.dark [data-brand="priority"] .border-gray-300 {
+    border-color: rgba(148, 163, 184, .28);
+}
+
+html.dark [data-brand="priority"] .bg-gray-50,
+html.dark [data-brand="priority"] .bg-gray-100,
+html.dark [data-brand="priority"] .bg-slate-50,
+html.dark [data-brand="priority"] .bg-slate-50\/30,
+html.dark [data-brand="priority"] .bg-slate-50\/50,
+html.dark [data-brand="priority"] .bg-slate-50\/70 {
+    background-color: var(--navy-800);
+}
+html.dark [data-brand="priority"] .bg-slate-100,
+html.dark [data-brand="priority"] .bg-slate-100\/70,
+html.dark [data-brand="priority"] .bg-slate-100\/80 {
+    background-color: var(--navy-850);
+}
+html.dark [data-brand="priority"] .hover\:bg-gray-50:hover,
+html.dark [data-brand="priority"] .hover\:bg-gray-100:hover,
+html.dark [data-brand="priority"] .hover\:bg-slate-50:hover,
+html.dark [data-brand="priority"] .hover\:bg-slate-100:hover {
+    background-color: var(--navy-700);
+}
+
+/* The soft brand tints are near-white; in dark mode they must invert to a
+   navy wash or every chip and icon tile becomes a bright block. */
+html.dark [data-brand="priority"] .bg-teal-50,
+html.dark [data-brand="priority"] .bg-teal-100,
+html.dark [data-brand="priority"] .bg-sky-50,
+html.dark [data-brand="priority"] .bg-sky-100 {
+    background-color: rgba(78, 131, 197, .16);
+}
+html.dark [data-brand="priority"] .text-teal-600,
+html.dark [data-brand="priority"] .text-teal-700,
+html.dark [data-brand="priority"] .text-teal-800,
+html.dark [data-brand="priority"] .text-sky-600,
+html.dark [data-brand="priority"] .text-sky-700,
+html.dark [data-brand="priority"] .text-cyan-600 {
+    color: var(--sky-brand);
+}
+html.dark [data-brand="priority"] .bg-teal-600,
+html.dark [data-brand="priority"] .bg-teal-500,
+html.dark [data-brand="priority"] .bg-sky-500,
+html.dark [data-brand="priority"] .bg-cyan-500 {
+    background-color: var(--sky-brand);
+}
+

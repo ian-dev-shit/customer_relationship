@@ -53,7 +53,7 @@ def send_customer_welcome_email(
 
                 <!-- CTA Button -->
                 <div style="text-align: center; margin: 30px 0;">
-                    <a href="http://127.0.0.1:3000/login.php" 
+                    <a href="http://127.0.0.1:3000/login.html" 
                        style="background-color: #4f46e5; color: #ffffff; padding: 12px 28px; border-radius: 6px; font-weight: 600; font-size: 14px; text-decoration: none; display: inline-block;">
                        Access Customer Portal
                     </a>

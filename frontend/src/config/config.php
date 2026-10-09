@@ -46,11 +46,11 @@ function env($key, $default = null) {
 }
 
 // 2. Constants Configuration
-// Para sa PHP cURL requests 
-define('INTERNAL_API_URL', env('INTERNAL_API_URL', 'http://crm_backend:8000'));
+// Para sa PHP cURL requests - default to localhost for XAMPP, override via .env/Docker for crm_backend
+define('INTERNAL_API_URL', env('INTERNAL_API_URL', 'http://127.0.0.1:8000'));
 
 // Para sa Client-side JS fetch 
-define('PUBLIC_API_URL', env('PUBLIC_API_URL', 'http://localhost:8000'));
+define('PUBLIC_API_URL', env('PUBLIC_API_URL', 'http://127.0.0.1:8000'));
 
 // Keep backward compatibility 
 define('API_BASE_URL', INTERNAL_API_URL);
@@ -68,7 +68,7 @@ function check_auth() {
     }
     
     if (!isset($_SESSION["access_token"])) {
-        header("Location: login.php");
+        header("Location: /login.html");
         exit();
     }
 }
