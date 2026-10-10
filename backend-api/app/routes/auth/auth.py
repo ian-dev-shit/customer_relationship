@@ -1,5 +1,4 @@
 # Auth Endpoint
-
 from fastapi import APIRouter, HTTPException, status
 from app.schemas.auth import UserLogin, UserRegister, TokenResponse, LoginResponse
 from app.supabase_config.supabase import supabase, redis_client, supabase_secondary
